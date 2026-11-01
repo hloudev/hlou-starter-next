@@ -130,7 +130,10 @@ export function fontPreloads(
     const href = customFontUrl(font, resolveAssetUrl);
     if (!href || seen.has(href)) continue;
     seen.add(href);
-    const extension = href.split(/[?#]/)[0]?.match(/\.([a-z0-9]+)$/i)?.[1]?.toLowerCase();
+    const extension = href
+      .split(/[?#]/)[0]
+      ?.match(/\.([a-z0-9]+)$/i)?.[1]
+      ?.toLowerCase();
     const type = extension ? FONT_TYPES[extension] : undefined;
     preloads.push(type ? { href, type } : { href });
   }
