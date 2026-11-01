@@ -64,7 +64,7 @@ export type AttributionBadgeProps = {
 /* -------------------------------------------------------------------------- */
 
 /** Where the badge links. One constant, so the real URL and UTM scheme land once. */
-export const HLOU_ATTRIBUTION_HREF = 'https://hlou.app/?ref=badge';
+export const HLOU_ATTRIBUTION_HREF = 'https://hlou.site/?ref=badge';
 
 /** The Hlou mark (512×338), from the handoff's reference script. */
 const MARK_PATH =
