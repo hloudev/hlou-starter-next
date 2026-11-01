@@ -46,8 +46,23 @@ resolve `react`, `react/jsx-runtime`, `zod` and relative files inside
   price of wiring business logic into a Hlou page; say so to the user. A page
   of its own in `app/(custom)/` avoids it (`custom/README.md`, recipe 2).
 
-No `fetch`, timers or `window` at render time in the block itself; components
-are server-rendered. Interactive parts are `"use client"` components in
+No `fetch`, timers, `window` or inline `<script>` at render time in the block
+itself; components are server-rendered, and Hlou's canvas draws them in the
+browser, where React never runs a `<script>`.
+
+**The current page.** A nav variant marks its link to the page being drawn
+with `ariaCurrent` from `../../resolve/href`: `"page"` on the link to this
+page, `"true"` on the link to the section it is in (`/archive` on
+`/archive/workshop-1`). It reads `context.currentPath`, so it is right on
+Hlou's canvas, in Preview and in a build alike, with no script:
+
+```tsx
+<a href={link.href} aria-current={ariaCurrent(link.href, context)}
+   className="aria-[current=page]:text-site-accent">
+```
+
+Style it with `aria-[current=page]:…`, or `aria-[current]:…` for the section
+too. Interactive parts are `"use client"` components in
 `custom/`.
 
 ## A section no block draws
