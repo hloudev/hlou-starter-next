@@ -205,9 +205,12 @@ spec goes back and forth with no zip:
 
 1. **Get** — `site_spec_get` (with the project's shortId): write every file it
    returns under `hlou/`, the lock included, as it is. Files too large to
-   inline are read with `version` + `path`.
+   inline are read with `version` + `path`. Download each `mediaFiles` entry's
+   `url` to its `file` (`public/media/…`, the link lasts an hour): the
+   project's media, so `pnpm hlou:compile` and `pnpm dev` find them. They are
+   already in Hlou: never upload them again.
 2. **Edit and check** — change `hlou/site/**` as above; `site_spec_validate`
-   (and `pnpm hlou:compile` when the media are on disk) until there is no error.
+   and `pnpm hlou:compile` until there is no error.
 3. **Plan** — `site_spec_plan` with every `hlou/site/**` file and the lock, plus
    the paths of new files in `public/media/`. PUT each new file to its
    `uploadUrl`.

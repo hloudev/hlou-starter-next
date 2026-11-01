@@ -313,9 +313,11 @@ A page « Tarifs » with three offers:
 Connected to Hlou's MCP server, the spec needs no zip:
 
 1. `site_spec_get` → write its files under `hlou/` (the lock as it is). Its
-   `media` list is what Hlou already holds: those paths validate without a file
-   in `public/media/`, but `pnpm hlou:compile` needs them on disk, so rely on
-   `site_spec_validate` when they are not.
+   `media` list is what Hlou already holds, and `mediaFiles` gives each one a
+   `url` (valid one hour): download it to its `file` (`public/media/…`) so
+   `pnpm hlou:compile` finds it. Those media are already in Hlou: they are no
+   new media, never upload them. A `url` of `null` (Hlou lost the bytes) still
+   validates with `site_spec_validate`.
 2. Edit `hlou/site/**`; `site_spec_validate` with the files (and the new media
    paths) until `ok` is true. Its errors are the codes above.
 3. `site_spec_plan` → `changes`, `conflicts` (each with `draft` = Hlou's value
