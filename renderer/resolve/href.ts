@@ -54,3 +54,48 @@ export function prefixHref(
   const hash = hashAt === -1 ? '' : href.slice(hashAt);
   return `${base}${path}${path.includes('?') ? '&' : '?'}${query}${hash}`;
 }
+
+/** The site path an href names, base path, query, fragment and trailing slash off. */
+function sitePathOf(href: string, basePath: string): string | null {
+  if (!href.startsWith('/') || href.startsWith('//')) return null;
+  const end = href.search(/[?#]/);
+  let path = end === -1 ? href : href.slice(0, end);
+  const queryAt = basePath.indexOf('?');
+  const base = (queryAt === -1 ? basePath : basePath.slice(0, queryAt)).replace(/\/+$/, '');
+  if (base && (path === base || path.startsWith(`${base}/`))) path = path.slice(base.length);
+  path = path.replace(/\/+$/, '');
+  return path === '' ? '/' : path;
+}
+
+/**
+ * Where a link points relative to the page being drawn: `'page'` when it IS
+ * that page, `'section'` when the page lives under it (`/archive` while
+ * drawing `/archive/workshop-1`; never `/`, which every page lives under),
+ * `null` otherwise or when the render names no page. The href may carry the
+ * base path (`/fr/about`) or not (`/about`).
+ */
+export function currentLink(
+  href: string,
+  context: { currentPath?: string; basePath?: string }
+): 'page' | 'section' | null {
+  if (!context.currentPath) return null;
+  const path = sitePathOf(href, context.basePath ?? '');
+  if (path === null) return null;
+  const current = context.currentPath.replace(/\/+$/, '') || '/';
+  if (path === current) return 'page';
+  return path !== '/' && current.startsWith(`${path}/`) ? 'section' : null;
+}
+
+/**
+ * The `aria-current` a nav link takes, for `<a aria-current={…}>`: `"page"`
+ * on the link to this page, `"true"` on the link to the section it is in,
+ * nothing otherwise. Style it with `aria-[current=page]:…` (this page) or
+ * `aria-[current]:…` (this page or its section).
+ */
+export function ariaCurrent(
+  href: string,
+  context: { currentPath?: string; basePath?: string }
+): 'page' | 'true' | undefined {
+  const link = currentLink(href, context);
+  return link === 'page' ? 'page' : link === 'section' ? 'true' : undefined;
+}

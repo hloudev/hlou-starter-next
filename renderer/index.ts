@@ -46,6 +46,8 @@ export {
   listStaticPaths,
   findRecordBySlug,
   prefixHref,
+  ariaCurrent,
+  currentLink,
 } from './resolve';
 export type {
   ResolvedCollectionWithQuery,

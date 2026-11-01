@@ -10,7 +10,7 @@ import { headerDefaults } from './defaults';
 import { NAV_CHILDREN_MAX } from './schema';
 
 import { Island } from '../../render/island';
-import { prefixHref } from '../../resolve/href';
+import { ariaCurrent, prefixHref } from '../../resolve/href';
 import { stateMessages } from '../../site/messages';
 import { MEDIA_SIZES_ATTR } from '../media';
 import {
@@ -124,6 +124,9 @@ function Logo({
  * the list on hover and on focus within, so mouse and Tab work without a
  * script; the menu island adds the caret toggle (touch), ↓ and Esc.
  */
+/** A link's `aria-current` on this page (`ariaCurrent`), bound to the render. */
+type CurrentOf = (href: string | undefined) => 'page' | 'true' | undefined;
+
 function DropdownItem({
   link,
   index,
@@ -133,6 +136,7 @@ function DropdownItem({
   className,
   style,
   field,
+  currentOf,
 }: {
   link: NavLink;
   index: number;
@@ -142,6 +146,7 @@ function DropdownItem({
   className: string;
   style?: CSSProperties;
   field?: string;
+  currentOf: CurrentOf;
 }): ReactElement {
   const listId = `${id}-sub-${index + 1}`;
   const caret = <Icon icon={{ name: 'caret-down' }} className="size-3.5" />;
@@ -153,7 +158,9 @@ function DropdownItem({
     >
       {link.href ? (
         <>
-          <a href={link.href}>{link.label}</a>
+          <a href={link.href} aria-current={currentOf(link.href)}>
+            {link.label}
+          </a>
           <button
             type="button"
             className="hl-menu__caret -my-1.5 inline-grid size-7 cursor-pointer place-items-center rounded-site border-0 bg-transparent p-0 text-site-ink-soft"
@@ -186,6 +193,7 @@ function DropdownItem({
           <li key={`${child.href}-${at}`}>
             <a
               href={child.href}
+              aria-current={currentOf(child.href)}
               className="block rounded-site px-3 py-2.5 text-site-sm text-site-ink hover:bg-site-well hover:no-underline"
             >
               {child.label}
@@ -204,6 +212,7 @@ function StackedLinks({
   childList,
   childClass,
   rise,
+  currentOf,
 }: {
   links: NavLink[];
   linkClass: string;
@@ -211,6 +220,7 @@ function StackedLinks({
   childClass: string;
   /** The full-screen menu: each item rises in turn (`--n`). */
   rise?: boolean;
+  currentOf: CurrentOf;
 }): ReactElement {
   return (
     <ul className="m-0 grid list-none p-0">
@@ -221,7 +231,7 @@ function StackedLinks({
           style={rise ? ({ '--n': index } as CSSProperties) : undefined}
         >
           {link.href ? (
-            <a href={link.href} className={linkClass}>
+            <a href={link.href} aria-current={currentOf(link.href)} className={linkClass}>
               {link.label}
             </a>
           ) : (
@@ -231,7 +241,7 @@ function StackedLinks({
             <ul className={childList}>
               {link.children.map((child, at) => (
                 <li key={`${child.href}-${at}`}>
-                  <a href={child.href} className={childClass}>
+                  <a href={child.href} aria-current={currentOf(child.href)} className={childClass}>
                     {child.label}
                   </a>
                 </li>
@@ -290,6 +300,7 @@ export function HeaderBlock(props: BlockProps<HeaderProps>): ReactElement {
      (`/p/<slug>/fr?build=…`) and the in-app live site (`/s/<domain>/fr`)
      would otherwise land on Hlou's own `/`. */
   const home = prefixHref('/', context.basePath ?? '');
+  const currentOf: CurrentOf = (href) => (href ? ariaCurrent(href, context) : undefined);
   const logoLink = (className?: string) => (
     <a
       href={home}
@@ -319,7 +330,9 @@ export function HeaderBlock(props: BlockProps<HeaderProps>): ReactElement {
                 key={`${link.href}-${index}`}
                 {...item('links', index, link, 'text-site-sm text-site-ink-soft', 'links')}
               >
-                <a href={link.href}>{link.label}</a>
+                <a href={link.href} aria-current={currentOf(link.href)}>
+                  {link.label}
+                </a>
               </li>
             );
           }
@@ -335,6 +348,7 @@ export function HeaderBlock(props: BlockProps<HeaderProps>): ReactElement {
               className={box.className}
               style={box.style}
               field={box['data-hl-field']}
+              currentOf={currentOf}
             />
           );
         })}
@@ -447,6 +461,7 @@ export function HeaderBlock(props: BlockProps<HeaderProps>): ReactElement {
               linkClass="flex min-h-12 items-center rounded-site px-3 text-site-md text-site-ink hover:no-underline hover:bg-site-well"
               childList="m-0 ms-3 mb-1.5 list-none border-s border-site-hairline-strong p-0 ps-4"
               childClass="flex min-h-10 items-center rounded-site px-3 text-site-sm text-site-ink-soft hover:no-underline hover:bg-site-well"
+              currentOf={currentOf}
             />
           </nav>
           {ctaLabel ? (
@@ -499,6 +514,7 @@ export function HeaderBlock(props: BlockProps<HeaderProps>): ReactElement {
               linkClass="inline-block py-0.5 font-heading text-[calc(var(--site-type-xl)*0.55)] leading-[1.15] tracking-[0.01em] text-site-ink uppercase hover:text-site-accent hover:no-underline md:text-[calc(var(--site-type-xl)*0.82)] rtl:tracking-normal"
               childList="m-0 mt-1 mb-3 grid list-none gap-1 p-0"
               childClass="text-site-sm text-site-ink-soft hover:text-site-accent hover:no-underline"
+              currentOf={currentOf}
             />
           </nav>
         </div>

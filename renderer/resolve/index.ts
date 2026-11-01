@@ -34,7 +34,7 @@ import {
 import { INSTANCE_NODE_TYPE } from '../doc/schema';
 import { childrenOf, slotsOf } from '../doc/tree';
 
-export { prefixHref } from './href';
+export { ariaCurrent, currentLink, prefixHref } from './href';
 
 /* -------------------------------------------------------------------------- */
 /*                                    TYPES                                   */

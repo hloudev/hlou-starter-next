@@ -112,6 +112,15 @@ export function leadBlockIds(doc: PageDocument): string[] {
   return ids;
 }
 
+/**
+ * The site path a page is drawn at: its own path, or a template's with the
+ * record's slug in place of `[slug]` (`/rooms/[slug]` → `/rooms/jasmin`), as
+ * `resolve` builds a record's link.
+ */
+export function currentPathOf(page: SiteRenderProps['page'], record?: RecordDoc): string {
+  return record?.slug ? page.path.replace(/\[slug\]/g, encodeURIComponent(record.slug)) : page.path;
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
@@ -162,6 +171,7 @@ export function SiteRender({
     formEndpoint,
     ...(records ? { recordsEndpoint: records } : {}),
     ...(basePath ? { basePath } : {}),
+    currentPath: currentPathOf(page, record),
     ...(formBuildId ? { formBuildId } : {}),
     ...(islands ? { islands } : {}),
     ...(previewOverlays && mode === 'canvas' ? { previewOverlays } : {}),

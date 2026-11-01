@@ -55,6 +55,13 @@ export type SiteRenderContext = {
    *  prefixes the root-relative links the records endpoint answers with. */
   basePath?: string;
   /**
+   * The site path of the page being drawn (`/`, `/about`, `/rooms/jasmin`),
+   * without the base path. A nav marks its link to this page with
+   * `aria-current` (`ariaCurrent` in `resolve/href`) as it renders — the same
+   * on the canvas, in Preview and in a build, no script.
+   */
+  currentPath?: string;
+  /**
    * The blocks above the fold (M37-06): the page's first node and the
    * first-child chain inside it. Their first media is not lazy-loaded and
    * asks `fetchpriority="high"` (decision 188 §10).
@@ -152,6 +159,9 @@ export function readRenderContext(puck: unknown): SiteRenderContext {
       ? { recordsEndpoint: raw.recordsEndpoint }
       : {}),
     ...(typeof raw.basePath === 'string' && raw.basePath ? { basePath: raw.basePath } : {}),
+    ...(typeof raw.currentPath === 'string' && raw.currentPath.startsWith('/')
+      ? { currentPath: raw.currentPath }
+      : {}),
     ...(Array.isArray(raw.leadBlocks)
       ? { leadBlocks: raw.leadBlocks.filter((id): id is string => typeof id === 'string') }
       : {}),
