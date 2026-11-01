@@ -610,14 +610,42 @@
     flex: none;
   }
 
-  /* No visible footer: a centred row after the content, on the scope's
-     paper, under a rule in the site's own hairline. */
+  /* No visible footer: a row after the content, on the scope's paper, under
+     a rule in the site's own hairline. `data-align` is the setting's. */
   .hl-attribution-row {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     padding-block: 22px 28px;
     padding-inline: 16px;
     border-block-start: 1px solid var(--site-hairline);
+  }
+  .hl-attribution-row[data-align='start'] {
+    justify-content: flex-start;
+  }
+  .hl-attribution-row[data-align='center'] {
+    justify-content: center;
+  }
+
+  /* Floating: pinned to the viewport at an offset from an edge and from the
+     side `data-align` names. `inset-inline-*` follows the text direction. */
+  .hl-attribution-float {
+    position: fixed;
+    z-index: 50;
+    inset-block-end: var(--site-badge-oy);
+    inset-inline-end: var(--site-badge-ox);
+  }
+  .hl-attribution-float[data-edge='top'] {
+    inset-block: var(--site-badge-oy) auto;
+  }
+  .hl-attribution-float[data-align='start'] {
+    inset-inline: var(--site-badge-ox) auto;
+  }
+  .hl-attribution-float[data-align='center'] {
+    inset-inline: 50% auto;
+    translate: -50% 0;
+  }
+  .hl-attribution-float[data-align='center']:dir(rtl) {
+    translate: 50% 0;
   }
 
   /* ------------------------------------ Phones ------------------------------ */

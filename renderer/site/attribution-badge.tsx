@@ -44,10 +44,11 @@ export type AttributionToneSide = {
 export type AttributionToneSideKey =
   'L' | 'D' | 'G' | 'B' | 'MI' | 'MP' | 'TO' | 'TOD' | 'MO' | 'MOD';
 
-/** Where a site draws it (decision 193) — `footer`: at the end of the Footer
- *  block's legal row · `row`: a centred row of its own after the content, when
- *  the page draws no footer · `static`: bare, for the settings previews and
- *  gallery, whatever holds it places it. Never fixed to the viewport. */
+/** Where a site draws it (decision 193) — `footer`: in the Footer block's
+ *  legal row · `row`: a row of its own after the content, when the page draws
+ *  no footer (or a viewport-pinned badge, when the setting floats) · `static`:
+ *  bare, for the settings previews and gallery, whatever holds it places it.
+ *  The setting's `align` and `mode` say where on that line. */
 export type AttributionPlacement = 'footer' | 'row' | 'static';
 
 export type AttributionBadgeProps = {
@@ -242,6 +243,7 @@ const PILL_RADIUS = '999px';
 
 const BADGE_CLASS = 'hl-attribution';
 const ROW_CLASS = 'hl-attribution-row';
+const FLOAT_CLASS = 'hl-attribution-float';
 
 /* -------------------------------------------------------------------------- */
 /*                                  HELPERS                                   */
@@ -428,5 +430,31 @@ export function AttributionBadge({
     </a>
   );
 
-  return placement === 'row' ? <div className={ROW_CLASS}>{badge}</div> : badge;
+  if (placement === 'footer' || placement === 'static') return badge;
+
+  /* The page's own line: a row of its own, aligned; or, floating, pinned to
+     the viewport (`styles/site.css`). Physical offsets are logical here:
+     `offsetX` is measured from the side `align` names, in the text direction. */
+  if (attribution.mode === 'float') {
+    return (
+      <div
+        className={FLOAT_CLASS}
+        data-align={attribution.align}
+        data-edge={attribution.edge}
+        style={
+          {
+            '--site-badge-ox': `${attribution.offsetX}px`,
+            '--site-badge-oy': `${attribution.offsetY}px`,
+          } as CSSProperties
+        }
+      >
+        {badge}
+      </div>
+    );
+  }
+  return (
+    <div className={ROW_CLASS} data-align={attribution.align}>
+      {badge}
+    </div>
+  );
 }

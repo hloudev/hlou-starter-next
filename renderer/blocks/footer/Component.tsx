@@ -146,10 +146,29 @@ export function FooterBlock(props: BlockProps<FooterProps>): ReactElement {
             })}
           </div>
           {attribution ? (
-            <div className="mt-5.5 flex flex-wrap items-center gap-4 max-[479px]:flex-col max-[479px]:items-start max-[479px]:gap-3">
+            <div
+              className={cx(
+                'mt-5.5 flex flex-wrap items-center gap-4',
+                attribution.align === 'center'
+                  ? 'flex-col gap-3 text-center'
+                  : 'max-[479px]:flex-col max-[479px]:items-start max-[479px]:gap-3',
+                attribution.align === 'start' && 'flex-row-reverse justify-end'
+              )}
+            >
               {legal ? (
-                <p {...el('legal', cx('m-0 min-w-0 flex-1 text-site-xs', theme.legal))}>{legal}</p>
-              ) : (
+                <p
+                  {...el(
+                    'legal',
+                    cx(
+                      'm-0 min-w-0 text-site-xs',
+                      attribution.align === 'center' ? '' : 'flex-1',
+                      theme.legal
+                    )
+                  )}
+                >
+                  {legal}
+                </p>
+              ) : attribution.align === 'center' ? null : (
                 <span className="flex-1" />
               )}
               <AttributionBadge

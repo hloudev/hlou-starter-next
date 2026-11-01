@@ -6,6 +6,10 @@ import type { SiteAttribution, SiteAttributionTone, SiteColorScheme } from '../c
 
 import {
   DEFAULT_SITE_ATTRIBUTION,
+  SITE_ATTRIBUTION_ALIGNS,
+  SITE_ATTRIBUTION_EDGES,
+  SITE_ATTRIBUTION_MAX_OFFSET,
+  SITE_ATTRIBUTION_MODES,
   SITE_ATTRIBUTION_SHAPES,
   SITE_ATTRIBUTION_SIZES,
   SITE_ATTRIBUTION_TONES,
@@ -73,6 +77,12 @@ function pick<T extends string>(options: readonly T[], value: unknown, fallback:
     : fallback;
 }
 
+function offset(value: unknown, fallback: number): number {
+  return typeof value === 'number' && Number.isInteger(value)
+    ? Math.min(Math.max(value, 0), SITE_ATTRIBUTION_MAX_OFFSET)
+    : fallback;
+}
+
 function hueDegrees(radians: number): number {
   return ((radians * 180) / Math.PI + 360) % 360;
 }
@@ -95,6 +105,11 @@ export function resolveAttribution(stored: unknown): SiteAttribution {
     adaptive: typeof value.adaptive === 'boolean' ? value.adaptive : fallback.adaptive,
     size: pick(SITE_ATTRIBUTION_SIZES, value.size, fallback.size),
     shape: pick(SITE_ATTRIBUTION_SHAPES, value.shape, fallback.shape),
+    align: pick(SITE_ATTRIBUTION_ALIGNS, value.align, fallback.align),
+    mode: pick(SITE_ATTRIBUTION_MODES, value.mode, fallback.mode),
+    edge: pick(SITE_ATTRIBUTION_EDGES, value.edge, fallback.edge),
+    offsetX: offset(value.offsetX, fallback.offsetX),
+    offsetY: offset(value.offsetY, fallback.offsetY),
   };
 }
 

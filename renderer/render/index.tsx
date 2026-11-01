@@ -188,7 +188,10 @@ export function SiteRender({
      (decision 193). */
   const attribution = snapshot.settings.attribution;
   const showAttribution = mode !== 'canvas' && attribution?.enabled === true;
-  const footer = showAttribution ? attributionFooter(resolved.doc, drawn, chrome) : null;
+  const footer =
+    showAttribution && attribution.mode !== 'float'
+      ? attributionFooter(resolved.doc, drawn, chrome)
+      : null;
 
   return renderDoc({
     doc: resolved.doc,

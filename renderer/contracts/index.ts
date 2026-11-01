@@ -793,6 +793,14 @@ export const SITE_ATTRIBUTION_TONES = [
 ] as const;
 export const SITE_ATTRIBUTION_SIZES = ['s', 'm', 'l'] as const;
 export const SITE_ATTRIBUTION_SHAPES = ['pill', 'rounded'] as const;
+/** Where it sits along the line it is on: the inline start, middle or end. */
+export const SITE_ATTRIBUTION_ALIGNS = ['start', 'center', 'end'] as const;
+/** `inline`: in the page's flow (the footer's legal row, or a row of its own) ·
+ *  `float`: pinned to the viewport at an offset from an edge and the aligned side. */
+export const SITE_ATTRIBUTION_MODES = ['inline', 'float'] as const;
+export const SITE_ATTRIBUTION_EDGES = ['bottom', 'top'] as const;
+/** The largest offset of a floating badge, in px. */
+export const SITE_ATTRIBUTION_MAX_OFFSET = 200;
 
 /**
  * The attribution badge a site carries. Absent from a snapshot = no badge, so
@@ -800,9 +808,11 @@ export const SITE_ATTRIBUTION_SHAPES = ['pill', 'rounded'] as const;
  * project's default (shown, `light`, adaptive) is applied when the snapshot
  * is built (`resolveAttribution`).
  *
- * It has no position: the badge closes the Footer block's legal row, or a
- * centred row after the content when the page draws no footer (decision
- * 193). A `position` a project stored before that is stripped on parse.
+ * By default the badge closes the Footer block's legal row, or a row of its
+ * own after the content when the page draws no footer (decision 193); `align`
+ * moves it to the start, middle or end of that line. In `float` mode it is
+ * pinned to the viewport instead (`edge`, `align`, `offsetX`, `offsetY`).
+ * A `position` a project stored before decision 193 is stripped on parse.
  */
 export const siteAttributionSchema = z.object({
   enabled: z.boolean(),
@@ -811,6 +821,16 @@ export const siteAttributionSchema = z.object({
   adaptive: z.boolean(),
   size: z.enum(SITE_ATTRIBUTION_SIZES),
   shape: z.enum(SITE_ATTRIBUTION_SHAPES),
+  /* The placement fields default on parse: a version frozen before they
+     existed keeps its badge, at the end of its line. */
+  align: z.enum(SITE_ATTRIBUTION_ALIGNS).default('end'),
+  mode: z.enum(SITE_ATTRIBUTION_MODES).default('inline'),
+  /** Floating only: the viewport edge it is pinned to. */
+  edge: z.enum(SITE_ATTRIBUTION_EDGES).default('bottom'),
+  /** Floating only: distance from the aligned side (the edge itself when centred: unused). */
+  offsetX: z.number().int().min(0).max(SITE_ATTRIBUTION_MAX_OFFSET).default(16),
+  /** Floating only: distance from `edge`. */
+  offsetY: z.number().int().min(0).max(SITE_ATTRIBUTION_MAX_OFFSET).default(16),
 });
 export type SiteAttribution = z.infer<typeof siteAttributionSchema>;
 export type SiteAttributionTone = SiteAttribution['tone'];
@@ -821,6 +841,11 @@ export const DEFAULT_SITE_ATTRIBUTION: SiteAttribution = {
   adaptive: true,
   size: 'm',
   shape: 'pill',
+  align: 'end',
+  mode: 'inline',
+  edge: 'bottom',
+  offsetX: 16,
+  offsetY: 16,
 };
 
 /**

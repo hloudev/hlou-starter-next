@@ -10,6 +10,10 @@ import {
   fontFamilyNameSchema,
   hexColourSchema,
   NAVIGATION_CHILDREN_MAX,
+  SITE_ATTRIBUTION_ALIGNS,
+  SITE_ATTRIBUTION_EDGES,
+  SITE_ATTRIBUTION_MAX_OFFSET,
+  SITE_ATTRIBUTION_MODES,
   SITE_ATTRIBUTION_SHAPES,
   SITE_ATTRIBUTION_SIZES,
   SITE_ATTRIBUTION_TONES,
@@ -286,6 +290,11 @@ export const specAttributionSchema = z
     adaptive: z.boolean().optional(),
     size: z.enum(SITE_ATTRIBUTION_SIZES).optional(),
     shape: z.enum(SITE_ATTRIBUTION_SHAPES).optional(),
+    align: z.enum(SITE_ATTRIBUTION_ALIGNS).optional(),
+    mode: z.enum(SITE_ATTRIBUTION_MODES).optional(),
+    edge: z.enum(SITE_ATTRIBUTION_EDGES).optional(),
+    offsetX: z.number().int().min(0).max(SITE_ATTRIBUTION_MAX_OFFSET).optional(),
+    offsetY: z.number().int().min(0).max(SITE_ATTRIBUTION_MAX_OFFSET).optional(),
   })
   .strict();
 
