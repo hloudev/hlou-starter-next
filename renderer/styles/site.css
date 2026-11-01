@@ -1,0 +1,1460 @@
+/* ------------------------------------------------------------------------ */
+/*  @hlou/site-renderer — the rendered site.                                */
+/*                                                                          */
+/*  Everything lives under `.hl-site-scope`. Only `--site-*` variables are  */
+/*  read here: the theme tokens `themeToCss()` writes on the wrapper, plus  */
+/*  the derived paper palette declared once below. Never `--hl-*`, never    */
+/*  `--mantine-*` — app chrome must not leak into a customer's website.     */
+/*  Logical properties only; the site renders under `dir="rtl"`.            */
+/* ------------------------------------------------------------------------ */
+
+/*  Cascade layers. The site's own rules sit in `hl-site`, BELOW Tailwind's
+    `utilities` — so a utility on a block element (the renderer's own, or one
+    a developer adds to a downloaded site) always wins over these defaults,
+    whatever the selector's specificity. Tailwind's preflight (`base`, the
+    starter only — never the Hlou app, where Mantine owns the reset) sits
+    below them. The same statement opens `app.css` and the starter's
+    `globals.css`; whichever the browser meets first fixes the order. */
+@layer theme, base, hl-site, components, utilities;
+
+@layer hl-site {
+  /*  Two palettes, one set of names. `themeToCss` writes every colour as a
+      `light-dark(<light>, <dark>)` pair; `color-scheme` picks the side. It
+      follows the visitor's system unless `data-site-scheme` forces one — on the
+      scope itself (the Design canvas's toolbar switch) or on `<html>` (the
+      theme-toggle block). A page whose `<html>` carries the theme (`/s`, `/p`,
+      the starter) marks it `.hl-site-root` so the page background outside the
+      scope follows too — and, while `<html>` forces nothing, it follows a
+      scope pinned to the version's frozen palette (`SiteRender`). Precedence:
+      a visitor's toggle on `<html>`, then the version's pin, then the system. */
+  .hl-site-root,
+  .hl-site-scope {
+    color-scheme: light dark;
+  }
+  .hl-site-root[data-site-scheme='light'],
+  .hl-site-root:not([data-site-scheme]):has(.hl-site-scope[data-site-scheme='light']),
+  :root[data-site-scheme='light'] .hl-site-scope,
+  .hl-site-scope[data-site-scheme='light'] {
+    color-scheme: light;
+  }
+  .hl-site-root[data-site-scheme='dark'],
+  .hl-site-root:not([data-site-scheme]):has(.hl-site-scope[data-site-scheme='dark']),
+  :root[data-site-scheme='dark'] .hl-site-scope,
+  .hl-site-scope[data-site-scheme='dark'] {
+    color-scheme: dark;
+  }
+
+  .hl-site-scope {
+    /* Theme tokens (overridden inline by themeToCss; the dark sides are
+       `resolveDarkColors` of the default roles) */
+    --site-accent: light-dark(#b0552f, #c66943);
+    --site-accent-soft: color-mix(in srgb, var(--site-accent) 15%, transparent);
+    --site-paper: light-dark(#f4f1ea, #181611);
+    --site-ink: light-dark(#1c1a17, #eae7e3);
+    --site-ink-soft: color-mix(in srgb, var(--site-ink) 66%, var(--site-paper));
+    --site-heading-font: var(--font-instrument-serif, 'Instrument Serif'), Georgia, serif;
+    --site-radius: 10px;
+    --site-pad-y: 54px;
+    --site-pad-x: 40px;
+    --site-type-xs: 11px;
+    --site-type-sm: 14px;
+    --site-type-md: 19px;
+    --site-type-lg: 26px;
+    --site-type-xl: 34px;
+
+    /* Derived paper palette (the prototype's fixed values, expressed off the tokens) */
+    --site-hairline: color-mix(in srgb, var(--site-ink) 9%, transparent);
+    --site-hairline-strong: color-mix(in srgb, var(--site-ink) 12%, transparent);
+    /* A card lifts off the paper: toward white in light, a shade lighter in dark. */
+    --site-card: light-dark(
+      color-mix(in srgb, var(--site-paper) 55%, #ffffff),
+      color-mix(in srgb, var(--site-paper) 92%, #ffffff)
+    );
+    --site-well: color-mix(in srgb, var(--site-paper) 96%, var(--site-ink));
+    /* Text on an accent or ink fill. In dark the accent is lifted and the ink
+       is light, so what sits on them turns dark — taken off the dark paper. */
+    --site-on-accent: light-dark(#fdfbf7, var(--site-paper));
+    --site-on-ink: light-dark(#e8e3d9, var(--site-paper));
+    --site-on-ink-muted: light-dark(
+      #8d867a,
+      color-mix(in srgb, var(--site-paper) 55%, var(--site-ink))
+    );
+    --site-on-ink-link: light-dark(
+      #cdc6b8,
+      color-mix(in srgb, var(--site-paper) 80%, var(--site-ink))
+    );
+    --site-media-fill: color-mix(in srgb, var(--site-accent) 22%, var(--site-paper));
+    /* Widget chrome (M40, D0): a popover's shadow, the lightbox's veil and the
+       text on it, a dialog's backdrop, a field error. The veils stay dark in
+       both schemes: ink in light, paper in dark. */
+    --site-shadow-pop:
+      0 18px 44px color-mix(in srgb, var(--site-ink) 16%, transparent),
+      0 0 0 1px var(--site-hairline);
+    --site-scrim: light-dark(
+      color-mix(in srgb, var(--site-ink) 92%, transparent),
+      color-mix(in srgb, var(--site-paper) 94%, transparent)
+    );
+    --site-on-scrim: light-dark(var(--site-paper), var(--site-ink));
+    --site-backdrop: light-dark(
+      color-mix(in srgb, var(--site-ink) 42%, transparent),
+      color-mix(in srgb, var(--site-paper) 70%, transparent)
+    );
+    --site-error: light-dark(#b3261e, #f2a29b);
+    --site-body-font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    --site-mono-font: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --site-pill: 99px;
+    --site-focus: 2px solid var(--site-accent);
+    --site-content-max: 1180px;
+
+    background: var(--site-paper);
+    color: var(--site-ink);
+    /* The body level's typography, where the theme sets it (`themeToCss`). */
+    font: var(--site-font-body-size, 16px) / var(--site-font-body-leading, 1.55)
+      var(--site-body-font);
+    font-weight: var(--site-font-body-weight, 400);
+    letter-spacing: var(--site-font-body-tracking, normal);
+    -webkit-font-smoothing: antialiased;
+    min-block-size: 100%;
+    box-sizing: border-box;
+  }
+
+  /* A block on a colour scheme (M33-13). `SiteRoot` writes the scheme's
+     roles on `[data-hl-scheme="<key>"]` (`schemesCss`); the tokens the scope
+     derives from them are derived again HERE, on the same element — a custom
+     property is computed where it is declared, so the scope's `--site-card`
+     would still read the theme's paper — and the block takes the scheme's
+     surface. A block's own background utility still wins (the layer). */
+  .hl-site-scope [data-hl-scheme] {
+    --site-accent-soft: color-mix(in srgb, var(--site-accent) 15%, transparent);
+    --site-ink-soft: color-mix(in srgb, var(--site-ink) 66%, var(--site-paper));
+    --site-hairline: color-mix(in srgb, var(--site-ink) 9%, transparent);
+    --site-hairline-strong: color-mix(in srgb, var(--site-ink) 12%, transparent);
+    --site-card: light-dark(
+      color-mix(in srgb, var(--site-paper) 55%, #ffffff),
+      color-mix(in srgb, var(--site-paper) 92%, #ffffff)
+    );
+    --site-well: color-mix(in srgb, var(--site-paper) 96%, var(--site-ink));
+    --site-on-accent: light-dark(#fdfbf7, var(--site-paper));
+    --site-on-ink: light-dark(#e8e3d9, var(--site-paper));
+    --site-on-ink-muted: light-dark(
+      #8d867a,
+      color-mix(in srgb, var(--site-paper) 55%, var(--site-ink))
+    );
+    --site-on-ink-link: light-dark(
+      #cdc6b8,
+      color-mix(in srgb, var(--site-paper) 80%, var(--site-ink))
+    );
+    --site-media-fill: color-mix(in srgb, var(--site-accent) 22%, var(--site-paper));
+    /* Widget chrome (M40, D0): a popover's shadow, the lightbox's veil and the
+       text on it, a dialog's backdrop, a field error. The veils stay dark in
+       both schemes: ink in light, paper in dark. */
+    --site-shadow-pop:
+      0 18px 44px color-mix(in srgb, var(--site-ink) 16%, transparent),
+      0 0 0 1px var(--site-hairline);
+    --site-scrim: light-dark(
+      color-mix(in srgb, var(--site-ink) 92%, transparent),
+      color-mix(in srgb, var(--site-paper) 94%, transparent)
+    );
+    --site-on-scrim: light-dark(var(--site-paper), var(--site-ink));
+    --site-backdrop: light-dark(
+      color-mix(in srgb, var(--site-ink) 42%, transparent),
+      color-mix(in srgb, var(--site-paper) 70%, transparent)
+    );
+    --site-error: light-dark(#b3261e, #f2a29b);
+
+    background-color: var(--site-paper);
+    color: var(--site-ink);
+  }
+
+  .hl-site-scope *,
+  .hl-site-scope *::before,
+  .hl-site-scope *::after {
+    box-sizing: inherit;
+  }
+
+  .hl-site-scope a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .hl-site-scope a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .hl-site-scope :focus-visible {
+    outline: var(--site-focus);
+    outline-offset: 2px;
+  }
+
+  .hl-site-scope img {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+  }
+
+  .hl-site-scope h1,
+  .hl-site-scope h2,
+  .hl-site-scope h3 {
+    font-family: var(--site-heading-font);
+    font-weight: var(--site-font-heading-weight, 400);
+    letter-spacing: var(--site-font-heading-tracking, -0.01em);
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  /* Negative tracking is a Latin-typography convention (tightening large
+     headings) — on Arabic's connected script it breaks letterforms apart.
+     Reset every heading-font rule that sets it, and the body level's, for
+     `dir="rtl"` locales only. */
+  .hl-site-scope[dir='rtl'],
+  .hl-site-scope[dir='rtl'] h1,
+  .hl-site-scope[dir='rtl'] h2,
+  .hl-site-scope[dir='rtl'] h3,
+  .hl-site-scope[dir='rtl'] h4 {
+    letter-spacing: normal;
+  }
+
+  .hl-site-scope p {
+    margin: 0;
+  }
+
+  /* ------------------------------------ Blocks ------------------------------ */
+
+  /* Every block's box. The padding is the theme's density (`themeToCss`
+     writes `--site-pad-y` / `--site-pad-x`); a block that flows inside a
+     page (a heading, a text) points `--site-pad-y` at its own rhythm, and a
+     designer's `style` padding — a utility — replaces it outright. */
+  .hl-blk {
+    position: relative;
+    padding-block: var(--site-pad-y);
+    padding-inline: var(--site-pad-x);
+  }
+
+  /* A block nested in a layout block's slot takes the slot's rhythm, not the
+     page's: no density padding of its own (a designer's still applies). */
+  .hl-slot .hl-blk {
+    padding: 0;
+  }
+
+  /* ------------------------------------ Prose ------------------------------- */
+
+  /* Rich text renders plain elements (`renderRichText`), so its prose rules
+     live here rather than on each element. */
+  .hl-rich > * + * {
+    margin-block-start: 0.8em;
+  }
+
+  .hl-rich ul,
+  .hl-rich ol {
+    padding-inline-start: 1.4em;
+  }
+
+  .hl-rich blockquote {
+    margin: 0;
+    padding-inline-start: 1em;
+    border-inline-start: 2px solid var(--site-accent);
+    color: var(--site-ink-soft);
+  }
+
+  .hl-rich code {
+    font-family: var(--site-mono-font);
+    font-size: 0.9em;
+    background: var(--site-well);
+    padding-inline: 0.3em;
+    border-radius: 4px;
+  }
+
+  .hl-rich a {
+    color: var(--site-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  /* ------------------------------- Theme toggle ----------------------------- */
+
+  /* Which icon shows follows the colour scheme — the visitor's, or the one a
+     `data-site-scheme` forces — not a breakpoint, so it stays plain CSS. */
+  .hl-theme-toggle__sun {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-site-scheme='light'])
+      .hl-site-scope:not([data-site-scheme='light'])
+      .hl-theme-toggle__sun {
+      display: block;
+    }
+    :root:not([data-site-scheme='light'])
+      .hl-site-scope:not([data-site-scheme='light'])
+      .hl-theme-toggle__moon {
+      display: none;
+    }
+  }
+
+  :root[data-site-scheme='dark'] .hl-theme-toggle__sun,
+  .hl-site-scope[data-site-scheme='dark'] .hl-theme-toggle__sun {
+    display: block;
+  }
+
+  :root[data-site-scheme='dark'] .hl-theme-toggle__moon,
+  .hl-site-scope[data-site-scheme='dark'] .hl-theme-toggle__moon {
+    display: none;
+  }
+
+  /* ------------------------------- Motion (M29) ----------------------------- */
+
+  /* A reveal as the block scrolls into view, driven by the scroll timeline —
+     no script. Where the browser has no `animation-timeline`, the block is
+     simply visible; where the visitor asked for less motion, likewise. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .hl-reveal {
+        animation: hl-reveal-fade linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 40%;
+      }
+      .hl-reveal--fade-up {
+        animation-name: hl-reveal-fade-up;
+      }
+      .hl-reveal--scale-in {
+        animation-name: hl-reveal-scale-in;
+      }
+      .hl-delay-1 {
+        animation-range: entry 10% entry 50%;
+      }
+      .hl-delay-2 {
+        animation-range: entry 20% entry 60%;
+      }
+      .hl-delay-3 {
+        animation-range: entry 30% entry 70%;
+      }
+    }
+  }
+
+  @keyframes hl-reveal-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes hl-reveal-fade-up {
+    from {
+      opacity: 0;
+      translate: 0 24px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+  @keyframes hl-reveal-scale-in {
+    from {
+      opacity: 0;
+      scale: 0.96;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  /* A hover response, on the block itself. */
+  .hl-hover--lift,
+  .hl-hover--zoom,
+  .hl-hover--dim {
+    transition:
+      translate 0.25s ease,
+      scale 0.25s ease,
+      opacity 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .hl-hover--lift:hover {
+    translate: 0 -4px;
+    box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.25);
+  }
+  .hl-hover--zoom:hover {
+    scale: 1.02;
+  }
+  .hl-hover--dim:hover {
+    opacity: 0.8;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hl-hover--lift,
+    .hl-hover--zoom,
+    .hl-hover--dim {
+      transition: none;
+    }
+    .hl-hover--lift:hover,
+    .hl-hover--zoom:hover {
+      translate: none;
+      scale: none;
+    }
+  }
+
+  /* ------------------------------- Marquee (M29) ---------------------------- */
+
+  /* Two copies of the track scroll by half their width, so the loop is
+     seamless. `--site-marquee-duration` comes from the block's speed; the
+     direction flips the keyframe. Paused on hover when the block asks. */
+  .hl-marquee {
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+  .hl-marquee__track {
+    display: flex;
+    width: max-content;
+    animation: hl-marquee var(--site-marquee-duration, 30s) linear infinite;
+  }
+  .hl-marquee--reverse .hl-marquee__track {
+    animation-direction: reverse;
+  }
+  .hl-marquee--pause:hover .hl-marquee__track {
+    animation-play-state: paused;
+  }
+  @keyframes hl-marquee {
+    from {
+      translate: 0 0;
+    }
+    to {
+      translate: -50% 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hl-marquee__track {
+      animation: none;
+      flex-wrap: wrap;
+      width: auto;
+    }
+    .hl-marquee__track > [aria-hidden='true'] {
+      display: none;
+    }
+  }
+
+  /* --------------------------- Accent decoration (M29) ---------------------- */
+
+  /* A word a heading marks: the decoration is an inline SVG drawn behind or
+     under the word, sized to it, in the decoration's colour
+     (`--site-mark-color`, the accent by default). */
+  .hl-accent {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .hl-accent__shape {
+    position: absolute;
+    pointer-events: none;
+    fill: none;
+    stroke: var(--site-mark-color, var(--site-accent));
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    overflow: visible;
+  }
+  .hl-accent--ellipse .hl-accent__shape,
+  .hl-accent--scribble .hl-accent__shape {
+    inset: -0.35em -0.3em;
+    width: calc(100% + 0.6em);
+    height: calc(100% + 0.7em);
+  }
+  .hl-accent--underline .hl-accent__shape {
+    inset-inline: -0.1em;
+    bottom: -0.25em;
+    width: calc(100% + 0.2em);
+    height: 0.35em;
+  }
+  .hl-accent--highlight {
+    background: linear-gradient(
+      transparent 55%,
+      color-mix(in srgb, var(--site-mark-color, var(--site-accent)) 35%, transparent) 55%
+    );
+    padding-inline: 0.08em;
+  }
+
+  /* ------------------------------ Accordion (M29) --------------------------- */
+
+  .hl-accordion summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  .hl-accordion summary::-webkit-details-marker {
+    display: none;
+  }
+  .hl-accordion details[open] .hl-accordion__caret {
+    rotate: 180deg;
+  }
+  .hl-accordion details[open] .hl-accordion__plus {
+    rotate: 45deg;
+  }
+  .hl-accordion__caret,
+  .hl-accordion__plus {
+    transition: rotate 0.2s ease;
+  }
+
+  /* ------------------------------ Attribution badge ------------------------- */
+
+  /* « Propulsé par Hlou » (`AttributionBadge`). Every colour and dimension is
+     an inline `--site-badge-*` property, written as `light-dark()` when the
+     badge follows the page — so it takes the `color-scheme` of what holds it:
+     the scope (system, version pin, theme toggle) or a settings preview's
+     wrapper. The reset is defensive: a site's blocks bring Tailwind (and, in
+     the starter, its preflight), and a developer's own CSS lands here too.
+     `a.` outranks the scope's own link rules above (same layer, same
+     specificity, later wins). */
+  a.hl-attribution {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--site-badge-gap);
+    block-size: var(--site-badge-h);
+    min-block-size: 0;
+    inline-size: auto;
+    max-inline-size: none;
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--site-badge-ps) var(--site-badge-pe);
+    border: 0;
+    border-radius: var(--site-badge-r);
+    background: var(--site-badge-bg);
+    color: var(--site-badge-fg);
+    box-shadow: var(--site-badge-shadow);
+    font:
+      500 var(--site-badge-fs) / 1 Inter,
+      system-ui,
+      -apple-system,
+      'Segoe UI',
+      sans-serif;
+    font-style: normal;
+    letter-spacing: 0;
+    line-height: 1;
+    text-transform: none;
+    text-decoration: none;
+    text-align: start;
+    white-space: nowrap;
+    opacity: 1;
+    cursor: pointer;
+    -webkit-font-smoothing: antialiased;
+    transition:
+      box-shadow 0.15s ease,
+      background 0.15s ease,
+      color 0.15s ease;
+  }
+  a.hl-attribution:hover {
+    background: var(--site-badge-bg-h);
+    color: var(--site-badge-fg-h);
+    box-shadow: var(--site-badge-shadow-h);
+    text-decoration: none;
+  }
+  a.hl-attribution:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    a.hl-attribution {
+      transition: none;
+    }
+  }
+
+  .hl-attribution span {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: none;
+  }
+  /* Two classes, to outrank the span reset just above. */
+  .hl-attribution .hl-attribution__muted {
+    color: var(--site-badge-muted);
+  }
+  .hl-attribution .hl-attribution__strong {
+    font-weight: 600;
+    color: var(--site-badge-strong);
+    /* Close to « par » / « by ». */
+    margin-inline-start: -2px;
+  }
+  .hl-attribution svg {
+    display: block;
+    flex: none;
+    block-size: var(--site-badge-mark);
+    inline-size: auto;
+    max-inline-size: none;
+    aspect-ratio: 512 / 338;
+    margin: 0;
+  }
+
+  /* Text-only: no mark, no nudge; the whole line darkens on hover. */
+  .hl-attribution--text .hl-attribution__strong {
+    margin-inline-start: 0;
+  }
+  a.hl-attribution--text:hover .hl-attribution__muted {
+    color: var(--site-badge-fg-h);
+  }
+
+  /* Mark-only: the mark alone, centred in a dot. */
+  a.hl-attribution--only {
+    inline-size: var(--site-badge-h);
+    padding-inline: 0;
+    justify-content: center;
+  }
+
+  .hl-attribution--glass {
+    -webkit-backdrop-filter: blur(12px) saturate(1.4);
+    backdrop-filter: blur(12px) saturate(1.4);
+  }
+
+  /* In the Footer block's legal row (decision 193): it closes the row and
+     never shrinks; the row itself is the block's (`FooterBlock`). */
+  a.hl-attribution--footer {
+    flex: none;
+  }
+
+  /* No visible footer: a centred row after the content, on the scope's
+     paper, under a rule in the site's own hairline. */
+  .hl-attribution-row {
+    display: flex;
+    justify-content: center;
+    padding-block: 22px 28px;
+    padding-inline: 16px;
+    border-block-start: 1px solid var(--site-hairline);
+  }
+
+  /* ------------------------------------ Phones ------------------------------ */
+
+  /* Below the smallest canvas viewport the density eases off. */
+  @media (max-width: 389px) {
+    .hl-blk {
+      padding-block: calc(var(--site-pad-y) * 0.7);
+      padding-inline: calc(var(--site-pad-x) * 0.5);
+    }
+  }
+
+  /* ------------------------------ Scope state (M40) ------------------------- */
+
+  /* A node whose `when` is false (decision 197): kept in the markup, so the
+     scope runtime can show it again, and hidden whatever its own display —
+     an important declaration in this layer beats any utility. */
+  [data-hl-off] {
+    display: none !important;
+  }
+
+  /* ------------------------- Carousel, hero slider (M40) -------------------- */
+
+  /* Slides per view and the gap, per breakpoint (`--site-carousel-per-*`,
+     `--site-carousel-gap-*`, written inline by the block — a peek adds the
+     fraction of the next slide). A smaller breakpoint's value carries up. */
+  .hl-carousel {
+    --site-carousel-n: var(--site-carousel-per, 1);
+    --site-carousel-g: var(--site-carousel-gap, 14px);
+    --site-carousel-w: calc(
+      (100% - (var(--site-carousel-n) - 1) * var(--site-carousel-g)) / var(--site-carousel-n)
+    );
+  }
+  @media (min-width: 768px) {
+    .hl-carousel {
+      --site-carousel-n: var(--site-carousel-per-md, var(--site-carousel-per, 1));
+      --site-carousel-g: var(--site-carousel-gap-md, var(--site-carousel-gap, 14px));
+    }
+  }
+  @media (min-width: 1180px) {
+    .hl-carousel {
+      --site-carousel-n: var(
+        --site-carousel-per-lg,
+        var(--site-carousel-per-md, var(--site-carousel-per, 1))
+      );
+      --site-carousel-g: var(
+        --site-carousel-gap-lg,
+        var(--site-carousel-gap-md, var(--site-carousel-gap, 14px))
+      );
+    }
+  }
+  @media (min-width: 1440px) {
+    .hl-carousel {
+      --site-carousel-n: var(
+        --site-carousel-per-xl,
+        var(--site-carousel-per-lg, var(--site-carousel-per-md, var(--site-carousel-per, 1)))
+      );
+      --site-carousel-g: var(
+        --site-carousel-gap-xl,
+        var(--site-carousel-gap-lg, var(--site-carousel-gap-md, var(--site-carousel-gap, 14px)))
+      );
+    }
+  }
+  /* The track is the browser's own scroller: touch swipes it, snap aligns it,
+     and it works with no script at all. */
+  .hl-carousel__track {
+    display: flex;
+    gap: var(--site-carousel-g);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+    scrollbar-width: none;
+  }
+  .hl-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+  .hl-carousel__track > * {
+    flex: 0 0 var(--site-carousel-w);
+    min-inline-size: 0;
+    scroll-snap-align: start;
+  }
+  /* Centred: a spacer at each end lets the first and last slides centre. */
+  .hl-carousel--center .hl-carousel__track > * {
+    scroll-snap-align: center;
+  }
+  .hl-carousel--center .hl-carousel__track::before,
+  .hl-carousel--center .hl-carousel__track::after {
+    content: '';
+    flex: 0 0 max(0px, calc((100% - var(--site-carousel-w)) / 2 - var(--site-carousel-g)));
+  }
+  /* A mouse drag scrolls by hand: no snapping, no image drag, until release. */
+  .hl-carousel__track[data-hl-dragging] {
+    scroll-snap-type: none;
+    cursor: grabbing;
+    user-select: none;
+  }
+  .hl-carousel__track[data-hl-dragging] * {
+    pointer-events: none;
+  }
+
+  /* Arrows, dots and the pause button wait for the island (`data-hl-ready` on
+     the block): without a script they would be dead buttons. */
+  [data-hl-c-ctl]:not([data-hl-ready] *),
+  [data-hl-c-ctl][hidden] {
+    display: none !important;
+  }
+
+  /* A dot is a pill in the hairline; the current one stretches in the accent.
+     An even 8px padding keeps a 24px target (and the mark round: the inner
+     radius is the outer one less the padding); the negative margin brings
+     the marks back to 8px apart. */
+  .hl-carousel__dot {
+    box-sizing: content-box;
+    inline-size: 8px;
+    block-size: 8px;
+    padding: 8px;
+    margin-inline: -4px;
+    border: 0;
+    border-radius: var(--site-pill);
+    background: var(--site-hairline-strong);
+    background-clip: content-box;
+    cursor: pointer;
+    transition: inline-size 0.2s ease;
+  }
+  .hl-carousel__dot[aria-current='true'] {
+    inline-size: 26px;
+    background-color: var(--site-accent);
+  }
+  .hl-carousel__dots--on-ink .hl-carousel__dot {
+    background-color: color-mix(in srgb, var(--site-on-ink) 45%, transparent);
+  }
+  .hl-carousel__dots--on-ink .hl-carousel__dot[aria-current='true'] {
+    background-color: var(--site-on-ink);
+  }
+
+  /* The hero slider: its images stacked, the active one shown, cross-faded. */
+  .hl-fade > [data-hl-c-slide] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.9s ease;
+  }
+  .hl-fade > [data-hl-c-slide][data-hl-active] {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hl-carousel__dot,
+    .hl-fade > [data-hl-c-slide] {
+      transition: none;
+    }
+  }
+
+  /* ------------------------------ Lightbox (M40) ---------------------------- */
+
+  /* The page under an open viewer does not scroll — no script involved. */
+  html:has(dialog[data-hl-lightbox-dialog][open]) {
+    overflow: hidden;
+  }
+  /* Each image fades in (it is redrawn per step); not under reduced motion. */
+  .hl-lightbox__img {
+    animation: hl-lightbox-in 0.15s ease both;
+  }
+  @keyframes hl-lightbox-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hl-lightbox__img {
+      animation: none;
+    }
+  }
+
+  /* ---------------------------------- Tabs (M40) ---------------------------- */
+
+  /* The strip's hairline is an inset shadow, so the scrolling strip does not
+     clip the selected tab's 2 px underline drawn over it. The underline grows
+     in, the pill fades in: 200 ms, none when the visitor asks for less. */
+  .hl-tabs--underline .hl-tabs__list {
+    box-shadow: inset 0 -1px 0 var(--site-hairline-strong);
+  }
+  .hl-tabs--underline .hl-tabs__tab::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: 2px;
+    background: var(--site-accent);
+    scale: 0 1;
+    transition: scale 0.2s ease;
+  }
+  .hl-tabs--underline .hl-tabs__tab[aria-selected='true']::after {
+    scale: 1 1;
+  }
+  .hl-tabs--pills .hl-tabs__tab {
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+  .hl-tabs--pills .hl-tabs__tab[aria-selected='true'] {
+    box-shadow: 0 1px 0 var(--site-hairline-strong);
+  }
+  .hl-tabs__list::-webkit-scrollbar {
+    display: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hl-tabs__tab,
+    .hl-tabs__tab::after {
+      transition: none !important;
+    }
+  }
+
+  /* --------------------------------- Modal (M40) ---------------------------- */
+
+  /* A native modal dialog, centred from the tablet up; under it every size is
+     a bottom sheet that rises 24 px (its square corners are utilities, in
+     `ModalBlock`). `full` is the whole viewport at every width. The page
+     behind does not scroll. */
+  dialog.hl-modal {
+    /* The UA centres a modal dialog with `margin: auto`; a site's own reset
+       (Tailwind's preflight in the starter and the kernel) zeroes it. */
+    margin: auto;
+    max-block-size: calc(100dvh - 32px);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  dialog.hl-modal::backdrop {
+    background: var(--site-backdrop);
+  }
+  @media (max-width: 767px) {
+    dialog.hl-modal {
+      margin: auto 0 0;
+      max-inline-size: 100%;
+    }
+  }
+  dialog.hl-modal.hl-modal--full {
+    margin: 0;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    block-size: 100dvh;
+    max-block-size: 100dvh;
+  }
+  html:has(dialog[data-hl-modal][open]) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    dialog.hl-modal {
+      transition:
+        opacity 0.15s ease-out,
+        scale 0.15s ease-out,
+        translate 0.15s ease-out,
+        overlay 0.15s allow-discrete,
+        display 0.15s allow-discrete;
+    }
+    dialog.hl-modal::backdrop {
+      transition:
+        opacity 0.15s ease-out,
+        overlay 0.15s allow-discrete,
+        display 0.15s allow-discrete;
+    }
+    @starting-style {
+      dialog.hl-modal[open] {
+        opacity: 0;
+        scale: 0.98;
+      }
+      dialog.hl-modal[open]::backdrop {
+        opacity: 0;
+      }
+    }
+    @media (max-width: 767px) {
+      @starting-style {
+        dialog.hl-modal[open] {
+          scale: 1;
+          translate: 0 24px;
+        }
+      }
+    }
+  }
+  /* No script: the link targets the dialog, which shows as a fixed panel over
+     a veil, and its close link (`#_`) un-targets it. Once the island runs it
+     marks the dialog ready and this stands down. */
+  dialog[data-hl-modal]:target:not([open]):not([data-hl-modal-ready]) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    margin: auto;
+    block-size: fit-content;
+    box-shadow:
+      var(--site-shadow-pop),
+      0 0 0 100vmax var(--site-backdrop);
+  }
+
+  /* --------------------------------- Header menus (M40) --------------------- */
+
+  /* Dropdowns: shown on hover and on focus within (mouse and Tab, no
+     script), or open from the caret (the menu island, for touch); a
+     dismissal (Esc) shuts it until the pointer or the focus leaves. A bridge
+     spans the 14 px between the link and the list, so the hover holds. */
+  .hl-menu__sub {
+    display: none;
+  }
+  .hl-menu__sub::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 100%;
+    block-size: 14px;
+  }
+  .hl-menu__item:is(:hover, :focus-within, [data-open]):not([data-dismissed]) > .hl-menu__sub {
+    display: block;
+  }
+  .hl-menu__caret[aria-expanded='true'] svg {
+    rotate: 180deg;
+  }
+
+  /* The panels are native popovers: closed, the browser hides them; open,
+     they sit in the top layer. `display` is set only while open. */
+  .hl-menu[popover] {
+    position: fixed;
+    margin: 0;
+    max-inline-size: none;
+    max-block-size: none;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  .hl-menu[popover]::backdrop {
+    background: var(--site-backdrop);
+  }
+  html:has(.hl-menu:popover-open) {
+    overflow: hidden;
+  }
+
+  /* The drawer: a sheet on the inline end, full height. */
+  .hl-menu--drawer[popover] {
+    inset-block: 0;
+    inset-inline: auto 0;
+    inline-size: min(22rem, 88vw);
+    block-size: 100dvh;
+  }
+  .hl-menu--drawer:popover-open,
+  .hl-menu--drawer[data-hl-menu-preview] {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  /* The full-screen menu: the whole viewport, the photo on the start 40 %
+     from the tablet up; on a phone the links over the photo at 12 %. */
+  .hl-menu--fullscreen[popover] {
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100dvh;
+  }
+  .hl-menu--fullscreen:popover-open {
+    display: grid;
+  }
+  .hl-menu--fullscreen[popover]::backdrop {
+    background: transparent;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hl-menu--drawer[popover] {
+      transition:
+        translate 0.2s ease-out,
+        opacity 0.2s ease-out,
+        overlay 0.2s allow-discrete,
+        display 0.2s allow-discrete;
+    }
+    @starting-style {
+      .hl-menu--drawer:popover-open {
+        translate: 100% 0;
+      }
+      [dir='rtl'] .hl-menu--drawer:popover-open {
+        translate: -100% 0;
+      }
+    }
+    .hl-menu--fullscreen[popover] {
+      transition:
+        opacity 0.24s ease-out,
+        overlay 0.24s allow-discrete,
+        display 0.24s allow-discrete;
+    }
+    @starting-style {
+      .hl-menu--fullscreen:popover-open {
+        opacity: 0;
+      }
+    }
+    .hl-menu--fullscreen:popover-open .hl-menu__rise {
+      animation: hl-menu-rise 0.32s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(var(--n, 0) * 30ms + 60ms);
+    }
+    .hl-menu__caret svg {
+      transition: rotate 0.2s ease;
+    }
+  }
+  @keyframes hl-menu-rise {
+    from {
+      opacity: 0;
+      translate: 0 14px;
+    }
+  }
+
+  /* A transparent header over the block below it: the bar's text turns
+     on-ink, like the overlay hero's, until a sticky one takes its paper. The
+     panels are outside the bar, so they keep the page's colours. */
+  .hl-site-scope:has(.hl-header--overlay) {
+    position: relative;
+  }
+  .hl-header--overlay {
+    --site-ink-page: var(--site-ink);
+    --site-ink-soft-page: var(--site-ink-soft);
+  }
+  .hl-header--overlay:not([data-hl-scrolled]) .hl-header__ink {
+    --site-ink: var(--site-on-ink);
+    --site-ink-soft: var(--site-on-ink-muted);
+    color: var(--site-on-ink);
+  }
+  /* A dropdown is a card: it keeps the page's ink. */
+  .hl-header--overlay .hl-menu__sub {
+    --site-ink: var(--site-ink-page);
+    --site-ink-soft: var(--site-ink-soft-page);
+    color: var(--site-ink);
+  }
+
+  /* ------------------------------- Date picker ------------------------------ */
+  /* The date picker and its calendar (M40-12, D0 board 4.6). The field looks
+     like an input; the calendar is a `popover="auto"` card placed by the island
+     (`--site-dp-x` / `--site-dp-y`), a bottom sheet with one month under 640 px.
+     The previous-month arrow is the next one turned, and both mirror in RTL.
+     Icons are Phosphor regular paths (CalendarBlank, CaretRight, X) as masks,
+     so the island ships no path data. */
+  .hl-dp {
+    --site-dp-calendar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z'/%3E%3C/svg%3E");
+    --site-dp-caret: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z'/%3E%3C/svg%3E");
+    --site-dp-close: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z'/%3E%3C/svg%3E");
+    max-inline-size: 760px;
+  }
+  .hl-dp__set {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-inline-size: 0;
+  }
+  .hl-dp__legend,
+  .hl-dp__label {
+    display: block;
+    margin: 0 0 8px;
+    padding: 0;
+    font-size: var(--site-type-xs);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--site-ink-soft);
+  }
+  .hl-dp__split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .hl-dp__end {
+    min-inline-size: 0;
+  }
+  .hl-dp__input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    inline-size: 100%;
+    min-block-size: 48px;
+    padding-inline: 14px;
+    border-radius: var(--site-radius);
+    border: 1px solid var(--site-hairline-strong);
+    background: var(--site-card);
+    color: var(--site-ink);
+    font: inherit;
+    font-size: var(--site-type-sm);
+    text-align: start;
+    cursor: pointer;
+  }
+  .hl-dp__input[aria-expanded='true'] {
+    border-color: var(--site-accent);
+  }
+  .hl-dp__input[tabindex='-1'] {
+    cursor: default;
+  }
+  .hl-dp__ph {
+    color: var(--site-ink-soft);
+  }
+  .hl-dp__icon {
+    flex: none;
+    inline-size: 18px;
+    block-size: 18px;
+    margin-inline-start: auto;
+    background: var(--site-ink-soft);
+    mask: var(--site-dp-calendar) center / contain no-repeat;
+  }
+  .hl-dp--error .hl-dp__input {
+    border-color: var(--site-error);
+  }
+  .hl-dp__error {
+    margin: 8px 0 0;
+    font-size: var(--site-type-xs);
+    color: var(--site-error);
+  }
+
+  .hl-dp__pop {
+    position: fixed;
+    inset: var(--site-dp-y, 0) auto auto var(--site-dp-x, 0);
+    margin: 0;
+    inline-size: max-content;
+    max-inline-size: calc(100vw - 16px);
+    padding: 18px 20px 14px;
+    border: 0;
+    border-radius: var(--site-radius);
+    background: var(--site-card);
+    color: var(--site-ink);
+    box-shadow: var(--site-shadow-pop);
+    z-index: 50;
+  }
+  /* Open but not drawn and placed yet: kept out of sight for that frame. */
+  .hl-dp__pop:not([data-open]) {
+    visibility: hidden;
+  }
+  .hl-dp__head {
+    display: none;
+  }
+  @media (max-width: 639px) {
+    .hl-dp__split {
+      gap: 10px;
+    }
+    .hl-dp__pop {
+      inset: auto 0 0 0;
+      inline-size: 100%;
+      max-inline-size: none;
+      padding: 8px 16px 20px;
+      border-end-start-radius: 0;
+      border-end-end-radius: 0;
+    }
+    .hl-dp__pop::backdrop {
+      background: var(--site-backdrop);
+    }
+    .hl-dp__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-block-end: 4px;
+      font: 500 var(--site-type-md) / 1.2 var(--site-heading-font);
+    }
+    .hl-dp__head::before {
+      content: '';
+      position: absolute;
+      inset-block-start: 8px;
+      inset-inline-start: calc(50% - 18px);
+      inline-size: 36px;
+      block-size: 4px;
+      border-radius: 99px;
+      background: var(--site-hairline-strong);
+    }
+    .hl-dp__head p {
+      margin: 14px 0 0;
+    }
+    .hl-dp__head .hl-cal__arrow {
+      border: 0;
+      background: transparent;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hl-dp__pop[data-open] {
+      animation: hl-dp-fade 0.12s ease-out;
+    }
+  }
+  @keyframes hl-dp-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .hl-cal {
+    position: relative;
+  }
+  .hl-cal__nav {
+    position: absolute;
+    inset-inline: -6px;
+    inset-block-start: -6px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+  .hl-cal__arrow {
+    pointer-events: auto;
+    display: inline-grid;
+    place-items: center;
+    inline-size: 36px;
+    block-size: 36px;
+    padding: 0;
+    border-radius: var(--site-pill);
+    border: 1px solid var(--site-hairline-strong);
+    background: var(--site-card);
+    color: var(--site-ink);
+    cursor: pointer;
+  }
+  .hl-cal__arrow::before {
+    content: '';
+    inline-size: 15px;
+    block-size: 15px;
+    background: currentColor;
+    mask: var(--site-dp-caret) center / contain no-repeat;
+  }
+  .hl-cal__arrow--close::before {
+    inline-size: 18px;
+    block-size: 18px;
+    mask-image: var(--site-dp-close);
+  }
+  .hl-cal__nav .hl-cal__arrow:first-child::before,
+  [dir='rtl'] .hl-cal__nav .hl-cal__arrow:last-child::before {
+    rotate: 180deg;
+  }
+  [dir='rtl'] .hl-cal__nav .hl-cal__arrow:first-child::before {
+    rotate: none;
+  }
+  .hl-cal__arrow:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .hl-cal__months {
+    display: flex;
+    gap: 32px;
+  }
+  .hl-cal__title {
+    margin: 6px 0 12px;
+    text-align: center;
+    text-transform: capitalize;
+    font: 500 var(--site-type-md) / 1.2 var(--site-heading-font);
+  }
+  .hl-cal__grid {
+    border-collapse: separate;
+    border-spacing: 0 2px;
+  }
+  .hl-cal__grid th {
+    block-size: 28px;
+    inline-size: 42px;
+    font-size: var(--site-type-xs);
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--site-ink-soft);
+  }
+  .hl-cal__grid td {
+    padding: 0;
+    text-align: center;
+  }
+  .hl-cal__day {
+    position: relative;
+    inline-size: 42px;
+    block-size: 40px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--site-radius);
+    background: transparent;
+    color: var(--site-ink);
+    font: inherit;
+    font-size: var(--site-type-sm);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  .hl-cal__day:hover {
+    background: var(--site-well);
+  }
+  .hl-cal__day[aria-disabled='true'] {
+    opacity: 0.45;
+    color: var(--site-ink-soft);
+    text-decoration: line-through;
+    text-decoration-color: var(--site-hairline-strong);
+    cursor: not-allowed;
+  }
+  .hl-cal__day[aria-current='date']::after {
+    content: '';
+    position: absolute;
+    inset-block-end: 5px;
+    inset-inline-start: calc(50% - 2px);
+    inline-size: 4px;
+    block-size: 4px;
+    border-radius: 50%;
+    background: var(--site-accent);
+  }
+  .hl-cal__day[data-k='r'] {
+    border-radius: 0;
+    background: var(--site-accent-soft);
+  }
+  .hl-cal__day[data-k='t'] {
+    border-radius: 0;
+    background: repeating-linear-gradient(
+      135deg,
+      var(--site-accent-soft) 0 6px,
+      transparent 6px 10px
+    );
+  }
+  .hl-cal__day[data-k='s'],
+  .hl-cal__day[data-k='e'] {
+    background: var(--site-accent);
+    color: var(--site-on-accent);
+  }
+  .hl-cal__day[data-k='s']::after,
+  .hl-cal__day[data-k='e']::after {
+    background: var(--site-on-accent);
+  }
+  .hl-cal__day[data-k='h'] {
+    box-shadow: inset 0 0 0 1.5px var(--site-accent);
+  }
+  .hl-cal__foot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-block-start: 10px;
+    padding-block-start: 10px;
+    border-block-start: 1px solid var(--site-hairline);
+  }
+  .hl-cal__note {
+    flex: 1;
+    font-size: var(--site-type-sm);
+    color: var(--site-ink-soft);
+  }
+  .hl-cal__btn {
+    min-block-size: 40px;
+    padding-inline: 10px;
+    border: 1px solid transparent;
+    border-radius: var(--site-radius);
+    background: transparent;
+    color: var(--site-ink);
+    font: inherit;
+    font-size: var(--site-type-xs);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .hl-cal__btn--done {
+    padding-inline: 16px;
+    background: var(--site-accent);
+    color: var(--site-on-accent);
+  }
+  /* The sheet: seven cells across the screen, 44 px tall (after the rules they widen). */
+  @media (max-width: 639px) {
+    .hl-cal__grid th,
+    .hl-cal__day {
+      inline-size: calc((100vw - 32px) / 7);
+    }
+    .hl-cal__day {
+      block-size: 44px;
+    }
+    .hl-cal__nav {
+      inset-block-start: 0;
+    }
+  }
+
+  /* Quantity, choices, steps, summary (M40-13, M40-14) — « Hlou Interactif »
+     boards 4.7–4.10. Their state looks are Tailwind variants on the
+     elements (a utility would beat this layer); here: what has no utility. */
+
+  /* Single steppers one under another: a hairline between their rows. */
+  .hl-blk-quantity + .hl-blk-quantity .hl-qty__row:not(.hl-qty__row--card) {
+    border-block-start: 1px solid var(--site-hairline);
+  }
+
+  /* The step indicator's joins: a hairline after every step but the last,
+     in the accent once that step is done. */
+  .hl-step:not(:last-child)::after {
+    content: '';
+    flex: 1;
+    min-inline-size: 1rem;
+    block-size: 1px;
+    margin-inline: 0.25rem 1rem;
+    background: var(--site-hairline-strong);
+  }
+  .hl-step[data-state='done']:not(:last-child)::after {
+    background: var(--site-accent);
+  }
+
+  /* The summary's mobile bar (`mobile: 'bar'`): a fixed bar on `<details>`
+     under 768 px; open, the card rises over the backdrop. The page keeps
+     the bar's height at its end, so the footer is never covered. */
+  .hl-summary-bar {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 30;
+    background: var(--site-paper);
+    border-block-start: 1px solid var(--site-hairline-strong);
+    box-shadow: 0 -10px 30px color-mix(in srgb, var(--site-ink) 8%, transparent);
+  }
+  /* Its own paper: the open sheet's backdrop sits under the bar's content
+     but over its background. */
+  .hl-summary-bar__head {
+    background: var(--site-paper);
+  }
+  .hl-summary-bar__head::-webkit-details-marker {
+    display: none;
+  }
+  .hl-summary-bar__sheet {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 100%;
+    max-block-size: calc(100dvh - 8.75rem);
+    overflow: auto;
+    padding: 1rem 1rem 0.5rem;
+    background: var(--site-paper);
+    border-start-start-radius: var(--site-radius);
+    border-start-end-radius: var(--site-radius);
+    box-shadow: var(--site-shadow-pop);
+  }
+  .hl-summary-bar__sheet::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: var(--site-backdrop);
+  }
+  .hl-summary-bar[open] .hl-summary-bar__show,
+  .hl-summary-bar:not([open]) .hl-summary-bar__hide {
+    display: none;
+  }
+  .hl-summary-bar[open] .hl-summary-bar__caret {
+    rotate: 180deg;
+  }
+  @media (width < 48rem) {
+    .hl-site-scope:has(.hl-summary-bar) {
+      padding-block-end: 4.25rem;
+    }
+  }
+  @media (width >= 48rem) {
+    .hl-summary-bar {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hl-summary-bar__caret {
+      transition: rotate 0.2s ease;
+    }
+  }
+}

@@ -1,0 +1,102 @@
+# The starter must work standalone: clone → install → build, on the committed
+# sample (no spec: `site/` as it is) and on the empty spec `create-hlou-site`
+# writes (compiled into `site/` first). Then `hlou:pack` must hold the spec
+# and leave the compiled output out.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build (${{ matrix.site }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        site: [sample, empty-spec]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Write the empty spec
+        if: matrix.site == 'empty-spec'
+        run: |
+          rm -rf site public/media
+          mkdir -p hlou/site/pages hlou/site/content
+          cat > hlou/site/site.json <<'JSON'
+          {
+            "$schema": "../../renderer/spec/json-schema/site.schema.json",
+            "format": 1,
+            "project": { "sourceLocale": "fr" },
+            "locales": [{ "code": "fr" }, { "code": "en" }, { "code": "ar" }],
+            "theme": {
+              "colors": [
+                { "key": "accent", "value": "#b0552f" },
+                { "key": "paper", "value": "#f7f5f0" },
+                { "key": "ink", "value": "#1c1a17" }
+              ],
+              "fonts": [
+                { "key": "heading", "source": "google", "family": "Inter" },
+                { "key": "body", "source": "google", "family": "Inter" }
+              ]
+            },
+            "slots": [{ "key": "site.name", "kind": "text" }]
+          }
+          JSON
+          cat > hlou/site/content/fr.json <<'JSON'
+          {
+            "$schema": "../../../renderer/spec/json-schema/content.schema.json",
+            "values": { "site/site.name": { "kind": "text", "text": "Mon site" } }
+          }
+          JSON
+          cat > hlou/site/pages/home.json <<'JSON'
+          {
+            "$schema": "../../../renderer/spec/json-schema/page.schema.json",
+            "path": "/",
+            "title": "Accueil",
+            "position": 0,
+            "status": "ready",
+            "sections": []
+          }
+          JSON
+
+      - name: Compile the spec
+        if: matrix.site == 'empty-spec'
+        run: pnpm hlou:compile
+
+      - run: pnpm build
+
+      - name: The export has the home page
+        run: |
+          test -f out/fr/index.html
+          if [ '${{ matrix.site }}' = empty-spec ]; then grep -q '<title>Mon site</title>' out/fr/index.html; fi
+
+      - name: Pack
+        if: matrix.site == 'empty-spec'
+        run: |
+          pnpm hlou:pack --out "$RUNNER_TEMP/site.hlou.zip"
+          unzip -Z1 "$RUNNER_TEMP/site.hlou.zip" > "$RUNNER_TEMP/files.txt"
+          grep -qx 'hlou-starter-next/hlou/site/site.json' "$RUNNER_TEMP/files.txt"
+          grep -qx 'hlou-starter-next/hlou/site/pages/home.json' "$RUNNER_TEMP/files.txt"
+          grep -qx 'hlou-starter-next/hlou/site/content/fr.json' "$RUNNER_TEMP/files.txt"
+          ! grep -E '^hlou-starter-next/(site|out|\.next|node_modules)/' "$RUNNER_TEMP/files.txt"
+          ! grep -q 'hlou/export.json' "$RUNNER_TEMP/files.txt"

@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hlou.app/schemas/site-spec/v1/content.schema.json",
+  "title": "Hlou site spec, format 1: hlou/site/content/<locale>.json",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "description": "The JSON Schema this file follows.",
+      "type": "string"
+    },
+    "values": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^(?:[a-z0-9]+(?:-[a-z0-9]+)*)\\/(?:[a-z0-9]+(?:[._-][a-zA-Z0-9]+)*)$"
+      },
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "text"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": ["kind", "text"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "heading"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": ["kind", "text"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "richtext"
+              },
+              "doc": {},
+              "docVersion": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": ["kind", "doc", "docVersion"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "media"
+              },
+              "src": {
+                "type": "string",
+                "pattern": "^\\/media\\/[A-Za-z0-9._-]+\\/[A-Za-z0-9._-]+$",
+                "description": "A medium by path: `/media/<dir>/<file>` is the file `public/media/<dir>/<file>`."
+              },
+              "alt": {
+                "type": "string"
+              }
+            },
+            "required": ["kind", "src"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "navigation"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "href": {
+                      "type": "string"
+                    },
+                    "page": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64,
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+                      "description": "The page’s key: its file name in `pages/`, and how content and links name it."
+                    },
+                    "children": {
+                      "maxItems": 8,
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": {
+                            "type": "string"
+                          },
+                          "href": {
+                            "type": "string"
+                          },
+                          "page": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 64,
+                            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+                            "description": "The page’s key: its file name in `pages/`, and how content and links name it."
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["kind", "items"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "dynamic"
+              },
+              "collection": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "query": {
+                "type": "object",
+                "properties": {
+                  "filter": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {}
+                  },
+                  "sort": {
+                    "type": "object",
+                    "properties": {
+                      "field": {
+                        "type": "string"
+                      },
+                      "dir": {
+                        "type": "string",
+                        "enum": ["asc", "desc"]
+                      }
+                    },
+                    "required": ["field", "dir"],
+                    "additionalProperties": false
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": ["kind"],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "media": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^\\/media\\/[A-Za-z0-9._-]+\\/[A-Za-z0-9._-]+$",
+        "description": "A medium by path: `/media/<dir>/<file>` is the file `public/media/<dir>/<file>`."
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "alt": {
+            "type": "string"
+          },
+          "caption": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["values"],
+  "additionalProperties": false
+}

@@ -1,0 +1,309 @@
+/* -------------------------------------------------------------------------- */
+/*                                DEPENDENCIES                                */
+/* -------------------------------------------------------------------------- */
+
+import type { CollectionDoc, ContentValue, FieldDoc, RecordDoc, SiteSnapshot } from '../contracts';
+
+/*
+ * What a site's `site/` folder holds besides `snapshot.json`: `content.ts`
+ * and `messages/<locale>.json` (and `tw-classes.txt`, `siteBuildClasses` in
+ * `blocks/design.ts`). Two writers, one output: `hlou-builder` materialises
+ * them from a snapshot Hlou built, and the starter's `pnpm hlou:compile`
+ * from the spec it compiled (M43-03, decision 219). Moved here from
+ * `apps/builder` so the starter, which vendors only the renderer, writes the
+ * same bytes.
+ */
+
+/* -------------------------------------------------------------------------- */
+/*                                   LOCALES                                  */
+/* -------------------------------------------------------------------------- */
+
+/** Locale codes in snapshot order, and the default: the source locale. */
+export function snapshotLocales(snapshot: Pick<SiteSnapshot, 'locales'>): {
+  codes: string[];
+  defaultCode: string;
+} {
+  const codes = snapshot.locales.map((locale) => locale.code);
+  const source = snapshot.locales.find((locale) => locale.isSource)?.code ?? codes[0];
+  if (source === undefined) throw new Error('A snapshot needs at least one locale');
+  return { codes, defaultCode: source };
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                  MESSAGES                                  */
+/* -------------------------------------------------------------------------- */
+
+/** The text a content value carries: `text`/`heading` verbatim, `richtext` flattened, others none. */
+export function slotText(value: ContentValue | undefined): string | null {
+  if (!value) return null;
+  switch (value.kind) {
+    case 'text':
+    case 'heading':
+      return value.text;
+    case 'richtext':
+      return richTextToPlain(value.doc);
+    default:
+      return null;
+  }
+}
+
+const BLOCK_NODES = new Set([
+  'paragraph',
+  'heading',
+  'listItem',
+  'blockquote',
+  'codeBlock',
+  'horizontalRule',
+]);
+
+/**
+ * TipTap JSON → plain text: text nodes concatenated, block nodes separated by
+ * newlines. The messages' flattening, not `richtext`'s (which joins lists
+ * differently): kept as the builder always wrote it.
+ */
+export function richTextToPlain(doc: unknown): string {
+  const parts: string[] = [];
+  const walk = (node: unknown): void => {
+    if (typeof node !== 'object' || node === null) return;
+    if (Array.isArray(node)) {
+      node.forEach(walk);
+      return;
+    }
+    const record = node as Record<string, unknown>;
+    if (record['type'] === 'text' && typeof record['text'] === 'string') parts.push(record['text']);
+    if (record['type'] === 'hardBreak') parts.push('\n');
+    walk(record['content']);
+    if (typeof record['type'] === 'string' && BLOCK_NODES.has(record['type'])) parts.push('\n');
+  };
+  walk(doc);
+  return parts
+    .join('')
+    .replace(/\n{2,}/g, '\n')
+    .trim();
+}
+
+/**
+ * `site/messages/<locale>.json`: `{ "<slot.key>": text }` for every site-level
+ * slot, read from `content[locale][slot.id]` and falling back to the source
+ * locale — the starter loads one file per locale and does not fall back on
+ * its own. Slots without text (media, navigation, dynamic) are skipped.
+ */
+export function snapshotSiteMessages(
+  snapshot: Pick<SiteSnapshot, 'siteSlots' | 'content' | 'locales'>,
+  locale: string
+): Record<string, string> {
+  const { defaultCode } = snapshotLocales(snapshot);
+  const messages: Record<string, string> = {};
+  for (const slot of snapshot.siteSlots) {
+    const value = snapshot.content[locale]?.[slot.id] ?? snapshot.content[defaultCode]?.[slot.id];
+    const text = slotText(value);
+    if (text !== null) messages[slot.key] = text;
+  }
+  return messages;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 content.ts                                 */
+/* -------------------------------------------------------------------------- */
+
+/** Declared on every record by the generator, never re-emitted from the field list. */
+const BASE_RECORD_KEYS = new Set(['id', 'slug']);
+
+/**
+ * `site/content.ts` — one interface per collection, its published records as
+ * typed constants, and the `pick` / `getBySlug` helpers the starter's pages use.
+ * Generated per build so the site compiles against exactly what it ships.
+ * `hlou-starter-next/site/content.ts` is this function's reference output.
+ */
+export function renderContentTs(snapshot: SiteSnapshot): string {
+  const { codes, defaultCode } = snapshotLocales(snapshot);
+  const out: string[] = [];
+  const push = (...lines: string[]) => out.push(...lines);
+
+  push(
+    '/* GENERATED by hlou-builder — do not edit; regenerated on every build. */',
+    '/* eslint-disable */',
+    '',
+    `export const locales = ${JSON.stringify(codes)} as const;`,
+    'export type Locale = (typeof locales)[number];',
+    `export const defaultLocale: Locale = ${JSON.stringify(defaultCode)};`,
+    '',
+    '/** A value stored per locale; `pick()` resolves it. */',
+    'export type Localized<T> = Partial<Record<Locale, T>>;',
+    "/** A media asset id — look it up in `site/snapshot.json`'s `media` map. */",
+    'export type MediaRef = string;',
+    "/** An integer amount in the currency's minor units (450 TND = 450000) and its ISO 4217 code. */",
+    'export type Money = { amount: number; currency: string };',
+    '/** Two calendar days, `YYYY-MM-DD`, both included: `from <= to`. */',
+    'export type DateRange = { from: string; to: string };',
+    ''
+  );
+
+  const typeNames = collectionTypeNames(snapshot.collections);
+
+  for (const collection of snapshot.collections) {
+    const typeName = typeNames.get(collection.key) as string;
+    push(
+      `export interface ${typeName} {`,
+      '  id: string;',
+      '  slug: string | Localized<string> | null;'
+    );
+    for (const field of collection.fields) {
+      if (BASE_RECORD_KEYS.has(field.key)) continue;
+      push(`  ${propertyKey(field.key)}: ${fieldType(field)};`);
+    }
+    push('}', '');
+  }
+
+  push('export const records = {');
+  for (const collection of snapshot.collections) {
+    const typeName = typeNames.get(collection.key) as string;
+    const rows = publishedRecords(snapshot, collection.key).map((record) =>
+      recordLiteral(record, collection)
+    );
+    const literal =
+      rows.length === 0 ? '[]' : `[\n${rows.map((row) => indent(row, 4)).join(',\n')},\n  ]`;
+    push(`  ${propertyKey(collection.key)}: ${literal} as const satisfies readonly ${typeName}[],`);
+  }
+  push('} as const;', '', 'export type CollectionKey = keyof typeof records;', '');
+
+  push(
+    'export function isLocalized(value: unknown): value is Localized<unknown> {',
+    "  if (typeof value !== 'object' || value === null || Array.isArray(value)) return false;",
+    '  const keys = Object.keys(value);',
+    '  return keys.length > 0 && keys.every((key) => (locales as readonly string[]).includes(key));',
+    '}',
+    '',
+    '/** Resolves a localized value: the locale, then the fallback, then whatever exists. */',
+    'export function pick<T>(value: Localized<T> | T, locale: Locale, fallback: Locale = defaultLocale): T | undefined {',
+    '  if (isLocalized(value)) {',
+    '    const localized = value as Localized<T>;',
+    '    if (localized[locale] !== undefined) return localized[locale];',
+    '    if (localized[fallback] !== undefined) return localized[fallback];',
+    '    const first = Object.values(localized)[0];',
+    '    return first as T | undefined;',
+    '  }',
+    '  return value as T;',
+    '}',
+    '',
+    'type Sluggable = { readonly slug: string | Localized<string> | null };',
+    '',
+    '/** The record of `collection` whose slug (in `locale`) is `slug`. */',
+    'export function getBySlug<K extends CollectionKey>(',
+    '  collection: K,',
+    '  slug: string,',
+    '  locale: Locale = defaultLocale',
+    '): (typeof records)[K][number] | undefined {',
+    '  const rows = records[collection] as readonly Sluggable[];',
+    '  return rows.find((row) => row.slug !== null && pick(row.slug, locale) === slug) as',
+    '    | (typeof records)[K][number]',
+    '    | undefined;',
+    '}',
+    ''
+  );
+
+  return out.join('\n');
+}
+
+/** `rooms` → `Room`, `case-studies` → `CaseStudy`; collisions get a numeric suffix. */
+export function collectionTypeNames(
+  collections: readonly Pick<CollectionDoc, 'key'>[]
+): Map<string, string> {
+  const names = new Map<string, string>();
+  const used = new Set<string>();
+  for (const collection of collections) {
+    let base = pascalCase(singular(collection.key)) || 'Record';
+    if (/^\d/.test(base)) base = `C${base}`;
+    let name = base;
+    let n = 2;
+    while (used.has(name)) name = `${base}${n++}`;
+    used.add(name);
+    names.set(collection.key, name);
+  }
+  return names;
+}
+
+function singular(key: string): string {
+  if (/ies$/i.test(key) && key.length > 4) return `${key.slice(0, -3)}y`;
+  if (/(ss|us|is)$|^news$/i.test(key)) return key;
+  if (/s$/i.test(key) && key.length > 3) return key.slice(0, -1);
+  return key;
+}
+
+function pascalCase(value: string): string {
+  return value
+    .split(/[^A-Za-z0-9]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('');
+}
+
+const IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
+
+function propertyKey(key: string): string {
+  return IDENTIFIER.test(key) ? key : JSON.stringify(key);
+}
+
+/** `FieldDoc.type` → TypeScript. `richtext` is TipTap JSON, opaque here. */
+export function fieldType(
+  field: Pick<FieldDoc, 'type' | 'localized' | 'required' | 'cardinality'>
+): string {
+  const base = scalarType(field);
+  const inner = field.localized ? `Localized<${base}>` : base;
+  return field.required ? inner : `${inner} | null`;
+}
+
+/** `phone` is E.164 (`+21698123456`), `country` ISO 3166-1 alpha-2 (`TN`): both strings. */
+function scalarType(field: Pick<FieldDoc, 'type' | 'cardinality'>): string {
+  switch (field.type) {
+    case 'text':
+    case 'slug':
+    case 'date':
+    case 'select':
+    case 'email':
+    case 'phone':
+    case 'country':
+      return 'string';
+    case 'number':
+      return 'number';
+    case 'boolean':
+      return 'boolean';
+    case 'media':
+      return 'MediaRef';
+    case 'relation':
+      return field.cardinality === 'many' ? 'readonly string[]' : 'string';
+    case 'richtext':
+      return 'unknown';
+    case 'money':
+      return 'Money';
+    case 'daterange':
+      return 'DateRange';
+    default:
+      return 'unknown';
+  }
+}
+
+/** Only what the site ships: `status === 'published'`, in snapshot order. */
+function publishedRecords(
+  snapshot: Pick<SiteSnapshot, 'records'>,
+  collectionKey: string
+): RecordDoc[] {
+  return (snapshot.records[collectionKey] ?? []).filter((record) => record.status === 'published');
+}
+
+function recordLiteral(record: RecordDoc, collection: CollectionDoc): string {
+  const row: Record<string, unknown> = { id: record.id, slug: record.slug ?? null };
+  for (const field of collection.fields) {
+    if (BASE_RECORD_KEYS.has(field.key)) continue;
+    row[field.key] = record.data[field.key] ?? null;
+  }
+  return JSON.stringify(row, null, 2);
+}
+
+function indent(block: string, spaces: number): string {
+  const pad = ' '.repeat(spaces);
+  return block
+    .split('\n')
+    .map((line) => `${pad}${line}`)
+    .join('\n');
+}

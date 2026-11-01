@@ -1,0 +1,19 @@
+/* ------------------------------------------------------------------------ */
+/*  @hlou/site-renderer — the rendered site, as the Hlou app loads it.      */
+/*                                                                          */
+/*  The Design canvas, the Preview stage (`/p`) and the published route     */
+/*  (`/s`) import this one file. Tailwind's theme and utilities only: NO    */
+/*  preflight — its reset would restyle Mantine's components, and Puck      */
+/*  copies every host stylesheet into the canvas frame. `source(none)`      */
+/*  keeps Tailwind from scanning the app's own code; `tailwind.css` names   */
+/*  exactly what to scan.                                                   */
+/* ------------------------------------------------------------------------ */
+
+@layer theme, base, hl-site, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities) source(none);
+
+@import './site.css';
+@import './tailwind.css';
+@import './vocabulary.css';

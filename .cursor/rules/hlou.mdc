@@ -1,0 +1,11 @@
+---
+description: How to work in a site exported from Hlou
+alwaysApply: true
+---
+
+Read `AGENTS.md` at the repository root before any change and follow it. Pages,
+content and theme are written in `hlou/site/**` (the spec), then checked with
+`pnpm hlou:compile`. Never edit `site/**`, `hlou/site.lock.json`,
+`package.json` or `next.config.*`. New code goes in `custom/**` and
+`app/(custom)/**`; a block's markup changes only through a `codeVariant` branch.
+Topic notes: `.claude/skills/*/SKILL.md`.

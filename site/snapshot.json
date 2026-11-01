@@ -1,0 +1,1538 @@
+{
+  "version": 2,
+  "project": {
+    "id": "proj-real-estate",
+    "name": "Dar Zitouna",
+    "slug": "real-estate-tn"
+  },
+  "domain": {
+    "hostname": "real-estate.tn"
+  },
+  "locales": [
+    {
+      "code": "fr",
+      "isSource": true,
+      "dir": "ltr",
+      "label": "Français"
+    },
+    {
+      "code": "en",
+      "isSource": false,
+      "dir": "ltr",
+      "label": "English"
+    },
+    {
+      "code": "ar",
+      "isSource": false,
+      "dir": "rtl",
+      "label": "العربية"
+    }
+  ],
+  "theme": {
+    "colors": [
+      {
+        "key": "accent",
+        "value": "#b0552f"
+      },
+      {
+        "key": "paper",
+        "value": "#f4f1ea"
+      },
+      {
+        "key": "ink",
+        "value": "#1c1a17"
+      }
+    ],
+    "fonts": [
+      {
+        "source": "google",
+        "family": "Instrument Serif",
+        "key": "heading"
+      },
+      {
+        "source": "google",
+        "family": "Inter",
+        "key": "body"
+      }
+    ],
+    "density": "base",
+    "radius": 10,
+    "typeScale": {
+      "xs": 11,
+      "sm": 14,
+      "md": 19,
+      "lg": 26,
+      "xl": 34
+    }
+  },
+  "siteSlots": [
+    {
+      "id": "slot-site-logo",
+      "key": "site.logo",
+      "kind": "text",
+      "required": true,
+      "localizable": false
+    },
+    {
+      "id": "slot-site-cta",
+      "key": "site.cta",
+      "kind": "text",
+      "required": false,
+      "localizable": true
+    },
+    {
+      "id": "slot-site-legal",
+      "key": "site.legal",
+      "kind": "text",
+      "required": false,
+      "localizable": true
+    },
+    {
+      "id": "slot-site-name",
+      "key": "site.name",
+      "kind": "text",
+      "required": false,
+      "localizable": true
+    },
+    {
+      "id": "slot-site-logo-image",
+      "key": "site.logoImage",
+      "kind": "media",
+      "required": false,
+      "localizable": true
+    }
+  ],
+  "pages": [
+    {
+      "id": "page-home",
+      "path": "/",
+      "kind": "static",
+      "title": "Accueil",
+      "status": "published",
+      "collectionKey": null,
+      "slots": [
+        {
+          "id": "slot-home-hero-image",
+          "key": "hero.image",
+          "kind": "media",
+          "required": true,
+          "localizable": false,
+          "sectionKey": "hero"
+        },
+        {
+          "id": "slot-home-hero-eyebrow",
+          "key": "hero.eyebrow",
+          "kind": "text",
+          "required": false,
+          "localizable": true,
+          "sectionKey": "hero"
+        },
+        {
+          "id": "slot-home-hero-title",
+          "key": "hero.title",
+          "kind": "heading",
+          "required": true,
+          "localizable": true,
+          "sectionKey": "hero"
+        },
+        {
+          "id": "slot-home-hero-description",
+          "key": "hero.description",
+          "kind": "richtext",
+          "required": false,
+          "localizable": true,
+          "sectionKey": "hero"
+        },
+        {
+          "id": "slot-home-features-title",
+          "key": "features.title",
+          "kind": "heading",
+          "required": false,
+          "localizable": true,
+          "sectionKey": "features"
+        },
+        {
+          "id": "slot-home-listings-title",
+          "key": "listings.title",
+          "kind": "heading",
+          "required": false,
+          "localizable": true,
+          "sectionKey": "listings"
+        },
+        {
+          "id": "slot-home-quote",
+          "key": "quote.text",
+          "kind": "text",
+          "required": false,
+          "localizable": true,
+          "sectionKey": "quote"
+        },
+        {
+          "id": "slot-home-cta-title",
+          "key": "cta.title",
+          "kind": "heading",
+          "required": true,
+          "localizable": true,
+          "sectionKey": "cta"
+        }
+      ],
+      "indexable": true,
+      "doc": {
+        "root": "root",
+        "rootProps": {},
+        "nodes": {
+          "root": {
+            "id": "root",
+            "type": "root",
+            "parent": null,
+            "slot": "",
+            "order": "a0",
+            "props": {}
+          },
+          "blk-home-hero": {
+            "id": "blk-home-hero",
+            "type": "hero",
+            "parent": "root",
+            "slot": "content",
+            "order": "a0",
+            "props": {
+              "image": {
+                "$slot": "slot-home-hero-image"
+              },
+              "eyebrow": {
+                "$slot": "slot-home-hero-eyebrow"
+              },
+              "title": {
+                "$slot": "slot-home-hero-title"
+              },
+              "description": {
+                "$slot": "slot-home-hero-description"
+              },
+              "buttons": [
+                {
+                  "label": "Voir les chambres",
+                  "href": "/rooms",
+                  "variant": "primary"
+                },
+                {
+                  "label": "Nous écrire",
+                  "href": "/contact",
+                  "variant": "ghost"
+                }
+              ],
+              "align": "start",
+              "gap": {
+                "base": "8",
+                "md": "12"
+              },
+              "mediaRatio": {
+                "base": "4/5"
+              }
+            }
+          },
+          "blk-home-hero-badge": {
+            "id": "blk-home-hero-badge",
+            "type": "floating",
+            "parent": "blk-home-hero",
+            "slot": "floating",
+            "order": "a0",
+            "props": {
+              "position": {
+                "base": {
+                  "anchor": "top-end",
+                  "x": 16,
+                  "y": 16,
+                  "width": 0,
+                  "z": 1
+                },
+                "md": {
+                  "anchor": "top-end",
+                  "x": 32,
+                  "y": 32,
+                  "width": 0,
+                  "z": 1
+                }
+              }
+            }
+          },
+          "blk-home-hero-badge-label": {
+            "id": "blk-home-hero-badge-label",
+            "type": "button",
+            "parent": "blk-home-hero-badge",
+            "slot": "content",
+            "order": "a0",
+            "props": {
+              "label": "Nouveau",
+              "href": "",
+              "variant": "paper",
+              "align": "start"
+            }
+          },
+          "blk-home-stats": {
+            "id": "blk-home-stats",
+            "type": "stats",
+            "parent": "root",
+            "slot": "content",
+            "order": "a1",
+            "props": {
+              "items": [
+                {
+                  "value": "4",
+                  "label": "chambres"
+                },
+                {
+                  "value": "1932",
+                  "label": "année"
+                },
+                {
+                  "value": "10 min",
+                  "label": "de la médina"
+                },
+                {
+                  "value": "4,9",
+                  "label": "note"
+                }
+              ],
+              "rule": "both"
+            }
+          },
+          "blk-home-features": {
+            "id": "blk-home-features",
+            "type": "featureGrid",
+            "parent": "root",
+            "slot": "content",
+            "order": "a2",
+            "props": {
+              "title": {
+                "$slot": "slot-home-features-title"
+              },
+              "cards": [
+                {
+                  "icon": "☀",
+                  "title": "Le patio",
+                  "description": "Un jardin clos et un citronnier."
+                },
+                {
+                  "icon": "◌",
+                  "title": "La table",
+                  "description": "Cuisine de saison, le soir."
+                },
+                {
+                  "icon": "⌂",
+                  "title": "Le quartier",
+                  "description": "Dix minutes de la médina."
+                }
+              ],
+              "columns": 3,
+              "bordered": true
+            }
+          },
+          "blk-home-listings": {
+            "id": "blk-home-listings",
+            "type": "listings",
+            "parent": "root",
+            "slot": "content",
+            "order": "a3",
+            "props": {
+              "source": {
+                "$collection": "rooms",
+                "query": {
+                  "sort": {
+                    "field": "price",
+                    "dir": "asc"
+                  },
+                  "limit": 3
+                }
+              },
+              "title": {
+                "$slot": "slot-home-listings-title"
+              },
+              "layout": "grid",
+              "limit": 6,
+              "showPrice": true,
+              "mapping": {
+                "titleField": "title",
+                "imageField": "image",
+                "metaField": "meta",
+                "priceField": "price",
+                "hrefTemplate": "/rooms/{slug}"
+              }
+            }
+          },
+          "blk-home-quote": {
+            "id": "blk-home-quote",
+            "type": "quote",
+            "parent": "root",
+            "slot": "content",
+            "order": "a4",
+            "props": {
+              "quote": {
+                "$slot": "slot-home-quote"
+              },
+              "by": "Léa & Karim, Lyon",
+              "align": "center"
+            }
+          },
+          "blk-home-cta": {
+            "id": "blk-home-cta",
+            "type": "ctaBand",
+            "parent": "root",
+            "slot": "content",
+            "order": "a5",
+            "props": {
+              "title": {
+                "$slot": "slot-home-cta-title"
+              },
+              "description": "Réponse sous 24 h.",
+              "buttonLabel": "Demander une date",
+              "buttonHref": "/contact",
+              "background": "accent"
+            }
+          },
+          "instance:header": {
+            "id": "instance:header",
+            "type": "instance",
+            "parent": "root",
+            "slot": "content",
+            "order": "Zz",
+            "props": {},
+            "instanceOf": "component:header"
+          },
+          "instance:footer": {
+            "id": "instance:footer",
+            "type": "instance",
+            "parent": "root",
+            "slot": "content",
+            "order": "a6",
+            "props": {},
+            "instanceOf": "component:footer"
+          }
+        }
+      }
+    },
+    {
+      "id": "page-rooms",
+      "path": "/rooms",
+      "kind": "static",
+      "title": "Chambres",
+      "status": "published",
+      "collectionKey": null,
+      "slots": [
+        {
+          "id": "slot-rooms-seo-image",
+          "key": "seo.image",
+          "kind": "media",
+          "required": false,
+          "localizable": true
+        },
+        {
+          "id": "slot-rooms-title",
+          "key": "head.title",
+          "kind": "heading",
+          "required": true,
+          "localizable": true,
+          "sectionKey": "head"
+        }
+      ],
+      "indexable": true,
+      "doc": {
+        "root": "root",
+        "rootProps": {},
+        "nodes": {
+          "root": {
+            "id": "root",
+            "type": "root",
+            "parent": null,
+            "slot": "",
+            "order": "a0",
+            "props": {}
+          },
+          "blk-rooms-head": {
+            "id": "blk-rooms-head",
+            "type": "pageHeader",
+            "parent": "root",
+            "slot": "content",
+            "order": "a0",
+            "props": {
+              "eyebrow": "Chambres",
+              "title": {
+                "$slot": "slot-rooms-title"
+              }
+            }
+          },
+          "blk-rooms-filters": {
+            "id": "blk-rooms-filters",
+            "type": "filterBar",
+            "parent": "root",
+            "slot": "content",
+            "order": "a1",
+            "props": {
+              "chips": [
+                {
+                  "label": "Toutes"
+                },
+                {
+                  "label": "Patio"
+                },
+                {
+                  "label": "Terrasse"
+                }
+              ],
+              "source": {
+                "$collection": "rooms"
+              },
+              "sticky": true,
+              "countLabel": "chambres"
+            }
+          },
+          "blk-rooms-listings": {
+            "id": "blk-rooms-listings",
+            "type": "listings",
+            "parent": "root",
+            "slot": "content",
+            "order": "a2",
+            "props": {
+              "source": {
+                "$collection": "rooms"
+              },
+              "title": "",
+              "layout": "grid",
+              "limit": 12,
+              "showPrice": true,
+              "mapping": {
+                "titleField": "title",
+                "imageField": "image",
+                "metaField": "meta",
+                "priceField": "price",
+                "hrefTemplate": "/rooms/{slug}"
+              }
+            }
+          },
+          "instance:header": {
+            "id": "instance:header",
+            "type": "instance",
+            "parent": "root",
+            "slot": "content",
+            "order": "Zz",
+            "props": {},
+            "instanceOf": "component:header"
+          },
+          "instance:footer": {
+            "id": "instance:footer",
+            "type": "instance",
+            "parent": "root",
+            "slot": "content",
+            "order": "a3",
+            "props": {},
+            "instanceOf": "component:footer"
+          }
+        }
+      }
+    },
+    {
+      "id": "page-room",
+      "path": "/rooms/[slug]",
+      "kind": "collection_template",
+      "title": "Chambre",
+      "status": "published",
+      "collectionKey": "rooms",
+      "slots": [],
+      "indexable": true,
+      "doc": {
+        "root": "root",
+        "rootProps": {},
+        "nodes": {
+          "root": {
+            "id": "root",
+            "type": "root",
+            "parent": null,
+            "slot": "",
+            "order": "a0",
+            "props": {}
+          },
+          "blk-room-head": {
+            "id": "blk-room-head",
+            "type": "pageHeader",
+            "parent": "root",
+            "slot": "content",
+            "order": "a0",
+            "props": {
+              "eyebrow": {
+                "$record": "meta"
+              },
+              "title": {
+                "$record": "title"
+              }
+            }
+          },
+          "blk-room-hero": {
+            "id": "blk-room-hero",
+            "type": "hero",
+            "parent": "root",
+            "slot": "content",
+            "order": "a1",
+            "props": {
+              "image": {
+                "$record": "image"
+              },
+              "eyebrow": {
+                "$record": "price"
+              },
+              "title": {
+                "$record": "title"
+              },
+              "description": {
+                "$record": "description"
+              },
+              "buttons": [
+                {
+                  "label": "Réserver",
+                  "href": "/contact",
+                  "variant": "primary"
+                }
+              ],
+              "align": "start"
+            }
+          },
+          "instance:header": {
+            "id": "instance:header",
+            "type": "instance",
+            "parent": "root",
+            "slot": "content",
+            "order": "Zz",
+            "props": {},
+            "instanceOf": "component:header"
+          },
+          "instance:footer": {
+            "id": "instance:footer",
+            "type": "instance",
+            "parent": "root",
+            "slot": "content",
+            "order": "a2",
+            "props": {},
+            "instanceOf": "component:footer"
+          }
+        }
+      }
+    },
+    {
+      "id": "page-journal",
+      "path": "/journal",
+      "kind": "static",
+      "title": "Journal",
+      "status": "ready",
+      "collectionKey": null,
+      "slots": [
+        {
+          "id": "slot-journal-title",
+          "key": "head.title",
+          "kind": "heading",
+          "required": true,
+          "localizable": true,
+          "sectionKey": "head"
+        }
+      ],
+      "indexable": true,
+      "doc": {
+        "root": "root",
+        "rootProps": {},
+        "nodes": {
+          "root": {
+            "id": "root",
+            "type": "root",
+            "parent": null,
+            "slot": "",
+            "order": "a0",
+            "props": {}
+          },
+          "blk-journal-head": {
+            "id": "blk-journal-head",
+            "type": "pageHeader",
+            "parent": "root",
+            "slot": "content",
+            "order": "a0",
+            "props": {
+              "eyebrow": "Journal",
+              "title": {
+                "$slot": "slot-journal-title"
+              }
+            }
+          },
+          "blk-journal-list": {
+            "id": "blk-journal-list",
+            "type": "articleList",
+            "parent": "root",
+            "slot": "content",
+            "order": "a1",
+            "props": {
+              "source": {
+                "$collection": "journal",
+                "query": {
+                  "sort": {
+                    "field": "date",
+                    "dir": "desc"
+                  }
+                }
+              },
+              "title": "",
+              "layout": "rows",
+              "limit": 6,
+              "showPrice": true,
+              "mapping": {
+                "titleField": "title",
+                "imageField": "image",
+                "metaField": "excerpt",
+                "priceField": "date",
+                "hrefTemplate": "/journal/{slug}"
+              }
+            }
+          },
+          "instance:header": {
+            "id": "instance:header",
+            "type": "instance",
+            "parent": "root",
+            "slot": "content",
+            "order": "Zz",
+            "props": {},
+            "instanceOf": "component:header"
+          },
+          "instance:footer": {
+            "id": "instance:footer",
+            "type": "instance",
+            "parent": "root",
+            "slot": "content",
+            "order": "a2",
+            "props": {},
+            "instanceOf": "component:footer"
+          }
+        }
+      }
+    },
+    {
+      "id": "page-contact",
+      "path": "/contact",
+      "kind": "static",
+      "title": "Contact",
+      "status": "published",
+      "collectionKey": null,
+      "slots": [
+        {
+          "id": "slot-contact-title",
+          "key": "head.title",
+          "kind": "heading",
+          "required": true,
+          "localizable": true,
+          "sectionKey": "head"
+        },
+        {
+          "id": "slot-contact-form-title",
+          "key": "form.title",
+          "kind": "heading",
+          "required": false,
+          "localizable": true,
+          "sectionKey": "form"
+        }
+      ],
+      "indexable": false,
+      "doc": {
+        "root": "root",
+        "rootProps": {},
+        "nodes": {
+          "root": {
+            "id": "root",
+            "type": "root",
+            "parent": null,
+            "slot": "",
+            "order": "a0",
+            "props": {}
+          },
+          "blk-contact-head": {
+            "id": "blk-contact-head",
+            "type": "pageHeader",
+            "parent": "root",
+            "slot": "content",
+            "order": "a0",
+            "props": {
+              "eyebrow": "Contact",
+              "title": {
+                "$slot": "slot-contact-title"
+              }
+            }
+          },
+          "blk-contact-form": {
+            "id": "blk-contact-form",
+            "type": "form",
+            "parent": "root",
+            "slot": "content",
+            "order": "a1",
+            "props": {
+              "source": {
+                "$form": "booking"
+              },
+              "title": {
+                "$slot": "slot-contact-form-title"
+              },
+              "description": "Une date en tête ? Nous répondons sous 24 h.",
+              "submitLabel": "Envoyer",
+              "successMessage": "Merci, votre demande est bien partie.",
+              "errorMessage": "L’envoi a échoué. Réessayez dans un instant."
+            }
+          },
+          "blk-contact-map": {
+            "id": "blk-contact-map",
+            "type": "section",
+            "parent": "root",
+            "slot": "content",
+            "order": "a2",
+            "props": {
+              "glyph": "map"
+            },
+            "name": "Accès (à composer)",
+            "role": "contact",
+            "section": "sec-contact-access"
+          },
+          "instance:header": {
+            "id": "instance:header",
+            "type": "instance",
+            "parent": "root",
+            "slot": "content",
+            "order": "Zz",
+            "props": {},
+            "instanceOf": "component:header"
+          },
+          "instance:footer": {
+            "id": "instance:footer",
+            "type": "instance",
+            "parent": "root",
+            "slot": "content",
+            "order": "a3",
+            "props": {},
+            "instanceOf": "component:footer"
+          }
+        }
+      }
+    },
+    {
+      "id": "page-legal",
+      "path": "/legal",
+      "kind": "utility",
+      "title": "Mentions légales",
+      "status": "draft",
+      "collectionKey": null,
+      "slots": [],
+      "indexable": true,
+      "doc": {
+        "root": "root",
+        "rootProps": {},
+        "nodes": {
+          "root": {
+            "id": "root",
+            "type": "root",
+            "parent": null,
+            "slot": "",
+            "order": "a0",
+            "props": {}
+          },
+          "instance:header": {
+            "id": "instance:header",
+            "type": "instance",
+            "parent": "root",
+            "slot": "content",
+            "order": "a0",
+            "props": {},
+            "instanceOf": "component:header"
+          },
+          "instance:footer": {
+            "id": "instance:footer",
+            "type": "instance",
+            "parent": "root",
+            "slot": "content",
+            "order": "a1",
+            "props": {},
+            "instanceOf": "component:footer"
+          }
+        }
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "component:header",
+      "key": "header",
+      "name": "Header",
+      "kind": "header",
+      "doc": {
+        "root": "root",
+        "rootProps": {},
+        "nodes": {
+          "root": {
+            "id": "root",
+            "type": "root",
+            "parent": null,
+            "slot": "",
+            "order": "a0",
+            "props": {}
+          },
+          "blk-site-header": {
+            "id": "blk-site-header",
+            "type": "header",
+            "parent": "root",
+            "slot": "content",
+            "order": "a0",
+            "props": {
+              "logo": {
+                "$slot": "slot-site-logo"
+              },
+              "links": [
+                {
+                  "label": "Accueil",
+                  "href": "/"
+                },
+                {
+                  "label": "Chambres",
+                  "href": "/rooms"
+                },
+                {
+                  "label": "Journal",
+                  "href": "/journal"
+                },
+                {
+                  "label": "Contact",
+                  "href": "/contact"
+                }
+              ],
+              "ctaLabel": {
+                "$slot": "slot-site-cta"
+              },
+              "ctaHref": "/contact",
+              "sticky": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "component:footer",
+      "key": "footer",
+      "name": "Footer",
+      "kind": "footer",
+      "doc": {
+        "root": "root",
+        "rootProps": {},
+        "nodes": {
+          "root": {
+            "id": "root",
+            "type": "root",
+            "parent": null,
+            "slot": "",
+            "order": "a0",
+            "props": {}
+          },
+          "blk-site-footer": {
+            "id": "blk-site-footer",
+            "type": "footer",
+            "parent": "root",
+            "slot": "content",
+            "order": "a0",
+            "props": {
+              "groups": [
+                {
+                  "heading": "Maison",
+                  "items": [
+                    {
+                      "label": "Chambres",
+                      "href": "/rooms"
+                    },
+                    {
+                      "label": "Journal",
+                      "href": "/journal"
+                    }
+                  ]
+                },
+                {
+                  "heading": "Contact",
+                  "items": [
+                    {
+                      "label": "Nous écrire",
+                      "href": "/contact"
+                    }
+                  ]
+                }
+              ],
+              "legal": {
+                "$slot": "slot-site-legal"
+              },
+              "theme": "ink"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "content": {
+    "fr": {
+      "slot-site-logo": {
+        "kind": "text",
+        "text": "Dar Zitouna"
+      },
+      "slot-site-cta": {
+        "kind": "text",
+        "text": "Réserver"
+      },
+      "slot-site-legal": {
+        "kind": "text",
+        "text": "© Dar Zitouna — Tous droits réservés"
+      },
+      "slot-site-name": {
+        "kind": "text",
+        "text": "Dar Zitouna"
+      },
+      "slot-site-logo-image": {
+        "kind": "media",
+        "assetId": "asset-logo"
+      },
+      "slot-rooms-seo-image": {
+        "kind": "media",
+        "assetId": "asset-room-1"
+      },
+      "slot-home-hero-image": {
+        "kind": "media",
+        "assetId": "asset-hero"
+      },
+      "slot-home-hero-eyebrow": {
+        "kind": "text",
+        "text": "Maison d’hôtes · Tunis"
+      },
+      "slot-home-hero-title": {
+        "kind": "heading",
+        "text": "Des chambres qui prennent leur temps"
+      },
+      "slot-home-hero-description": {
+        "kind": "richtext",
+        "doc": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Quatre chambres, un patio et une table d’hôtes, à dix minutes de la médina."
+                }
+              ]
+            }
+          ]
+        },
+        "docVersion": 1
+      },
+      "slot-home-features-title": {
+        "kind": "heading",
+        "text": "Ce qui fait la maison"
+      },
+      "slot-home-listings-title": {
+        "kind": "heading",
+        "text": "Nos chambres"
+      },
+      "slot-home-quote": {
+        "kind": "text",
+        "text": "On est arrivés pour deux nuits, on est restés une semaine."
+      },
+      "slot-home-cta-title": {
+        "kind": "heading",
+        "text": "Réservez votre séjour"
+      },
+      "slot-rooms-title": {
+        "kind": "heading",
+        "text": "Quatre chambres, quatre lumières"
+      },
+      "slot-journal-title": {
+        "kind": "heading",
+        "text": "Journal de la maison"
+      },
+      "slot-contact-title": {
+        "kind": "heading",
+        "text": "Nous écrire"
+      },
+      "slot-contact-form-title": {
+        "kind": "heading",
+        "text": "Demande de réservation"
+      }
+    },
+    "en": {
+      "slot-site-cta": {
+        "kind": "text",
+        "text": "Book"
+      },
+      "slot-home-hero-title": {
+        "kind": "heading",
+        "text": "Rooms that take their time"
+      },
+      "slot-home-hero-description": {
+        "kind": "richtext",
+        "doc": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Four rooms, a patio and a table d’hôtes, ten minutes from the medina."
+                }
+              ]
+            }
+          ]
+        },
+        "docVersion": 1
+      },
+      "slot-home-listings-title": {
+        "kind": "heading",
+        "text": "Our rooms"
+      },
+      "slot-rooms-title": {
+        "kind": "heading",
+        "text": "Four rooms, four lights"
+      }
+    },
+    "ar": {
+      "slot-site-name": {
+        "kind": "text",
+        "text": "دار الزيتونة"
+      },
+      "slot-site-cta": {
+        "kind": "text",
+        "text": "احجز"
+      },
+      "slot-home-hero-title": {
+        "kind": "heading",
+        "text": "غرف تأخذ وقتها"
+      },
+      "slot-rooms-title": {
+        "kind": "heading",
+        "text": "أربع غرف، أربعة أضواء"
+      }
+    }
+  },
+  "media": {
+    "asset-logo": {
+      "id": "asset-logo",
+      "url": "/media/asset-logo/logo.jpg",
+      "width": 480,
+      "height": 160,
+      "mime": "image/jpeg",
+      "alt": {
+        "fr": "Dar Zitouna"
+      }
+    },
+    "asset-hero": {
+      "id": "asset-hero",
+      "url": "/media/asset-hero/hero.jpg",
+      "width": 1600,
+      "height": 2000,
+      "mime": "image/jpeg",
+      "alt": {
+        "fr": "Le patio au matin",
+        "en": "The patio in the morning"
+      }
+    },
+    "asset-room-1": {
+      "id": "asset-room-1",
+      "url": "/media/asset-room-1/jasmin.jpg",
+      "width": 1200,
+      "height": 900,
+      "mime": "image/jpeg",
+      "alt": {
+        "fr": "Chambre Jasmin"
+      }
+    },
+    "asset-room-2": {
+      "id": "asset-room-2",
+      "url": "/media/asset-room-2/olivier.jpg",
+      "width": 1200,
+      "height": 900,
+      "mime": "image/jpeg",
+      "alt": {
+        "fr": "Chambre Olivier"
+      }
+    },
+    "asset-room-3": {
+      "id": "asset-room-3",
+      "url": "/media/asset-room-3/terrasse.jpg",
+      "width": 1200,
+      "height": 900,
+      "mime": "image/jpeg",
+      "alt": {
+        "fr": "Suite Terrasse"
+      }
+    }
+  },
+  "collections": [
+    {
+      "key": "rooms",
+      "name": "Chambres",
+      "localized": true,
+      "isSingleton": false,
+      "delivery": "static",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Titre",
+          "type": "text",
+          "required": true,
+          "localized": true
+        },
+        {
+          "key": "slug",
+          "label": "Slug",
+          "type": "slug",
+          "required": true,
+          "localized": false
+        },
+        {
+          "key": "meta",
+          "label": "Sous-titre",
+          "type": "text",
+          "required": false,
+          "localized": true
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "type": "richtext",
+          "required": false,
+          "localized": true
+        },
+        {
+          "key": "price",
+          "label": "Prix",
+          "type": "number",
+          "required": true,
+          "localized": false
+        },
+        {
+          "key": "image",
+          "label": "Image",
+          "type": "media",
+          "required": false,
+          "localized": false
+        },
+        {
+          "key": "available",
+          "label": "Disponible",
+          "type": "boolean",
+          "required": false,
+          "localized": false
+        }
+      ]
+    },
+    {
+      "key": "journal",
+      "name": "Journal",
+      "localized": true,
+      "isSingleton": false,
+      "delivery": "static",
+      "fields": [
+        {
+          "key": "title",
+          "label": "Titre",
+          "type": "text",
+          "required": true,
+          "localized": true
+        },
+        {
+          "key": "slug",
+          "label": "Slug",
+          "type": "slug",
+          "required": true,
+          "localized": false
+        },
+        {
+          "key": "excerpt",
+          "label": "Extrait",
+          "type": "text",
+          "required": false,
+          "localized": true
+        },
+        {
+          "key": "date",
+          "label": "Date",
+          "type": "date",
+          "required": true,
+          "localized": false
+        },
+        {
+          "key": "image",
+          "label": "Image",
+          "type": "media",
+          "required": false,
+          "localized": false
+        }
+      ]
+    },
+    {
+      "key": "bookings",
+      "name": "Demandes de réservation",
+      "localized": false,
+      "isSingleton": false,
+      "delivery": "static",
+      "fields": [
+        {
+          "key": "name",
+          "label": "Nom",
+          "type": "text",
+          "required": true,
+          "localized": false
+        },
+        {
+          "key": "email",
+          "label": "E-mail",
+          "type": "email",
+          "required": true,
+          "localized": false
+        },
+        {
+          "key": "arrival",
+          "label": "Arrivée",
+          "type": "date",
+          "required": true,
+          "localized": false
+        },
+        {
+          "key": "guests",
+          "label": "Voyageurs",
+          "type": "number",
+          "required": false,
+          "localized": false
+        },
+        {
+          "key": "room",
+          "label": "Chambre",
+          "type": "select",
+          "required": false,
+          "localized": false,
+          "options": [
+            {
+              "label": "Jasmin",
+              "value": "jasmin"
+            },
+            {
+              "label": "Olivier",
+              "value": "olivier"
+            }
+          ]
+        },
+        {
+          "key": "message",
+          "label": "Message",
+          "type": "richtext",
+          "required": false,
+          "localized": false
+        },
+        {
+          "key": "newsletter",
+          "label": "Recevoir le journal",
+          "type": "boolean",
+          "required": false,
+          "localized": false
+        },
+        {
+          "key": "source",
+          "label": "Source",
+          "type": "text",
+          "required": false,
+          "localized": false
+        }
+      ]
+    }
+  ],
+  "records": {
+    "rooms": [
+      {
+        "id": "rec-room-1",
+        "slug": "jasmin",
+        "status": "published",
+        "data": {
+          "title": {
+            "fr": "Chambre Jasmin",
+            "en": "Jasmine Room",
+            "ar": "غرفة الياسمين"
+          },
+          "slug": "jasmin",
+          "meta": {
+            "fr": "Patio · 2 personnes",
+            "en": "Patio · sleeps 2"
+          },
+          "description": {
+            "fr": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Une chambre sur le patio."
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "price": 120,
+          "image": "asset-room-1",
+          "available": true
+        },
+        "publishedAt": "2026-05-02T09:00:00.000Z"
+      },
+      {
+        "id": "rec-room-2",
+        "slug": "olivier",
+        "status": "published",
+        "data": {
+          "title": {
+            "fr": "Chambre Olivier",
+            "en": "Olive Room"
+          },
+          "slug": "olivier",
+          "meta": {
+            "fr": "Jardin · 2 personnes"
+          },
+          "description": {
+            "fr": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Une chambre côté jardin."
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "price": 95,
+          "image": "asset-room-2",
+          "available": false
+        },
+        "publishedAt": "2026-05-02T09:00:00.000Z"
+      },
+      {
+        "id": "rec-room-3",
+        "slug": "terrasse",
+        "status": "published",
+        "data": {
+          "title": {
+            "fr": "Suite Terrasse",
+            "en": "Terrace Suite"
+          },
+          "slug": "terrasse",
+          "meta": {
+            "fr": "Terrasse · 3 personnes"
+          },
+          "description": {
+            "fr": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "La suite sous les toits."
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "price": 180,
+          "image": "asset-room-3",
+          "available": true
+        },
+        "publishedAt": "2026-05-02T09:00:00.000Z"
+      },
+      {
+        "id": "rec-room-draft",
+        "slug": "cave",
+        "status": "draft",
+        "data": {
+          "title": {
+            "fr": "La cave"
+          },
+          "slug": "cave",
+          "price": 40,
+          "available": true
+        },
+        "publishedAt": null
+      }
+    ],
+    "journal": [
+      {
+        "id": "rec-journal-1",
+        "slug": "ouverture",
+        "status": "published",
+        "data": {
+          "title": {
+            "fr": "La maison ouvre"
+          },
+          "slug": "ouverture",
+          "excerpt": {
+            "fr": "Après deux ans de travaux."
+          },
+          "date": "2026-04-01",
+          "image": "asset-hero"
+        },
+        "publishedAt": "2026-04-01T08:00:00.000Z"
+      },
+      {
+        "id": "rec-journal-2",
+        "slug": "citronnier",
+        "status": "published",
+        "data": {
+          "title": {
+            "fr": "Le citronnier"
+          },
+          "slug": "citronnier",
+          "excerpt": {
+            "fr": "Il a donné cette année."
+          },
+          "date": "2026-06-10",
+          "image": null
+        },
+        "publishedAt": "2026-06-10T08:00:00.000Z"
+      }
+    ],
+    "bookings": []
+  },
+  "forms": [
+    {
+      "key": "booking",
+      "label": "Demande de réservation",
+      "collectionKey": "bookings",
+      "fieldKeys": [
+        "name",
+        "email",
+        "arrival",
+        "guests",
+        "room",
+        "message",
+        "newsletter"
+      ]
+    }
+  ],
+  "settings": {
+    "siteName": "Dar Zitouna",
+    "description": "Maison d’hôtes à Tunis.",
+    "social": {
+      "x": "https://x.com/darzitouna",
+      "instagram": "https://www.instagram.com/darzitouna"
+    },
+    "analytics": {
+      "plausibleDomain": "real-estate.tn"
+    }
+  },
+  "generatedAt": "2026-09-01T10:00:00.000Z"
+}

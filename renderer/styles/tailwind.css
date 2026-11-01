@@ -1,0 +1,150 @@
+/* ------------------------------------------------------------------------ */
+/*  @hlou/site-renderer — the Tailwind side of the rendered site.            */
+/*                                                                          */
+/*  Shared by every consumer: the Hlou app imports it through `app.css`     */
+/*  (utilities only, no preflight — Mantine owns the reset there), the      */
+/*  starter through its `globals.css` (full Tailwind). It never imports     */
+/*  `tailwindcss` itself; each consumer picks its own entry. Paths are      */
+/*  relative, so the same file works vendored in the starter's `renderer/`. */
+/* ------------------------------------------------------------------------ */
+
+/* The block components — every literal utility they spell. Never the tests:
+   they spell hostile tokens on purpose (`stored-props.test.ts`). */
+@source "../blocks";
+@source not "../blocks/**/*.test.ts";
+@source not "../blocks/**/*.test.tsx";
+@source "../puck";
+@source "../render";
+/* The site chrome (skip link, 404, redirects) — `site/chrome.tsx`. */
+@source "../site";
+
+/*
+ * A free element's position per breakpoint (`blocks/floating/position.ts`):
+ * each utility points the variables the element's fixed classes read
+ * (`start-(--fs) top-(--ft) …`) at that breakpoint's own values, which the
+ * element's inline style carries. `md:float-at-md` only where `md` is set,
+ * so an unset breakpoint keeps the smaller one's position.
+ */
+@utility float-at-base {
+  --fs: var(--fs-base);
+  --fe: var(--fe-base);
+  --ft: var(--ft-base);
+  --fb: var(--fb-base);
+  --ftx: var(--ftx-base);
+  --fty: var(--fty-base);
+  --fw: var(--fw-base);
+  --fz: var(--fz-base);
+}
+@utility float-at-md {
+  --fs: var(--fs-md);
+  --fe: var(--fe-md);
+  --ft: var(--ft-md);
+  --fb: var(--fb-md);
+  --ftx: var(--ftx-md);
+  --fty: var(--fty-md);
+  --fw: var(--fw-md);
+  --fz: var(--fz-md);
+}
+@utility float-at-lg {
+  --fs: var(--fs-lg);
+  --fe: var(--fe-lg);
+  --ft: var(--ft-lg);
+  --fb: var(--fb-lg);
+  --ftx: var(--ftx-lg);
+  --fty: var(--fty-lg);
+  --fw: var(--fw-lg);
+  --fz: var(--fz-lg);
+}
+@utility float-at-xl {
+  --fs: var(--fs-xl);
+  --fe: var(--fe-xl);
+  --ft: var(--ft-xl);
+  --fb: var(--fb-xl);
+  --ftx: var(--ftx-xl);
+  --fty: var(--fty-xl);
+  --fw: var(--fw-xl);
+  --fz: var(--fz-xl);
+}
+
+/*
+ * Any element's free frame per breakpoint (`blocks/tw.ts`'s `frameStyle`):
+ * the size and rotation the Design canvas's handles drag out, which no table
+ * of steps can hold. Same shape as `float-at-*` above — the utility points
+ * the variables the fixed classes read (`w-(--bw) h-(--bh) rotate-(--brot)`)
+ * at that breakpoint's own values, carried by the element's inline style.
+ */
+@utility box-at-base {
+  --bw: var(--bw-base);
+  --bh: var(--bh-base);
+  --brot: var(--brot-base);
+}
+@utility box-at-md {
+  --bw: var(--bw-md);
+  --bh: var(--bh-md);
+  --brot: var(--brot-md);
+}
+@utility box-at-lg {
+  --bw: var(--bw-lg);
+  --bh: var(--bh-lg);
+  --brot: var(--brot-lg);
+}
+@utility box-at-xl {
+  --bw: var(--bw-xl);
+  --bh: var(--bh-xl);
+  --brot: var(--brot-xl);
+}
+
+/*
+ * A free section's child (M33-20, `blocks/tw.ts`'s `placeClasses`): its cell
+ * range applies only as a direct child of the free grid, so a place left on
+ * a block that moved elsewhere draws nothing. `md:free:col-start-3`.
+ */
+@custom-variant free (.hl-free > &);
+
+/*
+ * Breakpoints = the Design canvas viewports (`theme.other.viewports`), so
+ * "Tablet" in the canvas is exactly `md:` and "Desktop" exactly `lg:`.
+ */
+@theme {
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1180px;
+  --breakpoint-xl: 1440px;
+}
+
+/*
+ * The site tokens as Tailwind names. `inline`: a utility reads the
+ * `--site-*` variable directly, so a theme edit (written on `.hl-site-scope`
+ * by `themeToCss`) repaints without a rebuild.
+ */
+@theme inline {
+  --color-site-accent: var(--site-accent);
+  --color-site-accent-soft: var(--site-accent-soft);
+  --color-site-paper: var(--site-paper);
+  --color-site-ink: var(--site-ink);
+  --color-site-ink-soft: var(--site-ink-soft);
+  --color-site-hairline: var(--site-hairline);
+  --color-site-hairline-strong: var(--site-hairline-strong);
+  --color-site-on-accent: var(--site-on-accent);
+  --color-site-on-ink: var(--site-on-ink);
+  --color-site-on-ink-muted: var(--site-on-ink-muted);
+  --color-site-on-ink-link: var(--site-on-ink-link);
+  --color-site-card: var(--site-card);
+  --color-site-well: var(--site-well);
+  --color-site-media-fill: var(--site-media-fill);
+  --color-site-scrim: var(--site-scrim);
+  --color-site-on-scrim: var(--site-on-scrim);
+  --color-site-backdrop: var(--site-backdrop);
+  --color-site-error: var(--site-error);
+  --shadow-site-pop: var(--site-shadow-pop);
+  --radius-site: var(--site-radius);
+  --radius-site-pill: var(--site-pill);
+  --text-site-xs: var(--site-type-xs);
+  --text-site-sm: var(--site-type-sm);
+  --text-site-md: var(--site-type-md);
+  --text-site-lg: var(--site-type-lg);
+  --text-site-xl: var(--site-type-xl);
+  --container-site-content: var(--site-content-max);
+  --font-sans: var(--site-body-font, system-ui, -apple-system, 'Segoe UI', sans-serif);
+  --font-heading: var(--site-heading-font, Georgia, serif);
+  --font-mono: var(--site-mono-font, ui-monospace, monospace);
+}
