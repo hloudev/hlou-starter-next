@@ -48,7 +48,8 @@ resolve `react`, `react/jsx-runtime`, `zod` and relative files inside
 
 No `fetch`, timers, `window` or inline `<script>` at render time in the block
 itself; components are server-rendered, and Hlou's canvas draws them in the
-browser, where React never runs a `<script>`.
+browser, where React never runs a `<script>`. Interactive parts are
+`"use client"` components in `custom/`.
 
 **The current page.** A nav variant marks its link to the page being drawn
 with `ariaCurrent` from `../../resolve/href`: `"page"` on the link to this
@@ -62,8 +63,7 @@ Hlou's canvas, in Preview and in a build alike, with no script:
 ```
 
 Style it with `aria-[current=page]:…`, or `aria-[current]:…` for the section
-too. Interactive parts are `"use client"` components in
-`custom/`.
+too.
 
 ## A section no block draws
 
