@@ -22,7 +22,7 @@ import { applyDesign } from '../blocks/design';
 import { siteAttributionSchema, siteThemeTokensSchema } from '../contracts';
 import { AttributionBadge } from '../site/attribution-badge';
 import { schemesCss, SITE_SCOPE_CLASS, themeToCss } from '../theme';
-import { fontFaceCss, googleFontsHref, resolveFontsForLocale } from '../theme/fonts';
+import { fontFaceCss, fontPreloads, googleFontsHref, resolveFontsForLocale } from '../theme/fonts';
 
 /* -------------------------------------------------------------------------- */
 /*                                    TYPES                                   */
@@ -87,6 +87,7 @@ function SiteRoot({ children, puck }: { children: ReactNode; puck?: unknown }): 
   );
   const fontsHref = googleFontsHref(fonts);
   const fontFace = fontFaceCss(fonts, resolveAssetUrl);
+  const preloads = fontPreloads(fonts, resolveAssetUrl);
   /* One rule per colour scheme a section can sit on (M33-13). */
   const schemes = schemesCss(rawTheme);
   /* The « Propulsé par Hlou » badge, when the page draws no visible footer
@@ -107,7 +108,30 @@ function SiteRoot({ children, puck }: { children: ReactNode; puck?: unknown }): 
       style={style}
       data-site-scheme={context.colorScheme}
     >
-      {fontsHref ? <link rel="stylesheet" href={fontsHref} /> : null}
+      {/* React 19 lifts these `<link>`s into the document's `<head>` (the
+          start of the HTML for the kernel's fragment render), so the font
+          files download before layout instead of after it — no fallback
+          face flashing on every full page load. `crossOrigin` is required:
+          `@font-face` fetches in CORS mode, and a preload without it is
+          fetched twice. The Google stylesheet itself stays here (a
+          stylesheet `<link>` without `precedence` is not lifted). */}
+      {fontsHref ? (
+        <>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link rel="stylesheet" href={fontsHref} />
+        </>
+      ) : null}
+      {preloads.map((font) => (
+        <link
+          key={font.href}
+          rel="preload"
+          as="font"
+          href={font.href}
+          type={font.type}
+          crossOrigin="anonymous"
+        />
+      ))}
       {fontFace ? <style>{fontFace}</style> : null}
       {schemes ? <style data-hl-schemes="">{schemes}</style> : null}
       {children}

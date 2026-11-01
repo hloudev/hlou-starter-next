@@ -77,7 +77,8 @@ export {
   SITE_SCHEME_SCRIPT,
   SITE_SCHEME_STORAGE_KEY,
 } from './theme/scheme';
-export { googleFontsHref, fontFaceCss } from './theme/fonts';
+export { googleFontsHref, fontFaceCss, fontPreloads } from './theme/fonts';
+export type { FontPreload } from './theme/fonts';
 export {
   GOOGLE_FONTS_CATALOG,
   searchGoogleFonts,
