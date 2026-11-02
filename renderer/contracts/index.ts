@@ -1126,6 +1126,11 @@ function mapMediaUrls(
   docs: Readonly<Record<string, MediaDoc>>
 ): unknown {
   if (Array.isArray(value)) return value.map((item) => mapMediaUrls(item, resolve, docs));
+  /* A URL as a plain string (a code variant's `data.logo`): no rungs to rebuild. */
+  if (typeof value === 'string') {
+    const assetId = mediaFileUrlAssetId(value);
+    return (assetId ? resolve(assetId) : null) ?? value;
+  }
   if (!isRecord(value)) return value;
 
   const assetId = typeof value.url === 'string' ? mediaFileUrlAssetId(value.url) : null;
@@ -1161,7 +1166,8 @@ function mapMediaUrls(
  * carrying a URL rather than an asset id. Left alone, that URL points at the
  * session-gated route, which answers `401` to the one viewer these rewrites
  * exist for — the visitor of a published site, and the holder of a share
- * link. `resolve` returning null leaves a URL as it was.
+ * link. A code variant's own props can name one as a plain string; it is
+ * rewritten the same way. `resolve` returning null leaves a URL as it was.
  *
  * Every media value it rewrites also gets the asset's ready `renditions`
  * (M37, decision 188 §8), each through `resolve(assetId, preset)`: the
