@@ -793,7 +793,7 @@ export const BUTTON_VARIANT_CLASSES: Record<ButtonVariant, string> = {
   primary: 'border-site-accent bg-site-accent text-site-on-accent',
   ghost: 'border-site-hairline-strong bg-transparent text-site-ink',
   paper: 'border-site-on-accent bg-site-on-accent text-site-accent',
-    ink: 'border-site-ink bg-site-ink text-site-on-ink',
+  ink: 'border-site-ink bg-site-ink text-site-on-ink',
   outline: 'border-site-ink bg-transparent text-site-ink',
   link: 'border-transparent bg-transparent px-0 py-0 text-site-accent underline-offset-4 hover:underline hover:brightness-100',
 };
