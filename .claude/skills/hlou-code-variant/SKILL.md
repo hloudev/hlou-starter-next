@@ -1,6 +1,6 @@
 ---
 name: hlou-code-variant
-description: The one sanctioned way to change a Hlou block's markup — a codeVariant === 'custom:<name>' branch in renderer/blocks/<key>/Component.tsx that only the instances carrying that variant draw (Hlou decision 106), with a worked example. Use when a request changes how a section or block looks beyond what Hlou's design tokens can do, adds a section no block draws, or wires custom code into a Hlou page.
+description: The one sanctioned way to change a Hlou block's markup — a codeVariant === 'custom:<name>' branch in renderer/blocks/<key>/Component.tsx that only the instances carrying that variant draw, with a worked example. Use when a request changes how a section or block looks beyond what Hlou's design tokens can do, adds a section no block draws, or wires custom code into a Hlou page.
 ---
 
 # Code variants

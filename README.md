@@ -99,199 +99,78 @@ import, which also accepts careful edits elsewhere (« The zones » in
 [`AGENTS.md`](./AGENTS.md)). Sites are static exports (`output: "export"`): no server code, no route
 handlers, no secrets — see « Static export » in [`AGENTS.md`](./AGENTS.md).
 
-## License
-
-[MIT](./LICENSE) © EMIKETIC. The rest of this file is for the people who
-maintain the starter in the Hlou monorepo.
-
-## Maintaining the starter
-
-A build copies this tree, drops the project's `site/*` and media in, and runs
-`next build` — so everything here must work standalone (clone → `pnpm dev`)
-and must consume only what the builder writes.
+## Reference
 
 ### Stack
 
-- **Next.js 16** — App Router, static export (`output: "export"`,
-  `trailingSlash: true`, unoptimized images)
-- **React 19**
-- **Tailwind CSS v4** — CSS-first (`@import "tailwindcss"` in
-  `app/globals.css`, `@tailwindcss/postcss`, no `tailwind.config`). It styles
-  the starter's chrome and the rendered blocks alike: every block's look is
-  utilities in its component (`renderer/blocks/*/Component.tsx`), and
-  `renderer/styles/tailwind.css` brings the site tokens (`bg-site-paper`,
-  `text-site-xl`, `font-heading`) and the breakpoints (`md` 768, `lg` 1180,
-  `xl` 1440). `site/tw-classes.txt` (written by the Hlou builder) lists the
-  utilities the site's stored styles use. `renderer/styles/site.css` is only a
-  base (scope tokens, the theme's density padding, rich-text prose), in the
-  `hl-site` layer below `utilities` — a class you add always wins.
-- **next-intl 4** — `[locale]` segment, static params, no `requestLocale`
-- **zod 4** — with `react`, the renderer's only dependency
-- **TypeScript** strict, `@/*` → repo root (flat layout, no `src/`)
-- **pnpm 10.32**, Node 24. Prettier (+ tailwind plugin), ESLint flat config
-  (`eslint-config-next/core-web-vitals` + `/typescript`)
+Next.js 16 (App Router, static export) · React 19 · Tailwind CSS v4 (CSS-first, no
+`tailwind.config`) · next-intl 4 · zod 4 · TypeScript strict · pnpm 10, Node 24.
+
+Every block's look is Tailwind utilities in its component
+(`renderer/blocks/*/Component.tsx`). `renderer/styles/tailwind.css` brings the site
+tokens (`bg-site-paper`, `text-site-xl`, `font-heading`) and the breakpoints (`md` 768,
+`lg` 1180, `xl` 1440).
 
 ### Scripts
 
 ```bash
 pnpm dev              # compiles hlou/site/ when there is one, watches it; http://localhost:3000
-pnpm hlou:compile     # checks the spec and writes site/ (scripts/spec-build.mjs)
-pnpm hlou:pack        # the zip Hlou imports (scripts/pack.mjs)
-pnpm build            # static export → out/ (prebuild compiles the spec, renders public/og.png)
-pnpm start            # next start (not used for the export; prefer preview)
-pnpm preview          # serve out/ on http://localhost:4173 (scripts/serve-out.mjs)
+pnpm hlou:compile     # checks the spec and writes site/
+pnpm hlou:pack        # the zip Hlou imports
+pnpm build            # static export → out/ (compiles the spec, renders public/og.png)
+pnpm preview          # serves out/ on http://localhost:4173
 pnpm lint             # eslint
 pnpm format           # prettier --write .
 pnpm check-types      # tsc --noEmit
-pnpm optimise-images  # sharp ladder over public/media (scripts/optimise-images.mjs)
+pnpm optimise-images  # a sharp ladder over public/media
 ```
-
-`.claude/launch.json` declares `dev` (3000) and `preview` (4173).
-
-### i18n
-
-Locales are **not** hardcoded: `i18n/routing.ts` reads `site/snapshot.json`
-(`locales[]`, the `isSource` one is the default, `dir: "rtl"` marks RTL) and
-exports `routing`, `rtlLocales`, `getDir(locale)`, `isLocale()`.
-`i18n/request.ts` avoids `await requestLocale` (it needs `headers()`, which
-breaks the export) and merges two message sources:
-
-- `i18n/messages/<locale>.json` — copy the starter adds of its own, FR first.
-  A locale without a file falls back to the default. The chrome's copy (skip
-  link, redirects, 404) is the renderer's, in `renderer/site/messages.ts`.
-- `site/messages/<locale>.json` — written by the builder: a flat
-  `{ "site.logo": "…" }` map of the site slots. Dots are illegal in next-intl
-  keys, so the map is unflattened under `Site`: `t("Site.site.logo")`.
-
-**The chrome is the renderer's** (`renderer/site/*`, Hlou decision 113): the
-document head (`siteDocument`, `layoutMetadata`, `pageMetadata`,
-`siteViewport`), routes (`siteRoutes`, `resolveRoute`), JSON-LD, sitemap,
-robots, manifest, redirect stubs, the skip link, the 404 and the social card.
-The files under `app/` are thin adapters onto Next's `Metadata` and file
-conventions; the `kernel` build method renders the same functions without
-Next, and a parity test in the Hlou repo compares the two outputs. Change the
-chrome in `packages/site-renderer/src/site`, never here. Root layouts import
-`@/renderer/site/<module>`, not `@/renderer`: the barrel would pull the form's
-client chunk into every page.
-
-Routes live under `app/(site)/[locale]/`. `<html lang dir>` is set per locale
-by that layout — a root `app/layout.tsx` cannot read the segment, so the route
-groups each own a root layout (`(site)` for pages, `(redirects)` for the stubs
-that forward `/` and unprefixed paths to the default locale, and an exported
-site's `(custom)` pages, which reuse the `(site)` layout).
 
 ### Structure
 
 ```
-AGENTS.md · CLAUDE.md · GEMINI.md · .cursor/ · .github/ · .claude/skills/   the agent kit (Hlou decision 185)
-app/
-  (site)/[locale]/layout.tsx          root layout: adapts siteHtmlAttrs, layoutMetadata, siteViewport
-  (site)/[locale]/[[...slug]]/page.tsx generateStaticParams = siteRoutes(snapshot); SiteRender + pageJsonLd
-  (redirects)/…                       `/` and `/rooms` → `/fr/`, `/fr/rooms/` (query kept; `<noscript>` meta refresh without JS)
-  not-found.tsx · sitemap.ts · robots.ts · manifest.ts · icon.svg · favicon.ico
-  globals.css                         Tailwind, then renderer/styles/{site,tailwind}.css, site/tw-classes.txt; focus rules
-components/  MainLayout · RedirectStub (async adapters over SiteChrome / RedirectBody) · SiteFrame · ui/{Container,Button,Eyebrow} · icons/
-custom/      the user zone of an exported site — only its README ships; Hlou never writes here
+AGENTS.md · CLAUDE.md · GEMINI.md · .cursor/ · .github/ · .claude/skills/   the agent kit
+hlou/site/   the site spec: yours
+custom/      the user zone: yours
+app/         (site)/[locale] pages · (redirects) `/` and unprefixed paths → the source locale · thin adapters onto Next
+components/  the page frame · ui/ · icons/
 i18n/        routing · request · navigation · messages/{fr,en,ar}.json
-lib/         snapshot (validated site/snapshot.json) · site (SiteEnv from NEXT_PUBLIC_*) · forms · analytics
-renderer/    VENDORED — never edit here (see below)
-site/        GENERATED — never edit here (see below)
-public/media/<assetId>/<file>         copied in by the builder; placeholders committed for the sample
-scripts/     spec-build (hlou:compile, dev, prebuild) · pack (hlou:pack) · og-image (prebuild: renderer's ogImage → next/og → public/og.png) · serve-out · optimise-images · fixture-from-renderer
-.github/workflows/ci.yml           install, compile, build on the sample and on the empty spec, pack
+lib/         the validated snapshot · env · forms · analytics
+renderer/    Hlou's blocks and chrome, vendored: never edit it, a build replaces it
+site/        generated from the spec: never edit it
+public/media/ images and fonts
+scripts/     spec-build · pack · og-image · serve-out · optimise-images
 ```
 
-### The agent kit
+To change how a block draws, add a `codeVariant` branch to its `Component.tsx` (skill
+`hlou-code-variant`); every Hlou build keeps it. The `renderer/` imports only `react` and
+`zod`, and its styles read only `--site-*` variables.
 
-`AGENTS.md` is canonical and stays under 250 lines; the other agent files are
-shims of at most 10 lines that point at it, and `CLAUDE.md` adds at most 15
-lines of Claude notes. The export (`feature-code`'s export archive) replaces
-everything between the `<!-- hlou:project -->` and `<!-- /hlou:project -->`
-markers with the project's facts — keep both markers. The import ignores every
-agent file, since each export regenerates them. The kit is prose, so its test
-is behaviour: after a change, run a fresh Claude Code session and a Codex or
-Cursor session on an exported tree with the M36-02 prompt, and record the
-outcome in `docs/handoffs/portability/PROGRESS.md`.
+### What `site/` holds
 
-### `renderer/` is vendored
+| File                          | Content                                                                                                      |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `site/snapshot.json`          | The compiled site, read through `lib/snapshot.ts`                                                            |
+| `site/content.ts`             | `locales`, `defaultLocale`, one interface per collection, `records` (published), `pick`, `getBySlug`         |
+| `site/messages/<locale>.json` | The text of the site-wide slots, read as `t("Site.site.logo")`                                               |
+| `site/tw-classes.txt`         | The utilities the spec's stored styles use                                                                   |
 
-A byte-for-byte copy of `packages/site-renderer/src` from the Hlou monorepo
-(minus fixtures and tests), stamped in `renderer/VERSION`. It changes only via
-`pnpm sync:renderer` at the monorepo root (`sync:renderer:check` fails CI on
-drift); the builder re-syncs before every build. It imports nothing from
-`@hlou/*` — only `react` and `zod`. Its styles live under `.hl-site-scope` and
-read only `--site-*` variables: `grep -r -- "--hl-\|--mantine-" out/` must find
-nothing. A site restyles a block through a `codeVariant` branch in its
-`Component.tsx` (Hlou decision 106), which every build keeps as an overlay.
+Your own pages read records through `site/content.ts` (`pick(value, locale)`,
+`getBySlug("rooms", slug)`) and never fetch them. Locales are not hardcoded: `i18n/routing.ts`
+reads them from the snapshot. Copy you add yourself goes in `i18n/messages/<locale>.json`, in
+every locale, using logical CSS properties so the site works under `dir="rtl"`.
 
-### `site/` is generated (the builder contract)
+### Running the sample
 
-`apps/builder/src/materialise.ts` copies the starter (ignoring `/site`,
-`/.env.local`, `/public/media`) and writes:
-
-| File                            | Content                                                                                                                          |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `site/snapshot.json`            | The `SiteSnapshot` (`renderer/contracts`), media URLs rewritten to `/media/<assetId>/<file>`                                     |
-| `site/content.ts`               | `locales`, `defaultLocale`, `Localized<T>`, `MediaRef`, one interface per collection, `records` (published), `pick`, `getBySlug` |
-| `site/messages/<locale>.json`   | Flat `{ "<slot.key>": "<text>" }` of the site slots for that locale                                                              |
-| `public/media/<assetId>/<file>` | Every asset in `snapshot.media`                                                                                                  |
-| `.env.local`                    | `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_HLOU_API_URL`, `NEXT_PUBLIC_HLOU_PROJECT_ID`                                                |
-
-`lib/snapshot.ts` validates `site/snapshot.json` once with `siteSnapshotSchema`
-and is the only reader of it on the server; `i18n/routing.ts` reads the JSON
-directly because it also runs on the client. Page code reads records through
-`site/content.ts` (`pick(value, locale)`, `getBySlug("rooms", slug)`) — never
-fetches.
-
-Forms: the renderer's form block posts
-`{ formKey, locale, data }` to the `formEndpoint` the page passes, built by
-`lib/forms.ts` as `${NEXT_PUBLIC_HLOU_API_URL}/api/v1/public/forms/${NEXT_PUBLIC_HLOU_PROJECT_ID}/`.
-`lib/forms.ts` also exposes `submitForm()` (honeypot field `website`) for the
-starter's own forms.
-
-### Running standalone on the fixture
-
-The committed `site/` is the renderer's fixture (`Dar Zitouna`: fr source,
-en, ar RTL; `rooms` + `journal` collections; a `booking` form) with placeholder
-JPEGs under `public/media`. `cp .env.example .env.local`, `pnpm install`,
-`pnpm dev`. To regenerate the sample from the monorepo root (it needs the
-fixture and the builder's generator, neither vendored):
-
-```bash
-node_modules/.bin/tsx hlou-starter-next/scripts/fixture-from-renderer.mts
-```
-
-The script calls the builder's own functions (`siteSnapshotSchema`,
-`mediaFileName`, `withResolvedMediaUrls`, `renderContentTs`, `siteStyleClasses`,
-`snapshotSiteMessages`), so a re-run must reproduce the committed `site/`
-exactly — a diff means the fixture or the builder changed, never the sample.
-Message files fall back to the source locale per slot (`en.json` carries the
-French `site.legal` because the fixture has no English one).
+The committed `site/` is a sample (`Dar Zitouna`: fr source, en, ar RTL; `rooms` and `journal`
+collections; a `booking` form) with placeholder JPEGs under `public/media`.
+`cp .env.example .env.local`, `pnpm install`, `pnpm dev`.
 
 ### Deployment
 
-`pnpm build` → `out/` (`fr/index.html`, `fr/rooms/jasmin/index.html`,
-`sitemap.xml`, `robots.txt`, `manifest.webmanifest`, `og.png`, `404.html`).
-`prebuild` renders `public/og.png` (the default social card: site name,
-description, theme colours) with `next/og` — a file-convention
-`opengraph-image.tsx` exports without an extension under `output: "export"`,
-which static hosts then serve without an image content-type. Any static host;
-the builder's `DeployTarget` is Cloudflare Workers Static Assets
-(`html_handling: auto-trailing-slash`) or the local static server. Set
-`NEXT_PUBLIC_SITE_URL` to the canonical origin — it feeds `metadataBase`,
-canonicals, hreflang, the sitemap, robots and JSON-LD.
-`NEXT_PUBLIC_PLAUSIBLE_DOMAIN` (optional) injects Plausible.
+`pnpm build` writes a static site to `out/`, which any static host can serve. Set
+`NEXT_PUBLIC_SITE_URL` to the canonical origin: it feeds canonicals, hreflang, the sitemap,
+robots and JSON-LD. `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` (optional) adds Plausible.
 
-### Notes
+## License
 
-- Fonts: resolved at runtime by the renderer's `SiteRoot` (a Google Fonts
-  `<link>` or `@font-face` for an uploaded file) from whatever the theme
-  names; `themeToCss()` writes `--site-heading-font` / `--site-body-font`.
-  No `next/font` — self-hosting is a deferred optimisation.
-- Literal hrefs in block props (`/rooms`) are not locale-prefixed by the
-  renderer (only page-id derived ones are); the `(redirects)` stubs forward
-  them to the default locale.
-- No `any`; prefer `unknown` + narrowing. No hardcoded copy — the chrome's is
-  the renderer's; anything the starter adds goes in all of
-  `i18n/messages/{fr,en,ar}.json`. Logical CSS properties only; the
-  site renders under `dir="rtl"`.
+[MIT](./LICENSE) © EMIKETIC

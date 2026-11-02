@@ -1,3 +1,3 @@
 # Intentionally empty. This file makes the starter its own pnpm root so a
-# clone (or a nested checkout inside the Hlou monorepo) keeps its own lockfile
-# and node_modules and is never picked up as a monorepo workspace package.
+# clone keeps its own lockfile and node_modules, and is never picked up as a
+# package of a workspace it happens to sit inside.

@@ -22,8 +22,8 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // The starter may sit inside the Hlou monorepo (a nested git repo); pin the
-  // workspace root here so Turbopack never picks the outer pnpm workspace up.
+  // The site may sit inside another pnpm workspace; pin the root here so
+  // Turbopack never picks the outer one up.
   turbopack: {
     root: import.meta.dirname,
   },

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Compiles the site spec (`hlou/site/**`, decision 219) into what the site
+// Compiles the site spec (`hlou/site/**`) into what the site
 // renders — the files Hlou's builder writes from its own snapshot:
 //
 //   site/snapshot.json          the SiteSnapshot (`compileSpecToSnapshot`)
@@ -18,7 +18,7 @@
 // Without a spec (`hlou/site/site.json`), `site/` is left as it is. Inside
 // Hlou's builder (`HLOU_BUILDER=1`, set on every starter build it runs),
 // `--if-spec` leaves it as it is too, spec or not: Hlou never builds from a
-// user's spec (decision 222), and that tree's `site/` is the one Hlou wrote.
+// user's spec, and that tree's `site/` is the one Hlou wrote.
 import { spawn } from "node:child_process";
 import {
   existsSync,
