@@ -40,7 +40,7 @@ const WIDTH: Record<StackProps['width'], string> = {
 /* -------------------------------------------------------------------------- */
 
 /**
- * A flex row or column of blocks (M29). Each child is a block with its own
+ * A flex row or column of blocks. Each child is a block with its own
  * width; the stack decides the axis, the gap and how the children line up —
  * what a Figma auto-layout frame says, one for one.
  */

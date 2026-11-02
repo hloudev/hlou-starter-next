@@ -10,7 +10,7 @@ import { slotPropsOfType } from '../doc/slots';
 /* -------------------------------------------------------------------------- */
 
 /**
- * A spec node's props over its block's defaults (M43-06): what the validator
+ * A spec node's props over its block's defaults: what the validator
  * checks and what the compiler writes, from this one function so the two
  * cannot drift. A spec may give only the props it changes; a valid spec then
  * never reaches the renderer with a content prop missing (a `hero` without

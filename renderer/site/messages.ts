@@ -23,7 +23,7 @@ export type AttributionMessages = {
 };
 
 /**
- * The copy of a scope's values and widgets on a rendered site (decision 199).
+ * The copy of a scope's values and widgets on a rendered site.
  * Plural forms are keyed by `Intl.PluralRules` category; `other` is required,
  * and `{n}` is the formatted count.
  */
@@ -39,13 +39,13 @@ export type StateMessages = {
   total: string;
   /** The scope's validation errors, by the code the store writes in `errors`. */
   errors: { required: string; chooseOne: string; invalidDates: string };
-  /** The tabs block (M40-10): the canvas's band over each stacked panel, `{n}` its number. */
+  /** The tabs block: the canvas's band over each stacked panel, `{n}` its number. */
   tabs: { band: string };
-  /** The modal block (M40-10): its close control, and the canvas's band (« Fenêtre · devis »). */
+  /** The modal block: its close control, and the canvas's band (« Fenêtre · devis »). */
   modal: { close: string; band: string };
-  /** The header's menus (M40-11); `{label}` is the parent link's label. */
+  /** The header's menus; `{label}` is the parent link's label. */
   menu: { open: string; close: string; submenu: string };
-  /** The carousel and the hero slider (M40-08). `{n}` / `{total}` are numbers. */
+  /** The carousel and the hero slider. `{n}` / `{total}` are numbers. */
   carousel: {
     /** `aria-roledescription` of the region, and its label when it has no title. */
     region: string;
@@ -59,10 +59,10 @@ export type StateMessages = {
     pause: string;
     play: string;
   };
-  /** The gallery lightbox (M40-09). `{alt}` is the image's alt text. */
+  /** The gallery lightbox. `{alt}` is the image's alt text. */
   lightbox: { dialog: string; prev: string; next: string; open: string };
   /**
-   * The date picker and its calendar (M40-12). `minNights`: `{n}` is the
+   * The date picker and its calendar. `minNights`: `{n}` is the
    * minimum stay; `arrival` / `departure` stand in for a blank split label.
    */
   date: {
@@ -79,18 +79,18 @@ export type StateMessages = {
     arrival: string;
     departure: string;
   };
-  /** The quantity stepper (M40-13): `{label}` names the row, `{max}` its bound. */
+  /** The quantity stepper: `{label}` names the row, `{max}` its bound. */
   quantity: { dec: string; inc: string; max: string };
-  /** Choice cards (M40-13): the selected card's mark, for screen readers. */
+  /** Choice cards: the selected card's mark, for screen readers. */
   choice: { selected: string };
-  /** The step indicator (M40-14): its landmark, the done step's button (`{label}`). */
+  /** The step indicator: its landmark, the done step's button (`{label}`). */
   steps: { label: string; back: string };
-  /** The summary (M40-14): the estimate note under the card, the mobile bar's toggle. */
+  /** The summary: the estimate note under the card, the mobile bar's toggle. */
   summary: { note: string; showDetail: string; hideDetail: string };
   /** A widget in the canvas: not bound to a scope value, or a scope without steps. */
   widget: { unbound: string; noSteps: string };
   /**
-   * The form block's per-field errors (M40-16), beside `errors.required`, and
+   * The form block's per-field errors, beside `errors.required`, and
    * the phone field's calling-code select.
    */
   form: { email: string; phone: string; money: string; dateOrder: string; dialCode: string };

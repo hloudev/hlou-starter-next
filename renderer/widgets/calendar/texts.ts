@@ -12,7 +12,7 @@ import { formatDay, pluralText } from './locale';
  * Pure, and NOT a client module: the date picker block's server shell calls
  * `dateFieldTexts` to draw its first render. A function exported from a
  * `'use client'` file is a client reference in the Next starter's server
- * components — calling it there fails the static export (M40-20).
+ * components — calling it there fails the static export.
  */
 
 /* -------------------------------------------------------------------------- */

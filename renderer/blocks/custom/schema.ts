@@ -33,7 +33,7 @@ export const customItemSchema = z.object({
 export type CustomItem = z.infer<typeof customItemSchema>;
 
 /**
- * A section no block has (M29, decision 138): neutral content props — an
+ * A section no block has: neutral content props — an
  * eyebrow, a title, a text, items, media, buttons, free data — that a
  * hand-written `Component.tsx` variant draws its own way (Design › Code,
  * or the agent's `write_block_code`). Hlou's own render is a plain stacked

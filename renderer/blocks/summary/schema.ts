@@ -21,7 +21,7 @@ export const stateFormatSchema = stateRefSchema.shape.format.unwrap();
 
 /**
  * A count and its unit word, picked with `Intl.PluralRules`: « 3 nuits ».
- * Structured, not a template — no expression language (decision 197).
+ * Structured, not a template — no expression language.
  */
 export const summaryPluralSchema = z.object({
   path: statePathSchema,
@@ -42,7 +42,7 @@ export const summaryRowSchema = z.object({
 export type SummaryRow = z.infer<typeof summaryRowSchema>;
 
 /**
- * The summary (M40-14): « Votre réservation » beside a wizard — rows read
+ * The summary: « Votre réservation » beside a wizard — rows read
  * from the nearest scope, a derived `lines` value's items, a total always
  * labelled « Estimation », and rows under it (the deposit). Sticky from
  * 1024 px (it aligns itself to the start of its grid cell); on a phone a

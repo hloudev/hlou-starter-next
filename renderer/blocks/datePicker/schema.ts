@@ -18,7 +18,7 @@ export const DATE_PICKER_ELEMENTS = ['label', 'field', 'calendar'] as const;
 /* -------------------------------------------------------------------------- */
 
 /**
- * A date picker (M40-12) bound to a `date` or `dateRange` field of the
+ * A date picker bound to a `date` or `dateRange` field of the
  * enclosing scope. No `mode`: single or range follows the field's type, and
  * `min` / `minNights` / `maxNights` come from the field — one source of
  * truth. Unbound (no scope, or a path the scope lacks), it draws inert.

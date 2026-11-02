@@ -229,7 +229,7 @@ function Row({
 }
 
 /**
- * The quantity island (M40-13): one stepper, or the extras list — a card row
+ * The quantity island: one stepper, or the extras list — a card row
  * per record (icon or photo, title, meta, unit price, stepper). It renders
  * the block's body from the server's JSON and the scope's live values
  * (`useScopeState`), dispatching `inc` / `dec` (with `key` for a record) and

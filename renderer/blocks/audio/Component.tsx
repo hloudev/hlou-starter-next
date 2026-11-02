@@ -15,8 +15,7 @@ import { blockParts, literal, literalMedia } from '../shared';
 
 /**
  * A library audio file in a card: its title, the browser's own player with
- * one `<source>` per rung (`128k`, `64k`, then the original — decision 188
- * §8), and a caption. `preload="metadata"`: the length shows, the bytes wait
+ * one `<source>` per rung (`128k`, `64k`, then the original), and a caption. `preload="metadata"`: the length shows, the bytes wait
  * for play. Controls always on, never autoplay.
  */
 export function AudioBlock(props: BlockProps<AudioProps>): ReactElement {

@@ -26,7 +26,7 @@ import {
 /* -------------------------------------------------------------------------- */
 
 /*
- * Plain Tailwind (decision 59). `grid` lays the articles out as cards;
+ * Plain Tailwind. `grid` lays the articles out as cards;
  * `rows` (and `carousel`, which has no look of its own yet) is a ruled list
  * whose rows put the image, the copy and the aside side by side from `md`.
  */

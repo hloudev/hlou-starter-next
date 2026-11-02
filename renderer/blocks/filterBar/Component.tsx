@@ -14,7 +14,7 @@ import { cx } from '../tw';
 /* -------------------------------------------------------------------------- */
 
 /*
- * Plain Tailwind (decision 59). The active chip is `aria-pressed`, so its
+ * Plain Tailwind. The active chip is `aria-pressed`, so its
  * look is a variant of the chip's own utilities: a designer's chip style
  * replaces the resting look and leaves the pressed one standing.
  */

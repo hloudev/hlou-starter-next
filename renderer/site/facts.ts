@@ -12,7 +12,7 @@ import type { HeadTag } from './head';
 
 /**
  * What a page's `<head>` says about sharing it, as written — the one shape
- * both audit sources produce (M31 §3): the renderer's own head
+ * both audit sources produce: the renderer's own head
  * (`headTagsToFacts`, inline health) and the builder's crawl of a deployed
  * page (parse5).
  *

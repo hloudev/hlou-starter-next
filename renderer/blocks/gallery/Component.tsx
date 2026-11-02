@@ -52,7 +52,7 @@ export function GalleryBlock(props: BlockProps<GalleryProps>): ReactElement {
   const gap = gapClasses(props.gap);
   const gaps = gap.length > 0 ? gap : gapClasses(galleryDefaults.gap);
   const hover = HOVER[props.hover] ?? HOVER.none;
-  /* Unset is `link`, as before M40-09: stored galleries do not change. */
+  /* Unset is `link`, as it always was: stored galleries do not change. */
   const onClick = props.onClick === 'none' || props.onClick === 'lightbox' ? props.onClick : 'link';
   const enlarge = stateMessages(context.locale).lightbox.open;
   /* The lightbox's images: only items with media, in order. */

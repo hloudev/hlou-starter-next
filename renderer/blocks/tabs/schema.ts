@@ -32,7 +32,7 @@ export const tabItemSchema = z.object({
 export type TabItem = z.infer<typeof tabItemSchema>;
 
 /**
- * Tabs (M40-10): one to six, each a slot. The panel count follows `tabs`; a
+ * Tabs: one to six, each a slot. The panel count follows `tabs`; a
  * panel beyond it keeps its blocks and is not drawn (the grid's rule), so
  * removing a tab loses nothing. Server markup, wired by a child-less island.
  */

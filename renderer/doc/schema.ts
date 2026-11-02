@@ -24,7 +24,7 @@ export const INSTANCE_NODE_TYPE = 'instance';
 /** The slot the root's children sit in — Puck's `content`. */
 export const ROOT_SLOT = 'content';
 
-/** One breakpoint's cell range in a free section (M33-20, `blocks/tw.ts`'s `PlaceValue`). */
+/** One breakpoint's cell range in a free section (`blocks/tw.ts`'s `PlaceValue`). */
 export const docPlaceValueSchema = z.object({
   colStart: z.number().int().min(1).max(PLACE_COLUMN_MAX),
   colSpan: z.number().int().min(1).max(PLACE_COLUMN_MAX),
@@ -62,11 +62,11 @@ export const docNodeSchema = z.object({
   props: z.record(z.string(), z.unknown()),
   /** The layer name. */
   name: z.string().optional(),
-  /** The section role (`hero`, `features` …) — M33-09 / M33-13. */
+  /** The section role (`hero`, `features` …) . */
   role: z.string().optional(),
   /**
    * The Structure section (`page_sections.id`) this node is — set on a root
-   * `section` node planned in Structure (M33-09). Its label is `name`, its
+   * `section` node planned in Structure. Its label is `name`, its
    * pattern `props.glyph`; with no children yet it draws as the planned
    * section, never on a published site.
    */
@@ -75,17 +75,17 @@ export const docNodeSchema = z.object({
   design: z.record(z.string(), z.string()).optional(),
   /** The component an `instance` node draws. */
   instanceOf: z.string().optional(),
-  /** Per-node prop overrides inside an instance — M33-21. */
+  /** Per-node prop overrides inside an instance. */
   overrides: z.record(z.string(), z.record(z.string(), z.unknown())).optional(),
   /**
-   * Its cell range in a free section's grid, per breakpoint (M33-20). Read by
+   * Its cell range in a free section's grid, per breakpoint. Read by
    * the block through its side map; drawn only while its parent is free.
    */
   place: docPlaceSchema.optional(),
   /** Today's `_hidden`: kept in the document, never rendered. */
   hidden: z.boolean().optional(),
   /**
-   * When it shows, against the nearest scope's state (decision 197): always
+   * When it shows, against the nearest scope's state: always
    * rendered, marked `data-hl-off` while false. Paths name field keys, never
    * node ids. Outside any scope it is ignored.
    */

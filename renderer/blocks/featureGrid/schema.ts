@@ -26,7 +26,7 @@ export const featureCardSchema = z.object({
     .describe(
       'An icon name from the set (globe, credit-card, users, star…) or an emoji. Use iconMedia for an exported SVG.'
     ),
-  /** The icon as an image (M29): an SVG exported from Figma. Wins over `icon`. */
+  /** The icon as an image: an SVG exported from Figma. Wins over `icon`. */
   iconMedia: resolvedMediaSchema.nullable().optional(),
   title: boundSchema(z.string()),
   description: boundSchema(longTextSchema),

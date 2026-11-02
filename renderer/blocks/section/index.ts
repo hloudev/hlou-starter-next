@@ -23,7 +23,7 @@ export const sectionBlock: BlockDefinition<typeof sectionSchema, SectionProps> =
   Component: SectionBlock,
   bindable: [],
   /* A layout block: no role or variants of its own — a Structure section
-     node carries its role (M33-09) — but the section looks (M33-13). */
+     node carries its role — but the section looks. */
   designOptions: [
     densityOption<SectionProps>(),
     propOption<SectionProps, 'width'>('container', 'width', [

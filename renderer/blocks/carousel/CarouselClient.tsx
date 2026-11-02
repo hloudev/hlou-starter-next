@@ -35,7 +35,7 @@ const CURRENT = 'aria-current';
 const DISABLED = 'aria-disabled';
 
 /**
- * Arms a carousel's server markup (M40-08): arrows, dots, the keyboard, a
+ * Arms a carousel's server markup: arrows, dots, the keyboard, a
  * mouse drag and autoplay, on the elements the block marked (`data-hl-c-*`).
  * It only ever changes attributes and the scroll position — never the
  * React-owned children — and reads every element inside `root` that belongs
@@ -302,7 +302,7 @@ export function wireCarousel(root: HTMLElement, props: CarouselClientProps): () 
 /* -------------------------------------------------------------------------- */
 
 /**
- * The `carousel` island (M40-08): an enhancer, not a renderer. It draws one
+ * The `carousel` island: an enhancer, not a renderer. It draws one
  * hidden span — so the server HTML and its first render are the same — finds
  * its block from there (never by id: an instance may repeat a node id) and
  * arms the slides the server already drew.

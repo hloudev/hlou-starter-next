@@ -3,10 +3,10 @@
 /* -------------------------------------------------------------------------- */
 
 /**
- * The semantic layer over a block's typed values (M33-13): what a section is
+ * The semantic layer over a block's typed values: what a section is
  * FOR (its role), the layouts it comes in (variants) and the few one-click
  * looks it offers (design options). Everything here compiles to the props
- * and the typed style a block already has (decision 59) — no new component,
+ * and the typed style a block already has — no new component,
  * no class outside the vocabulary.
  *
  * Types and the shared option builders only: each library block declares its
@@ -22,8 +22,7 @@ import { SITE_SCHEME_KEY } from '../contracts/guards';
 /* -------------------------------------------------------------------------- */
 
 /**
- * What a section is for. Structure's patterns map onto these
- * (`@hlou/feature-design/contracts/sections`'s `sectionRole`), the Insert
+ * What a section is for. Structure's patterns map onto these, the Insert
  * list groups by them, and `list_variants(role)` answers by them.
  */
 export const SECTION_ROLES = [
@@ -84,7 +83,7 @@ export interface DesignOption<P = Record<string, unknown>> {
  * One layout of a block: a preset of its existing props (written into the
  * node when the variant is picked), plus default design choices and a style
  * layer, both below what the node sets itself. `thumbnail` is a Structure
- * wireframe glyph key (`@hlou/feature-structure/glyphs`), which draws it in
+ * wireframe glyph key, which draws it in
  * Wireframe and in the Insert list — a plain string here, because the
  * renderer imports nothing of Hlou's; `feature-design` checks every one.
  */

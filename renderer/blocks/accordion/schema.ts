@@ -24,7 +24,7 @@ export const accordionItemSchema = z.object({
 export type AccordionItem = z.infer<typeof accordionItemSchema>;
 
 /**
- * Questions and answers, specs, steps (M29): native `<details>`, so it
+ * Questions and answers, specs, steps: native `<details>`, so it
  * works without a script and hydrates nothing. One open at a time unless
  * `allowMultiple`.
  */

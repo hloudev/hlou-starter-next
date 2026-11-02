@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------------ */
-/*  @hlou/site-renderer — the rendered site, as the Hlou app loads it.      */
+/*  Hlou's renderer — the rendered site, as the Hlou app loads it.      */
 /*                                                                          */
 /*  The Design canvas, the Preview stage (`/p`) and the published route     */
 /*  (`/s`) import this one file. Tailwind's theme and utilities only: NO    */

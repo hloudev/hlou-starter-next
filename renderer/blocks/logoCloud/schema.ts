@@ -21,7 +21,7 @@ export const logoItemSchema = z.object({
   style: itemStyleSchema,
 });
 
-/** Clients, partners, press (M29): a row of logos at one height. */
+/** Clients, partners, press: a row of logos at one height. */
 export const logoCloudSchema = z.object({
   title: boundSchema(z.string()),
   items: z.array(logoItemSchema),

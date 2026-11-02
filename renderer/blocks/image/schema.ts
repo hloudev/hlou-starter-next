@@ -19,7 +19,7 @@ export const imageSchema = z.object({
   caption: boundSchema(z.string()),
   ratio: z.enum(['auto', 'square', 'landscape', 'portrait', 'wide']),
   fit: z.enum(['cover', 'contain']),
-  /** Which part of the image stays in view when it is cropped (M29). */
+  /** Which part of the image stays in view when it is cropped. */
   position: z.enum(SURFACE_POSITIONS).optional(),
   width: z.enum(['narrow', 'wide', 'full']),
   rounded: z.boolean(),

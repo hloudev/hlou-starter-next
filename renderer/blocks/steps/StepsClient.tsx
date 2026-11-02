@@ -36,7 +36,7 @@ export type StepsClientProps = {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The step indicator island (M40-14): the scope's steps and `$step`, live.
+ * The step indicator island: the scope's steps and `$step`, live.
  * From 768 px a row — done steps a check (a button back to them with
  * `clickable`, dispatching `step.go`), the current one `aria-current`,
  * upcoming ones muted, joined by hairlines; under it (or always, with

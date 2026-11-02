@@ -23,7 +23,7 @@ export {
 /* -------------------------------------------------------------------------- */
 
 /*
- * The `phone` and `country` value shapes of decision 200, with their display
+ * The `phone` and `country` value shapes, with their display
  * helpers. Pure — zod and `Intl` only, no phone or country library — so the
  * server validator, the site's inputs and mobile agree on one list.
  */

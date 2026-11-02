@@ -21,7 +21,7 @@ export const MEDIA_TEXT_ELEMENTS = ['eyebrow', 'title', 'text', 'buttons', 'medi
 /* -------------------------------------------------------------------------- */
 
 /**
- * The split section (M29): an image on one side, copy on the other — the
+ * The split section: an image on one side, copy on the other — the
  * shape most brand pages repeat after the hero. The split and the media side
  * are props; the ratio is responsive.
  */

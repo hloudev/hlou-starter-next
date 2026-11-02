@@ -187,7 +187,7 @@ export const styleValueSchema = z
     textAlign: z.enum(TEXT_ALIGNS),
     textWrap: z.enum(TEXT_WRAPS),
     decoration: z.enum(DECORATIONS),
-    /** Inside a grid: how many columns / rows this block spans (M29). */
+    /** Inside a grid: how many columns / rows this block spans. */
     colSpan: z.enum(COL_SPANS),
     rowSpan: z.enum(ROW_SPANS),
   })
@@ -198,7 +198,7 @@ export const styleValueSchema = z
 /* -------------------------------------------------------------------------- */
 
 /**
- * A style's surface (M29): a background image, a gradient and/or a colour
+ * A style's surface: a background image, a gradient and/or a colour
  * overlay under the block's content — a hero over a photo, a section with a
  * wash. Layered into one `background-image` (`shared.tsx`'s `boxStyle`).
  */
@@ -227,7 +227,7 @@ export const surfaceSchema = z
   .partial();
 export type SurfaceValue = z.infer<typeof surfaceSchema>;
 
-/** A style's motion (M29): a reveal on scroll, a hover response. CSS only. */
+/** A style's motion: a reveal on scroll, a hover response. CSS only. */
 export const motionSchema = z
   .object({
     reveal: z.enum(MOTION_REVEALS),
@@ -242,7 +242,7 @@ export type MotionValue = z.infer<typeof motionSchema>;
 /* -------------------------------------------------------------------------- */
 
 /**
- * An icon as a block draws it (M29): a name from the renderer's own set
+ * An icon as a block draws it: a name from the renderer's own set
  * (`icon-paths.ts`: `globe`, `credit-card`…), a media asset (an SVG exported
  * from Figma), or a glyph (an emoji, a character). The first one set wins in
  * that order. Never a bare word drawn as text — imported cards once showed
@@ -268,7 +268,7 @@ export type IconValue = z.infer<typeof iconSchema>;
  * theme role already adapts, to the colour scheme included.
  */
 /**
- * Free Tailwind utilities on a style (M29, rung 2½): exact values the tables
+ * Free Tailwind utilities on a style (rung 2½): exact values the tables
  * have no step for (`pt-[72px]`, `lg:grid-cols-[2fr_1fr]`, `tracking-[-0.02em]`,
  * `bg-[radial-gradient(…)]`), breakpoint prefixes typed by hand. Validated
  * token by token (`classIssues`): a refused token names itself in the error.
@@ -335,10 +335,10 @@ export function elementsSchema<const K extends string>(names: readonly K[]) {
  * block schema: `...styleProps(['title', 'description'])`.
  */
 /**
- * Which hand-coded variant of the block this instance draws (decision 106).
+ * Which hand-coded variant of the block this instance draws.
  *
  * Hlou's own components ignore it. An edited `renderer/blocks/<key>/Component.tsx`
- * (Design › Code, decision 105) branches on it — `custom:<name>` — so one
+ * (Design › Code) branches on it — `custom:<name>` — so one
  * instance can look like a design no token expresses while every other
  * instance of the type renders as before. Not a custom block: a block of a
  * shape no built-in block has is its own type, created by a person.

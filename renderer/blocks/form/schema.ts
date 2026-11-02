@@ -17,7 +17,7 @@ export const FORM_ELEMENTS = ['title', 'description', 'form', 'submit'] as const
 /* -------------------------------------------------------------------------- */
 
 /**
- * A form field filled from its scope at submit (M40-16): `field` a field key
+ * A form field filled from its scope at submit: `field` a field key
  * of the form's collection, `path` a scope path (a value or a derived one),
  * `as: 'text'` formatted as the page shows it. The field draws no input.
  */

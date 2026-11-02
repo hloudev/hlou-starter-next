@@ -73,7 +73,7 @@ function linesOf(value: unknown): SummaryLine[] {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The summary's server shell (M40-14): its copy resolved and its scope's
+ * The summary's server shell: its copy resolved and its scope's
  * render-time snapshot handed to the island as JSON — the island computes
  * the rows from them, on the server too, so the first paint shows the
  * defaults (and the canvas preview). `sticky` holds it in view from 1024 px.

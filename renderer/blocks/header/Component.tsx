@@ -68,7 +68,7 @@ function asChildren(value: unknown): NavChild[] | undefined {
  * The link list, literal or resolved from a navigation slot — both are arrays
  * (`contentToLiteral`). An entry with no label is dropped rather than drawn as
  * an empty `<a>`: a half-typed row in the Content editor is not a link yet.
- * Its `children` (M40-11) go through the same checks.
+ * Its `children` go through the same checks.
  */
 function asLinks(value: unknown): NavLink[] {
   if (!Array.isArray(value)) return [];
@@ -118,7 +118,7 @@ function Logo({
 }
 
 /**
- * One bar link with a dropdown (M40-11): the link (or, with no href, a
+ * One bar link with a dropdown: the link (or, with no href, a
  * button that only opens it), a 28 px caret button — its negative margin
  * keeps the row as tall as its neighbours — and the children. CSS shows
  * the list on hover and on focus within, so mouse and Tab work without a
@@ -259,7 +259,7 @@ function StackedLinks({
 /* -------------------------------------------------------------------------- */
 
 /**
- * The site header. `menuStyle` (M40-11) picks how the links show: in the bar
+ * The site header. `menuStyle` picks how the links show: in the bar
  * (`inline`, a stored header's look), in a sheet from the inline end below a
  * breakpoint (`drawer`), or in a full-screen menu behind a burger
  * (`fullscreen`). Both panels are native popovers — the browser opens,

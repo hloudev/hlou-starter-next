@@ -12,7 +12,7 @@ import { cx } from './tw';
 /* -------------------------------------------------------------------------- */
 
 /**
- * Marked words (M29): a heading or a statement names the words to set apart
+ * Marked words: a heading or a statement names the words to set apart
  * (`accentWords`), and how — a colour through the `accent` element's style,
  * and a DECORATION drawn around or under the word: a hand-drawn ellipse, a
  * scribble, an underline, a highlight. A hero that circles one word; this

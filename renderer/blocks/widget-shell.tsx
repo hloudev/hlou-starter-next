@@ -14,7 +14,7 @@ import { isResolvedMedia } from '../contracts';
 import { formatState } from '../state/format';
 import { pathKey } from '../state/when';
 
-/* The server half of the M40 widgets (quantity, choiceCards, steps,
+/* The server half of the scope widgets (quantity, choiceCards, steps,
    summary): what a block's shell reads of the scope it sits in, shaped into
    the plain JSON its island renders from. The island half is
    `widget-client.tsx`, which never imports this file (zod, the contracts). */

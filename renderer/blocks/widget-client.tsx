@@ -10,7 +10,7 @@ import type { ScopeSnapshot } from '../state/schema';
 
 import { getScope } from '../state/store';
 
-/* The island half of the M40 widgets (quantity, choiceCards, steps,
+/* The island half of the scope widgets (quantity, choiceCards, steps,
    summary): types and hooks shared by their client components. Free of zod
    and of the contracts — the store it reads is the scope island's, already
    in the page's islands bundle. */

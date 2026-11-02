@@ -377,8 +377,8 @@ export const defaultFieldRenderers: CustomFieldRenderers = {
   position: JsonField,
   style: JsonField,
   elements: JsonField,
-  /* A scope's lists and a button's action (decision 197) are edited as JSON
-     here; the Design inspector draws their own editors (M40-18). */
+  /* A scope's lists and a button's action are edited as JSON
+     here; the Design inspector draws their own editors. */
   scopeFields: JsonField,
   scopeSteps: JsonField,
   scopeDerived: JsonField,

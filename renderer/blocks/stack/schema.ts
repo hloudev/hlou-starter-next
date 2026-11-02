@@ -15,7 +15,7 @@ import { FLEX_DIRECTIONS } from '../tw';
 export const responsiveDirectionSchema = responsiveSchema(z.enum(FLEX_DIRECTIONS), 'direction');
 
 /**
- * A flex container (M29): the layout block for anything a grid of equal
+ * A flex container: the layout block for anything a grid of equal
  * columns is not — a row of unequal items, a column with its own alignment,
  * a header-like bar. Direction and gap are responsive; nested blocks carry
  * their own size through `style` (`width`, `frame`, `classes`).

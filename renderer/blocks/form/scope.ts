@@ -10,7 +10,7 @@ import { formatState } from '../../state/format';
 import { isRecord } from '../../state/values';
 import { pathKey } from '../../state/when';
 
-/* A form inside a scope (M40-16), zod-free: the scope values a form posts
+/* A form inside a scope, zod-free: the scope values a form posts
    through `fromState`, and the size-capped `state` it sends along. */
 
 /* -------------------------------------------------------------------------- */

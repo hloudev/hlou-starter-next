@@ -35,14 +35,14 @@ import { subtreeIds } from '../doc/tree';
 import { resolveAttribution } from '../site/attribution';
 
 /*
- * The spec's first compiler (M43-03, decision 219: one spec, two compilers):
+ * The spec's first compiler (one spec, two compilers):
  * `hlou/site/**` → the `SiteSnapshot` the starter renders, so `pnpm dev`
  * shows a hand-edited spec the way Hlou would build it. Pure: no filesystem,
  * no clock, no network — the starter's `pnpm hlou:compile` reads the files
  * and writes what this returns (plus `content.ts`, the messages and the
  * Tailwind classes, from `../site/output` and `../blocks/design`).
  *
- * It gives what `buildDesignSnapshot` (`@hlou/feature-design`) gives for the
+ * It gives what Hlou's own build gives for the
  * same definition, with three differences that are the starter's by nature:
  *
  * - **ids** are the lock's uuids where the lock has the row, and otherwise
@@ -64,7 +64,7 @@ import { resolveAttribution } from '../site/attribution';
 
 export interface CompileSiteSpecOptions {
   /**
-   * The project's name and slug: the spec carries neither (decision 211).
+   * The project's name and slug: the spec carries neither.
    * Absent → `hlou/export.json`'s, when the files hold one, else `Site` / `site`.
    */
   project?: { id?: string; name?: string; slug?: string };
@@ -87,10 +87,10 @@ export type SiteSpecCompileResult =
 /*                                  CONSTANTS                                 */
 /* -------------------------------------------------------------------------- */
 
-/** A copy of `@hlou/contracts/locale`'s RTL languages (`resolveSiteDirection`). */
+/** A copy of Hlou's RTL languages. */
 export const SPEC_RTL_LANGUAGES = ['ar', 'he', 'fa', 'ur', 'ps', 'sd', 'yi'] as const;
 
-/** A copy of `@hlou/feature-collections`' `FORM_INPUT_FIELD_TYPES`: what a form asks for. */
+/** A copy of Hlou's form input types: what a form asks for. */
 export const SPEC_FORM_INPUT_FIELD_TYPES = [
   'text',
   'richtext',
@@ -105,10 +105,10 @@ export const SPEC_FORM_INPUT_FIELD_TYPES = [
   'country',
 ] as const;
 
-/** A copy of `@hlou/feature-collections`' `SITE_DATA_RECORD_CAP`. */
+/** A copy of Hlou's cap on site data records. */
 export const SPEC_RECORD_CAP = 500;
 
-/** A copy of `@hlou/contracts`' `DEFAULT_TITLE_TEMPLATE`. */
+/** A copy of Hlou's default title template. */
 export const SPEC_DEFAULT_TITLE_TEMPLATE = '{page} — {site}';
 
 const EPOCH = '1970-01-01T00:00:00.000Z';
@@ -473,7 +473,7 @@ function compileDocument(refs: Refs, doc: SpecDocument, slug: string | null): Pa
     const { section, instanceOf, props, overrides, ...rest } = node;
     nodes[id] = {
       ...rest,
-      /* Over the block's defaults, as the validator checked them (M43-06). */
+      /* Over the block's defaults, as the validator checked them. */
       props: compileProps(refs, withBlockDefaults(node.type, props), slug) as Record<
         string,
         unknown

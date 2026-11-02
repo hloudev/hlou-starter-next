@@ -119,7 +119,7 @@ export function siteRoutes(snapshot: SiteSnapshot): SiteRoute[] {
  * *key* on a page (`seo.title`) or on the site (`site.logo`) — the page's
  * slot first, then the site's of the same key. A page slot with no value in
  * either locale gives way to the site's: a page whose share image was
- * removed shares the site's again, not the generated card (M30-6).
+ * removed shares the site's again, not the generated card.
  */
 function getSlotValue(
   snapshot: SiteSnapshot,
@@ -216,7 +216,7 @@ export function getSiteTagline(snapshot: SiteSnapshot, locale?: string): string 
 }
 
 /**
- * The site's logo image in `locale` (`site.logoImage`, decision 146 — an
+ * The site's logo image in `locale` (`site.logoImage` — an
  * Arabic logo is a real request). `site.logo` stays the text wordmark.
  */
 export function getSiteLogo(snapshot: SiteSnapshot, locale?: string): MediaDoc | undefined {
@@ -264,9 +264,9 @@ export function getShareImage(
 }
 
 /**
- * The media the site's icon set is generated from (decision 147):
+ * The media the site's icon set is generated from:
  * `settings.iconAssetId`, else the source-locale `site.logoImage`. `undefined`
- * → the builder draws a monogram. `apps/builder/src/site-icons.ts` picks the
+ * → the build draws a monogram. The build picks the
  * same one, so what the head names is what the build wrote.
  */
 export function getIconSource(snapshot: SiteSnapshot): MediaDoc | undefined {
@@ -274,7 +274,7 @@ export function getIconSource(snapshot: SiteSnapshot): MediaDoc | undefined {
 }
 
 /**
- * Whether the icon set has an `icon.svg` (decision 147): when the source is an
+ * Whether the icon set has an `icon.svg`: when the source is an
  * SVG (passed through, sanitised), or when there is none (the monogram is
  * drawn as one). A raster source has no `icon.svg`.
  */

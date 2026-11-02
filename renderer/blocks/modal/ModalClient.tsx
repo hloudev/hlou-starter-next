@@ -30,7 +30,7 @@ const FOCUSABLE =
 /* -------------------------------------------------------------------------- */
 
 /**
- * Wires one modal `<dialog>` (M40-10): a plain click on any
+ * Wires one modal `<dialog>`: a plain click on any
  * `a[href="#modal-<key>"]` opens it, and so does the URL's hash on load (a
  * link from another page). The modal dialog is the focus trap; focus goes to
  * the content's first control, else the close button, and back to the
@@ -119,7 +119,7 @@ export function wireModal(dialog: HTMLDialogElement): () => void {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The modal island (M40-10): a hidden anchor beside the server's `<dialog>`.
+ * The modal island: a hidden anchor beside the server's `<dialog>`.
  * After hydration it finds its block's dialog and wires it; the content
  * (other blocks) never sits in a React tree of its own.
  */

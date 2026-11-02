@@ -2,7 +2,7 @@
 /*                                    TYPES                                   */
 /* -------------------------------------------------------------------------- */
 
-/* Calendar maths on `YYYY-MM-DD` strings (M40-12), read as UTC midnights: a
+/* Calendar maths on `YYYY-MM-DD` strings, read as UTC midnights: a
    calendar day has no time zone, so no offset can shift it. ISO strings
    compare as strings. Pure, no Intl: shared by the server shell, the island
    and the form (F3). */

@@ -54,7 +54,7 @@ function pinnedStep(props: unknown): string | null {
  * component without a function crossing the client boundary — the error copy, the
  * country names sorted for the page's language, the calendar's first weekday.
  *
- * **Inside a scope** (M40-16) — one form per scope, on the step where the
+ * **Inside a scope** — one form per scope, on the step where the
  * visitor types; the scope's own fields reach the record through `fromState`
  * (drawn as nothing, read from the scope at submit), and with `hideSubmit` a
  * scope button (`{ do: 'submit' }`) sends it. The step the render pass pinned

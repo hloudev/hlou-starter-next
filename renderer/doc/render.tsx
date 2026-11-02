@@ -38,16 +38,16 @@ export type RenderDocInput = {
   /** `false` skips Header and Footer instances. */
   chrome?: boolean;
   /**
-   * The Canvas editor's markers (M33-17): every slot wrapper names the node
+   * The Canvas editor's markers: every slot wrapper names the node
    * and the slot it holds (`data-hl-node`, `data-hl-slot`), and a component
    * instance's blocks sit in a `display: contents` wrapper naming the
    * component that owns them (`data-hl-owner`), and an empty slot keeps its
-   * block's `minEmptyHeight` (M33-24). Off by default: static, preview and
+   * block's `minEmptyHeight`. Off by default: static, preview and
    * Classic output never carry them.
    */
   markers?: boolean;
   /**
-   * The Canvas state bar's preview of a scope (decision 198), keyed by scope
+   * The Canvas state bar's preview of a scope, keyed by scope
    * id: merged over the scope's first state. Never set on a published render.
    */
   previewState?: Record<string, Partial<ScopeSnapshot>>;
@@ -92,7 +92,7 @@ const STRUCTURAL = new Set(['id', 'type', 'parent', 'slot', 'order', 'props', 'h
 /** The nodes whose stray `when` was logged already: once per node, not once per render. */
 const LOGGED_STRAY_WHEN = new Set<string>();
 
-/** The block that opens a scope (decision 197). */
+/** The block that opens a scope. */
 export const SCOPE_NODE_TYPE = 'scope';
 
 /** On an instance's wrapper and every block root: the node's `when`, and whether it is off. */
@@ -196,7 +196,7 @@ function bindState(
  * know, draw nothing. An `instance` draws its component's blocks in place,
  * with its own `overrides` merged (`applyOverrides`).
  *
- * Scopes (decision 197): a `scope` block inside a section opens a scope —
+ * Scopes: a `scope` block inside a section opens a scope —
  * its id is the node's (`<instance>/<node>` inside an instance), its
  * snapshot `scopeSnapshotOf` with the canvas `previewState` over it. Every
  * block inside receives it as `__hl.scope`; each `{ $state }` in its props is
@@ -235,7 +235,7 @@ export function renderDoc({
 
   /* With the markers (the canvas), an empty slot keeps the height its block
      asks for (`minEmptyHeight`), as Puck's drop zone did: it is where a block
-     dropped into it lands (M33-24). Without them nothing changes. */
+     dropped into it lands. Without them nothing changes. */
   const slotFunction =
     (owner: PageDocument, parentId: string, slot: string, env: RenderEnv) =>
     ({ className, style, as, minEmptyHeight }: DocSlotRenderProps = {}): ReactElement => {
@@ -267,7 +267,7 @@ export function renderDoc({
       const component = node.instanceOf ? componentsById.get(node.instanceOf) : undefined;
       if (!component) return null;
       if (!chrome && (component.kind === 'header' || component.kind === 'footer')) return null;
-      /* What this instance overrides on the component's nodes (M33-21). */
+      /* What this instance overrides on the component's nodes. */
       const source = applyOverrides(component.doc, node.overrides);
       const instance = env.instance ? `${env.instance}/${node.id}` : node.id;
       const blocks = renderChildren(source, source.root, ROOT_SLOT, { ...inner, instance });

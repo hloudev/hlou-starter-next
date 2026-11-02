@@ -12,7 +12,7 @@ import { styleProps } from '../style-props';
 /* -------------------------------------------------------------------------- */
 
 /**
- * A library audio file (M37-06, decision 188 §9): the player always shows
+ * A library audio file: the player always shows
  * its controls and never starts on its own — no autoplay prop at all.
  */
 export const audioSchema = z.object({

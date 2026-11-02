@@ -22,7 +22,7 @@ export const marqueeItemSchema = z.object({
 export type MarqueeItem = z.infer<typeof marqueeItemSchema>;
 
 /**
- * A line that scrolls by itself (M29): words, logos, a strip of images — the
+ * A line that scrolls by itself: words, logos, a strip of images — the
  * creative-site staple. CSS only; a visitor who asked for less motion sees
  * the items wrapped and still.
  */

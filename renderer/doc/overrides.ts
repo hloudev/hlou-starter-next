@@ -11,7 +11,7 @@ import type { DocNode, PageDocument } from './schema';
 /* -------------------------------------------------------------------------- */
 
 /**
- * What one instance changes on one of its component's nodes (M33-21), kept
+ * What one instance changes on one of its component's nodes, kept
  * on the instance as `overrides[nodeId]`:
  *
  * - `props`: top-level props, each replacing the component's whole;

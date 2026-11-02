@@ -13,11 +13,11 @@ import { colorPropSchema, styleProps } from '../style-props';
 /* -------------------------------------------------------------------------- */
 
 export const headingSchema = z.object({
-  /* May show a scope value (decision 197). */
+  /* May show a scope value. */
   text: stateBoundSchema(z.string()),
   level: z.enum(['h1', 'h2', 'h3', 'h4']),
   align: z.enum(['start', 'center', 'end']),
-  /** Words set apart (M29), comma- or space-separated; styled through the `accent` element. */
+  /** Words set apart, comma- or space-separated; styled through the `accent` element. */
   accentWords: z
     .string()
     .optional()

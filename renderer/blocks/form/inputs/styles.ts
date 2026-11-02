@@ -2,7 +2,7 @@
 /*                                   STYLES                                   */
 /* -------------------------------------------------------------------------- */
 
-/* Plain Tailwind (decision 59); every class spelled out for Tailwind's scan.
+/* Plain Tailwind; every class spelled out for Tailwind's scan.
    An invalid field (`aria-invalid`) takes the site's error border. */
 
 /** A bare input, select or textarea. */

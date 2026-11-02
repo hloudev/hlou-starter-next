@@ -26,7 +26,7 @@ export const galleryItemSchema = z.object({
 export type GalleryItem = z.infer<typeof galleryItemSchema>;
 
 /**
- * Images, many (M29): a portfolio, an exhibition, a venue. Four layouts —
+ * Images, many: a portfolio, an exhibition, a venue. Four layouts —
  * a grid of fixed ratios, a masonry of natural heights, justified rows, a
  * horizontal strip — and a hover that zooms or reveals the caption.
  */
@@ -41,7 +41,7 @@ export const gallerySchema = z.object({
   ratio: z.enum(['auto', 'square', 'portrait', 'landscape', 'wide']),
   hover: z.enum(['none', 'zoom', 'caption']),
   /**
-   * What a click on an image does (M40-09): nothing, follow the item's
+   * What a click on an image does: nothing, follow the item's
    * `href`, or open the lightbox. Unset reads as `link` — stored galleries
    * do not change.
    */

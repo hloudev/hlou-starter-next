@@ -22,7 +22,7 @@ import {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The `sizes` attribute per layout (M37-06): how wide the browser should
+ * The `sizes` attribute per layout: how wide the browser should
  * expect an image to be drawn, so it picks the smallest rung of the
  * `srcset` that covers it. One table, so every block says the same thing:
  *
@@ -77,7 +77,7 @@ const LADDERS: readonly (readonly MediaRenditionPreset[])[] = [
 ];
 
 /**
- * `pickRendition`'s rule (`@hlou/feature-content/contracts`) over the rungs a
+ * `pickRendition`'s rule over the rungs a
  * value carries — every one of them ready: that rung, else the nearest larger
  * one of its ladder, else `null` (the original).
  */
@@ -123,13 +123,13 @@ export type MediaImgAttrs = {
 };
 
 /**
- * Everything an `<img>` of a media value needs (M37-06, decision 188 §8, §10):
+ * Everything an `<img>` of a media value needs:
  *
  * - `size: auto` (or absent) — `src` is the `md` rung (else the nearest ready
  *   larger one, else the original), `srcset` every ready rung at its width
  *   plus the original at its own, and `sizes` from the block;
  * - a rung — that rung by `pickServedRendition`, no `srcset`;
- * - `original` — the uploaded file, as before M37;
+ * - `original` — the uploaded file, the only choice for older media;
  * - `width` / `height` always when known (the rung's own when one is served),
  *   `decoding="async"`, and `loading="lazy"` unless `priority` — the hero's
  *   media and the first figure above the fold — which asks `fetchpriority="high"`;
@@ -223,7 +223,7 @@ export function surfaceImageUrls(media: ResolvedMedia): string[] {
 export type MediaSource = { src: string; type?: string };
 
 /**
- * A library video's `<source>` list, best first (decision 188 §8): on `auto`
+ * A library video's `<source>` list, best first: on `auto`
  * the 720p rung, then 480p, then the original; a rung caps the ladder (that
  * rung, the smaller ones, then the original); `original` alone. The poster
  * is the `poster` rung when there is one.

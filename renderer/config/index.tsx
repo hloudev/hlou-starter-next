@@ -88,10 +88,10 @@ function SiteRoot({ children, puck }: { children: ReactNode; puck?: unknown }): 
   const fontsHref = googleFontsHref(fonts);
   const fontFace = fontFaceCss(fonts, resolveAssetUrl);
   const preloads = fontPreloads(fonts, resolveAssetUrl);
-  /* One rule per colour scheme a section can sit on (M33-13). */
+  /* One rule per colour scheme a section can sit on. */
   const schemes = schemesCss(rawTheme);
   /* The « Propulsé par Hlou » badge, when the page draws no visible footer
-     to carry it (decision 193): a centred row after the content, inside the
+     to carry it: a centred row after the content, inside the
      scope so it takes its theme, scheme, `lang` and `dir`. With a footer,
      `FooterBlock` draws it in its legal row instead — never both. The Design
      canvas never shows it: every Canvas path renders with `mode="canvas"`
@@ -170,7 +170,7 @@ export function createSiteConfig(options: SiteConfigOptions = {}): SiteRenderCon
       label: block.label,
       fields,
       defaultProps: block.defaults,
-      /* The node's variant and design choices land here (M33-13). */
+      /* The node's variant and design choices land here. */
       render: (props) => block.Component(applyDesign(key, props)),
     };
     /* The title is the category KEY; the Design palette translates it. */

@@ -30,7 +30,7 @@ export const SITE_SCOPE_CLASS = 'hl-site-scope';
  *  the scope switches palette with it. */
 export const SITE_ROOT_CLASS = 'hl-site-root';
 
-/** Section padding (block / inline) per density, from the design README §11. */
+/** Section padding (block / inline) per density. */
 const DENSITY_PADDING: Record<SiteThemeDensity, { y: number; x: number }> = {
   tight: { y: 34, x: 26 },
   base: { y: 54, x: 40 },
@@ -170,11 +170,11 @@ export function themeToCss(tokens: unknown, locale?: string): SiteCssVariables {
 const LEGACY_COLOR_KEYS = new Set(['accent', 'paper', 'ink']);
 
 /**
- * One rule per colour scheme (M33-13): a section carrying
+ * One rule per colour scheme: a section carrying
  * `data-hl-scheme="<key>"` re-points the colour roles the scheme names, both
  * palettes at once, for everything inside it. A role the scheme leaves out
  * keeps the theme's light value, and every dark side is derived again over
- * the scheme's colours (decision 52, per scheme) — a lighter paper gets its
+ * the scheme's colours (per scheme) — a lighter paper gets its
  * own dark paper, and the accent is lifted against THAT. `site.css` derives
  * the soft, hairline, card and on-colour tokens from these on the same
  * element, and paints the section's surface.

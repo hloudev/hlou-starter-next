@@ -27,7 +27,7 @@ export const headerDesign: BlockDesign<HeaderProps> = {
       thumbnail: 'navbar-split',
       props: { sticky: true },
     },
-    /* M40-11: transparent over the block below, taking its paper on scroll —
+    /* Transparent over the block below, taking its paper on scroll —
        meant for one page, through the instance's override. */
     {
       key: 'overlay',
@@ -35,7 +35,7 @@ export const headerDesign: BlockDesign<HeaderProps> = {
       thumbnail: 'navbar-center',
       props: { sticky: true, overlay: true },
     },
-    /* M40-11: a burger at every width opening the full-screen menu. */
+    /* A burger at every width opening the full-screen menu. */
     {
       key: 'fullscreen',
       labelKey: 'Design.variants.header.fullscreen',

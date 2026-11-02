@@ -60,10 +60,8 @@ export const SITE_THEME_TYPOGRAPHY_KEYS = [
 /* -------------------------------------------------------------------------- */
 
 /**
- * The rendition ladder (M37, decision 188 §2), mirrored from
- * `@hlou/feature-content/contracts`' `MEDIA_RENDITION_PRESETS` — this package
- * imports nothing from `@hlou/*`, so the list is copied and a test in
- * `feature-content` checks the two match. Only what serving needs: the
+ * The rendition ladder, copied here because the renderer imports only `react`
+ * and `zod`; a test holds the copy equal to Hlou's own. Only what serving needs: the
  * width an image rung is cut at, the height of a video rung, the bitrate of
  * an audio rung.
  */

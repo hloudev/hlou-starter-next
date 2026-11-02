@@ -14,7 +14,7 @@ import type { BlockVariant, DesignOption, SectionRole } from './design-options';
  * The palette's four shelves: `layout` holds containers and spacing, `blocks`
  * the agnostic primitives (heading, text, image, button…), `interactive` the
  * blocks that read or write a parcours (scope, dates, quantity, choices,
- * steps, summary — M40), `library` the composed, opinionated sections (hero,
+ * steps, summary), `library` the composed, opinionated sections (hero,
  * feature grid, CTA band…) — the set a later milestone splits into system and
  * agency components.
  */
@@ -35,7 +35,7 @@ export type SiteRenderContext = {
   formEndpoint: string;
   /**
    * A PREVIEW build's own id, sent as `X-Hlou-Build` with every form post so
-   * the submission lands in the portal's Sandbox (decision 90). Absent on a
+   * the submission lands in the portal's Sandbox. Absent on a
    * production build — the live site never names itself.
    */
   formBuildId?: string;
@@ -62,14 +62,14 @@ export type SiteRenderContext = {
    */
   currentPath?: string;
   /**
-   * The blocks above the fold (M37-06): the page's first node and the
+   * The blocks above the fold: the page's first node and the
    * first-child chain inside it. Their first media is not lazy-loaded and
-   * asks `fetchpriority="high"` (decision 188 §10).
+   * asks `fetchpriority="high"`.
    */
   leadBlocks?: string[];
   /**
    * The canvas draws what a block keeps behind a click — a header's menu
-   * panel — inline under it, so a designer can style it (M40-11). Only a
+   * panel — inline under it, so a designer can style it. Only a
    * component frame asks; pages never do.
    */
   previewOverlays?: boolean;
@@ -116,7 +116,7 @@ export interface BlockDefinition<S extends z.ZodObject = z.ZodObject, P = z.infe
   /** Prop names that accept `{ $form }`. */
   formProps?: string[];
   /**
-   * The semantic layer (M33-13), declared by every library block in its
+   * The semantic layer, declared by every library block in its
    * `design.ts`: what the section is for, the layouts it comes in, and its
    * one-click looks. `design.ts` (the folder's) applies them at render time.
    */

@@ -58,7 +58,7 @@ const WIDTH: Record<SectionProps['width'], string> = {
 };
 
 /*
- * A section planned in Structure (M33-09) and not designed yet draws the
+ * A section planned in Structure and not designed yet draws the
  * planned box — its pattern and its label — wherever it is edited or
  * previewed. The box sits over the empty slot (the drop zone stays under it)
  * and goes as soon as the section holds a block: CSS (`:has`), because a
@@ -88,7 +88,7 @@ function plannedLabel(props: Record<string, unknown>): string | null {
 }
 
 /**
- * An agency's pattern (`t:<uuid>`, decision 177 §5): its pill would show a
+ * An agency's pattern (`t:<uuid>`): its pill would show a
  * uuid, and the label beside it already names the section.
  */
 function isTenantGlyph(glyph: string): boolean {
@@ -109,7 +109,7 @@ export function SectionBlock(props: BlockProps<SectionProps>): ReactElement {
   const background = BACKGROUND[props.background] ?? BACKGROUND.paper;
   const { root, context } = blockParts(props, 'section', background.root);
   const planned = context.mode === 'static' ? null : plannedLabel(props);
-  /* A free section (M33-20): the slot is a column grid its blocks are placed on. */
+  /* A free section: the slot is a column grid its blocks are placed on. */
   const free = props.layout === 'free';
 
   return (

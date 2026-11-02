@@ -41,11 +41,11 @@ export {
 } from './guards';
 export type { MediaRenditionPreset } from './guards';
 
-/* The share-facts shape (M31 §3) is a contract both audit sources write. */
+/* The share-facts shape is a contract both audit sources write. */
 export { headTagsToFacts, shareFactsSchema } from '../site/facts';
 export type { ShareFacts } from '../site/facts';
 
-/* The value shapes of decision 200, shared with the collections validator. */
+/* The value shapes, shared with the collections validator. */
 export * from './money';
 export * from './country';
 
@@ -130,7 +130,7 @@ export const siteThemeSchemeRoleSchema = z.object({
 export type SiteThemeSchemeRole = z.infer<typeof siteThemeSchemeRoleSchema>;
 
 /**
- * A colour scheme (M33-13): a named set of the theme's colour roles, re-pointed
+ * A colour scheme: a named set of the theme's colour roles, re-pointed
  * for the sections that sit on it (`design.scheme` → `data-hl-scheme`) —
  * Relume's "colour scheme from the style guide". A role it does not name keeps
  * the theme's value; the dark side is derived per scheme like the theme's.
@@ -248,7 +248,7 @@ const siteThemeTokensShapeSchema = z.object({
   density: siteThemeDensitySchema.default('base'),
   radius: siteThemeRadiusSchema.default(10),
   typeScale: siteThemeTypeScaleSchema.default({ xs: 11, sm: 14, md: 19, lg: 26, xl: 34 }),
-  /** Colour schemes a section can sit on (M33-13). Optional: a theme without any is unchanged. */
+  /** Colour schemes a section can sit on. Optional: a theme without any is unchanged. */
   schemes: z
     .array(siteThemeSchemeSchema)
     .max(12)
@@ -264,8 +264,7 @@ export type SiteThemeTokens = z.infer<typeof siteThemeTokensShapeSchema>;
 export const DEFAULT_THEME_TOKENS: SiteThemeTokens = siteThemeTokensShapeSchema.parse({});
 
 /** `site.css` keys these three colour roles and the two font roles by name — a
- *  project's theme can edit them but never remove them (`applyRoleOps` in
- *  `@hlou/feature-design`'s `service/theme.ts`). */
+ *  project's theme can edit them but never remove them. */
 export const PROTECTED_COLOR_KEYS = ['accent', 'paper', 'ink'] as const;
 export const PROTECTED_FONT_KEYS = ['heading', 'body'] as const;
 
@@ -333,7 +332,7 @@ export const recordStatusSchema = z.enum(['draft', 'published', 'archived']);
 export type RecordStatus = z.infer<typeof recordStatusSchema>;
 
 /**
- * The store a record belongs to (decision 89): `production` is the portal's
+ * The store a record belongs to: `production` is the portal's
  * Live, `preview` its Sandbox. A build is one or the other, so the same pair
  * names both.
  */
@@ -384,12 +383,12 @@ const navigationLinkShape = {
   label: z.string().optional(),
 };
 
-/** At most this many links under one (M40-11): a header dropdown, one level. */
+/** At most this many links under one: a header dropdown, one level. */
 export const NAVIGATION_CHILDREN_MAX = 8;
 
 export const navigationItemSchema = z.object({
   ...navigationLinkShape,
-  /** A dropdown under the link (M40-11): one level, no children of their own. */
+  /** A dropdown under the link: one level, no children of their own. */
   children: z.array(z.object(navigationLinkShape)).max(NAVIGATION_CHILDREN_MAX).optional(),
 });
 export type NavigationItem = z.infer<typeof navigationItemSchema>;
@@ -457,11 +456,11 @@ export const mediaRenditionPresetSchema = z.enum(
 );
 
 /**
- * The size a media value is served at (decision 188 §8): `auto` (absent) lets
+ * The size a media value is served at: `auto` (absent) lets
  * the site pick — a `srcset` of the ready rungs for an image, the 720p → 480p
  * ladder for a video, 128k for audio; a rung serves that rung (or the nearest
  * ready larger one); `original` serves the uploaded file. The video and audio
- * rungs are sizes too: the inspector offers them on those kinds (M37-07).
+ * rungs are sizes too: the inspector offers them on those kinds.
  */
 export const MEDIA_SIZES = [
   'auto',
@@ -504,9 +503,9 @@ export const mediaDocSchema = z.object({
   height: z.number().int().positive().optional(),
   mime: z.string(),
   alt: z.record(z.string(), z.string()),
-  /** Video and audio (M37): the current version's length. */
+  /** Video and audio: the current version's length. */
   durationMs: z.number().int().nonnegative().optional(),
-  /** The current version's READY renditions (M37), keyed by preset. */
+  /** The current version's READY renditions, keyed by preset. */
   renditions: mediaRenditionsSchema.optional(),
   /**
    * The `media_asset_versions` row a frozen snapshot pins: the published read
@@ -556,7 +555,7 @@ export type RecordRef = z.infer<typeof recordRefSchema>;
 export type Bound<T> = T | SlotRef | RecordRef;
 
 /**
- * A block prop bound to a value of the nearest `scope` (decision 197): the
+ * A block prop bound to a value of the nearest `scope`: the
  * render pass replaces it with the formatted value of the scope's snapshot,
  * and the scope runtime keeps it current in the browser. `resolveDoc` leaves
  * it alone.
@@ -595,18 +594,18 @@ export type BoundMeta = {
     | 'elements'
     /* The key of one field of the block's bound collection (a listing's mapping). */
     | 'fieldKey'
-    /* A code variant (decision 106): set by code, no inspector field. */
+    /* A code variant: set by code, no inspector field. */
     | 'codeVariant'
     /* Written by the document itself (a planned section's glyph): no inspector field. */
     | 'internal'
-    /* A scope's fields, steps and derived values, a button's action (decision 197):
-       a JSON editor until the Canvas kinds land (M40-18). */
+    /* A scope's fields, steps and derived values, a button's action:
+       a JSON editor until the Canvas kinds land. */
     | 'scopeFields'
     | 'scopeSteps'
     | 'scopeDerived'
     | 'action'
     /* A path into the nearest scope (`adults`, `dates.from`, `$step`): a widget's
-       `bind.path`. Plain text standalone; the Design inspector picks it (M40-18). */
+       `bind.path`. Plain text standalone; the Design inspector picks it. */
     | 'statePath';
   /** For `responsive`: the control that edits one breakpoint's value. */
   control?: ResponsiveControl;
@@ -614,7 +613,7 @@ export type BoundMeta = {
   elements?: string[];
   /** For `fieldKey`: the collection field types it may name. */
   fieldTypes?: FieldType[];
-  /** For `bound`: the prop also takes a `{ $state }` scope value (decision 197). */
+  /** For `bound`: the prop also takes a `{ $state }` scope value. */
   state?: true;
   /** For `slot`: block types this slot refuses besides `SLOT_DISALLOWED` (a scope's `scope`). */
   disallow?: string[];
@@ -638,7 +637,7 @@ export function boundSchema<T extends z.ZodType>(inner: T) {
 
 /**
  * `boundSchema`, plus `{ $state }`: a prop that may show a value of the
- * nearest scope. Opt-in, prop by prop (decision 197): `heading.text`,
+ * nearest scope. Opt-in, prop by prop: `heading.text`,
  * `button.label`, `statement.text`, the `stats` values, widget props.
  */
 export function stateBoundSchema<T extends z.ZodType>(inner: T) {
@@ -654,7 +653,7 @@ export const resolvedMediaSchema = z
     width: z.number().int().positive().optional(),
     height: z.number().int().positive().optional(),
     alt: z.string().optional(),
-    /** What the site serves (decision 188 §8); absent = `auto`. */
+    /** What the site serves; absent = `auto`. */
     size: mediaSizeSchema.optional(),
     /** The asset's mime, when known — a GIF and a video are served differently. */
     mime: z.string().optional(),
@@ -670,7 +669,7 @@ export type ResolvedMedia = z.infer<typeof resolvedMediaSchema>;
 /**
  * `boundSchema(resolvedMediaSchema)`, whose references may carry the served
  * size beside the binding (`{ $slot, size }`, `{ $record, size }`): the
- * resolver lays it onto the media it resolves (decision 188 §8).
+ * resolver lays it onto the media it resolves.
  */
 export function boundMediaSchema() {
   const size = { size: mediaSizeSchema.optional() };
@@ -757,7 +756,7 @@ export const pageMetaSchema = z.object({
 });
 export type PageMeta = z.infer<typeof pageMetaSchema>;
 
-/** A snapshot's page: its meta and its flat document (decision 160). */
+/** A snapshot's page: its meta and its flat document. */
 export const pageDocV2Schema = pageMetaSchema.extend({ doc: pageDocumentSchema });
 export type PageDocV2 = z.infer<typeof pageDocV2Schema>;
 
@@ -780,7 +779,7 @@ export const siteSocialSchema = z.object({
 });
 export type SiteSocial = z.infer<typeof siteSocialSchema>;
 
-/** The « Propulsé par Hlou » badge's styles (Claude Design handoff, 2026-10-17). */
+/** The « Propulsé par Hlou » badge's styles. */
 export const SITE_ATTRIBUTION_TONES = [
   'light',
   'dark',
@@ -809,10 +808,10 @@ export const SITE_ATTRIBUTION_MAX_OFFSET = 200;
  * is built (`resolveAttribution`).
  *
  * By default the badge closes the Footer block's legal row, or a row of its
- * own after the content when the page draws no footer (decision 193); `align`
+ * own after the content when the page draws no footer; `align`
  * moves it to the start, middle or end of that line. In `float` mode it is
  * pinned to the viewport instead (`edge`, `align`, `offsetX`, `offsetY`).
- * A `position` a project stored before decision 193 is stripped on parse.
+ * A `position` a project stored before these fields existed is stripped on parse.
  */
 export const siteAttributionSchema = z.object({
   enabled: z.boolean(),
@@ -849,7 +848,7 @@ export const DEFAULT_SITE_ATTRIBUTION: SiteAttribution = {
 };
 
 /**
- * What a machine reads once per site (decision 145). What a visitor reads and
+ * What a machine reads once per site. What a visitor reads and
  * can differ per language is a site slot instead — `site.name`,
  * `site.tagline`, `seo.description`, `seo.image`, `site.logoImage` — and
  * `siteName` / `description` here are only the fallbacks of a snapshot that
@@ -874,8 +873,8 @@ export const siteSettingsSchema = z.object({
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;
 
 /**
- * What the renderer draws a site from (decision 160): version 2 only since
- * M33-09. Pages carry flat documents (`doc`); `components` (Header, Footer,
+ * What the renderer draws a site from: version 2 only.
+ * Pages carry flat documents (`doc`); `components` (Header, Footer,
  * later saved sections) are the documents their `instance` nodes place.
  */
 export const siteSnapshotSchema = z.object({
@@ -903,7 +902,7 @@ export const siteSnapshotSchema = z.object({
   colorScheme: siteColorSchemeSchema.optional(),
   /** The URL paths of the legacy pages this build lays beside Hlou's (decision
    *  187: `/cours/`, `/about.html`). Written by the builder, never stored in a
-   *  version: a link to one stays unprefixed (M36-09). */
+   *  version: a link to one stays unprefixed. */
   legacyPaths: z.array(z.string()).optional(),
   generatedAt: z.iso.datetime({ offset: true }),
 });
@@ -1170,7 +1169,7 @@ function mapMediaUrls(
  * rewritten the same way. `resolve` returning null leaves a URL as it was.
  *
  * Every media value it rewrites also gets the asset's ready `renditions`
- * (M37, decision 188 §8), each through `resolve(assetId, preset)`: the
+ *, each through `resolve(assetId, preset)`: the
  * published routes add `?r=<preset>`, a build points at its own copies.
  */
 export function withResolvedMediaUrls<T extends SiteSnapshot>(

@@ -23,7 +23,7 @@ export {
 /* -------------------------------------------------------------------------- */
 
 /*
- * The value shapes of decision 200 (series M40, « Value shapes »), shared by
+ * The value shapes, shared by
  * the renderer, the state runtime, the site's form inputs and the collections
  * validator — pure, zod and `Intl` only, so all of them can import it.
  */

@@ -3,11 +3,10 @@
 /* -------------------------------------------------------------------------- */
 
 /*
- * The site spec's file tree (M43, decision 219). A site's definition as keyed
+ * The site spec's file tree. A site's definition as keyed
  * JSON files a person or an agent writes by hand: `hlou/site/**` is editable,
  * the lock beside it is generated. Defined here, in the renderer, because the
- * starter vendors only `packages/site-renderer/src` and compiles the spec
- * there (S3); `@hlou/contracts/site-spec` re-exports it, and nothing else
+ * starter vendors only the renderer and compiles the spec there. Nothing else
  * defines the format.
  */
 

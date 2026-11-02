@@ -21,7 +21,7 @@ export type SiteEnv = {
   cfBeaconToken: string;
   /** The build row a preview's forms name (`X-Hlou-Build`); unset in production. */
   buildId?: string;
-  /** A preview build is never indexed (decision 148), whatever the settings say. */
+  /** A preview build is never indexed, whatever the settings say. */
   environment: SiteEnvironment;
 };
 

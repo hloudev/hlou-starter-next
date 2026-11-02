@@ -159,8 +159,8 @@ function resolveMedia(assetId: unknown, ctx: Context): ResolvedMedia | null {
 }
 
 /**
- * The served size a binding carries beside its reference (`{ $slot, size }`,
- * decision 188 §8), laid onto the media it resolved to. Anything else passes.
+ * The served size a binding carries beside its reference (`{ $slot, size }`),
+ * laid onto the media it resolved to. Anything else passes.
  */
 function withBoundSize(literal: unknown, ref: Record<string, unknown>): unknown {
   if (!isMediaSize(ref.size) || !isResolvedMedia(literal)) return literal;
@@ -204,7 +204,7 @@ function contentToLiteral(value: ContentValue, ctx: Context): unknown {
          falls back to, so it follows the page when Structure moves it. */
       return value.items.map((item) => ({
         ...navigationLink(item, ctx),
-        /* A dropdown's links (M40-11) resolve the same way. */
+        /* A dropdown's links resolve the same way. */
         ...(item.children?.length
           ? { children: item.children.map((child) => navigationLink(child, ctx)) }
           : {}),
@@ -348,7 +348,7 @@ function resolveValue(
   path: Array<string | number>,
   ctx: Context
 ): unknown {
-  /* A scope value (decision 197) has no content behind it: the render pass
+  /* A scope value has no content behind it: the render pass
      formats it from the scope's snapshot. It leaves here untouched. */
   if (isStateRef(value)) return value;
   if (isSlotRef(value)) {
@@ -439,7 +439,7 @@ function fillPath(path: string, record: RecordDoc | undefined): string {
 /* -------------------------------------------------------------------------- */
 
 /**
- * An instance's overrides (M33-21) dereferenced like the props they replace:
+ * An instance's overrides dereferenced like the props they replace:
  * bound values, record fields, hrefs under the base path. With no block type
  * at hand, a missing `$slot` keeps its reference rather than a default.
  */
@@ -462,7 +462,7 @@ function resolveOverrides(
 /**
  * A document dereferenced for one locale, node by node: `{ $slot }` → the
  * locale's content (the source locale, then the node's OWN block default at
- * its own path, nested or not — M33-09), `{ $collection }` → published records
+ * its own path, nested or not), `{ $collection }` → published records
  * after `query`, `{ $form }` → the form and its fields, `{ $record }` → the
  * current record's field on a template page. `rootProps` is left as is. Pure.
  */

@@ -58,7 +58,7 @@ type Twitter = {
   images: { url: string; alt: string }[];
 };
 
-/** One `<link>` of the icon set (decision 147), shaped as Next's `IconDescriptor`. */
+/** One `<link>` of the icon set, shaped as Next's `IconDescriptor`. */
 type IconLink = { url: string; sizes?: string; type?: string };
 
 /**
@@ -143,7 +143,7 @@ function titleTemplate(snapshot: SiteSnapshot, siteName: string): string {
 }
 
 /**
- * `<meta name=robots>` for a page (decision 148): a preview is never indexed
+ * `<meta name=robots>` for a page: a preview is never indexed
  * nor followed; production honours the site's `indexable`, then the page's.
  */
 export function siteRobots(
@@ -160,7 +160,7 @@ export function siteRobots(
 
 /**
  * The icon set the head names, in order: `/favicon.ico`, `/icon.svg` when the
- * set has one, `/apple-touch-icon.png`. The files are the build's (M30-3);
+ * set has one, `/apple-touch-icon.png`. The files are the build's;
  * both templates ship fallbacks at the same paths.
  */
 function siteIcons(snapshot: SiteSnapshot): NonNullable<SiteMetadata['icons']> {

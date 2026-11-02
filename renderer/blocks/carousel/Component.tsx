@@ -298,7 +298,7 @@ export function CarouselBlock(props: BlockProps<CarouselProps>): ReactElement {
   /* A bound collection gives the slides; the canvas says which. */
   const badge = context.mode !== 'static' && sourceKey !== null;
   const rootStyle = { ...root.style, ...carouselVars(props.perView, props.gap, props.peek) };
-  /* Unset is `link`; `lightbox` opens the slides' images full screen (M40-09). */
+  /* Unset is `link`; `lightbox` opens the slides' images full screen. */
   const onClick = props.onClick === 'none' || props.onClick === 'lightbox' ? props.onClick : 'link';
   const enlarge = stateMessages(context.locale).lightbox.open;
   const viewer: LightboxItem[] = [];

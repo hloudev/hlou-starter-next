@@ -145,7 +145,7 @@ export { DEFAULT_POSITION, dragPosition, positionVarsAt, readPosition } from './
 export { FLOATING_SLOT_ALLOWED } from './config/fields';
 export * from './site';
 
-/* M29: the surface / motion / span vocabulary, the layout literals and the icon set. */
+/* The surface / motion / span vocabulary, the layout literals and the icon set. */
 export {
   COL_SPANS,
   COLUMN_COUNTS,
@@ -169,7 +169,7 @@ export {
 export type { ColumnCount, FlexDirection, SurfacePosition } from './blocks/tw';
 export { ICON_NAMES, ICON_PATHS, isIconName } from './blocks/icon-paths';
 
-/* M33-13: section roles, variants, design options and colour schemes. */
+/* Section roles, variants, design options and colour schemes. */
 export {
   DENSITY_VALUES,
   isSectionRole,

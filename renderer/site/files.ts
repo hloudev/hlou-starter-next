@@ -107,7 +107,7 @@ export function sitemapXml(entries: readonly SitemapEntry[]): string {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The site's crawl rule (decision 148): nothing on a preview build, nothing
+ * The site's crawl rule: nothing on a preview build, nothing
  * when the site is set not to be indexed, everything otherwise.
  */
 export function robotsData(env: SiteEnv, snapshot: SiteSnapshot): RobotsData {
@@ -130,7 +130,7 @@ export function robotsTxt(data: RobotsData): string {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The install manifest: the generated PNGs (M30-3; both templates ship
+ * The install manifest: the generated PNGs (both templates ship
  * fallbacks), the maskable one marked so, `icon.svg` when the set has one —
  * and the same theme colour the head names (`themeColorValue`).
  */

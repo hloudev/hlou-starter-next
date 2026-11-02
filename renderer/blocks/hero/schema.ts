@@ -45,11 +45,11 @@ export const heroSchema = z.object({
   /** Between the copy column and the image. */
   gap: responsiveGapSchema,
   mediaRatio: responsiveAspectSchema,
-  /** Where the image sits (M29): beside the copy (end or start), under it, or behind it as a full-bleed background. */
+  /** Where the image sits: beside the copy (end or start), under it, or behind it as a full-bleed background. */
   layout: z.enum(['split-end', 'split-start', 'stacked', 'overlay']).optional(),
   mediaFit: z.enum(['cover', 'contain']).optional(),
   /**
-   * More images after `image` (M40-08): the figure becomes a slideshow that
+   * More images after `image`: the figure becomes a slideshow that
    * cross-fades from one to the next — in every layout. `image` stays the
    * first, so a bound image keeps working. Items, not bare media: the
    * inspector draws a media picker per item.

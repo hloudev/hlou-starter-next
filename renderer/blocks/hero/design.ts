@@ -40,7 +40,7 @@ export const heroDesign: BlockDesign<HeroProps> = {
       props: { layout: 'overlay' },
     },
     {
-      /* M40-08: add images under « Diapositives » and they cross-fade. */
+      /* Add images under « Diapositives » and they cross-fade. */
       key: 'slider',
       labelKey: 'Design.variants.hero.slider',
       thumbnail: 'hero-full',

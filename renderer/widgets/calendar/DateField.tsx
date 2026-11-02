@@ -74,7 +74,7 @@ const join = (...parts: Array<string | undefined>) => parts.filter(Boolean).join
 /* -------------------------------------------------------------------------- */
 
 /**
- * A date field (M40-12): a trigger drawn like an input — two side by side
+ * A date field: a trigger drawn like an input — two side by side
  * for a split range — opening the calendar in a `popover="auto"` dialog (top
  * layer, Esc, light dismiss) placed under the field, flipped above when it
  * has no room, kept in the viewport; under 640 px a bottom sheet with one

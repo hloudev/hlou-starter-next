@@ -3,7 +3,7 @@
 /* -------------------------------------------------------------------------- */
 
 /**
- * Applies a node's variant and design choices (M33-13) when its block
+ * Applies a node's variant and design choices when its block
  * renders, with one precedence everywhere — Puck (Classic, Focus), `renderDoc`
  * (Studio, previews, published sites):
  *

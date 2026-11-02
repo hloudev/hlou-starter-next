@@ -77,7 +77,7 @@ function patch(element: HTMLElement, store: ScopeStore): void {
 /* -------------------------------------------------------------------------- */
 
 /**
- * Starts scope `id` on this page (decision 198): its store (`getScope`
+ * Starts scope `id` on this page: its store (`getScope`
  * builds it from `data-hl-scope-def`, sessionStorage and the URL), the one
  * delegated click listener on `document` (installed once, whatever the
  * number of scopes), and one subscriber that keeps the scope's bound texts

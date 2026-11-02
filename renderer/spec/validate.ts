@@ -83,7 +83,7 @@ export const SITE_SPEC_ERROR_CODES = [
   'locale_unknown',
   /**
    * The source locale listed as disabled. Content for a disabled locale is
-   * valid: the locale keeps it while it is off (decision 174).
+   * valid: the locale keeps it while it is off.
    */
   'locale_disabled',
   /**
@@ -637,7 +637,7 @@ function checkContent(ctx: Context) {
   for (const locale of Object.keys(ctx.spec.content).sort()) {
     const file = `${SITE_SPEC_ROOT}/content/${locale}.json`;
     const entry = locales.get(locale);
-    /* A disabled locale keeps its content (decision 174): only an unknown one is wrong. */
+    /* A disabled locale keeps its content: only an unknown one is wrong. */
     if (!entry) {
       ctx.report.add(file, [], 'locale_unknown', `The site lists no locale "${locale}"`);
     }

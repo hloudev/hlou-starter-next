@@ -2,8 +2,8 @@
 /*                                   EXPORTS                                  */
 /* -------------------------------------------------------------------------- */
 
-/* Document v2 (M33, decision 160): the flat page document, its tree, the v1
-   converter and the Puck-free renderer. Edit-side logic is `@hlou/site-model`'s. */
+/* Document v2: the flat page document, its tree, the v1
+   converter and the Puck-free renderer. Edit-side logic is the editor's. */
 export {
   docNodeSchema,
   docPlaceSchema,

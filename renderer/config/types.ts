@@ -11,8 +11,7 @@ import type { CatalogEntry, Derived, ScopeDefField } from '../state/schema';
 
 /**
  * How a block prop is edited, as the registry describes it (`zodToField`).
- * The shape is the one Puck's fields had until M33-23, so the Design
- * inspector reads the same objects; the renderer owns it now, and draws
+ * The Design inspector reads these objects; the renderer owns the shape, and draws
  * nothing with it but the standalone editors in `default-fields.tsx`.
  *
  * A field's `label` is a KEY (the prop name, an option's raw value) that the
@@ -88,13 +87,13 @@ export interface CustomFieldDrawProps {
   readOnly?: boolean;
   /**
    * The parcours (scope) the edited node is in, or is — from the node's
-   * ancestors, which no schema knows: the inspector computes it (M40-18).
+   * ancestors, which no schema knows: the inspector computes it.
    */
   scope?: CustomFieldScope;
 }
 
 /**
- * What a field editor knows of the nearest scope (decision 197): its fields,
+ * What a field editor knows of the nearest scope: its fields,
  * steps and derived values as the runtime reads them (labels resolved), and
  * the currency amounts are counted in. `self` when the node IS the scope.
  */

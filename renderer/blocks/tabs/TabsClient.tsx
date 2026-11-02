@@ -103,7 +103,7 @@ export function wireTabs(root: HTMLElement, count = Infinity): () => void {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The tabs island (M40-10): draws a hidden anchor and nothing else. After
+ * The tabs island: draws a hidden anchor and nothing else. After
  * hydration it finds its block and wires the server's markup — the panels
  * (other blocks) are never inside a React tree of its own.
  */

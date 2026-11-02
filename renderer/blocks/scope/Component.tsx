@@ -30,7 +30,7 @@ function openedScope(props: unknown): DocScopeEnv | null {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The scope's server shell (decisions 197–198): its root names the scope and
+ * The scope's server shell: its root names the scope and
  * carries its def, its slot draws the blocks as they are, and a child-less
  * island starts the DOM runtime after hydration — no React tree ever wraps
  * the blocks. A scope that opened none (nested, at a page's root, drawn

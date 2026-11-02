@@ -31,7 +31,7 @@ import { aspectClasses, cx, gapClasses, mergeClasses } from '../tw';
 /* -------------------------------------------------------------------------- */
 
 /*
- * Plain Tailwind (decision 59): what a developer reads here is what renders.
+ * Plain Tailwind: what a developer reads here is what renders.
  * A designer's `style` / `elements` entry replaces the default for the same
  * property (`blockParts`); the gap and image ratio are the block's own
  * responsive props. The padding is the theme's density (`.hl-blk`) until a
@@ -52,7 +52,7 @@ function orDefault(classes: string[], fallback: string[]): string[] {
 const SLIDER_AUTOPLAY = 6;
 
 /**
- * The slideshow's figure (M40-08): every image stacked in one box, the first
+ * The slideshow's figure: every image stacked in one box, the first
  * active; `site.css`'s `.hl-fade` cross-fades whichever the `carousel`
  * island marks active. Without a script — and on the canvas — the first
  * image is the hero's image, as before, with a « 1 / n » badge while editing.

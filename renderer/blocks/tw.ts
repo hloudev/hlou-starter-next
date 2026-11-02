@@ -13,7 +13,7 @@
  * `@source inline(...)` lines; `styles/vocabulary.css` carries them verbatim
  * (`pnpm tw:vocabulary` rewrites them, `tw.test.ts` fails on drift).
  *
- * Stored props are untrusted (decision 48): a mapper looks each value up in
+ * Stored props are untrusted: a mapper looks each value up in
  * its table and drops anything else, so no stored string ever reaches a
  * `class` attribute. Logical utilities only (`ps-`/`pe-`, `text-start`) —
  * the site renders under `dir="rtl"`.
@@ -284,7 +284,7 @@ export const TEXT_ALIGNS = ['start', 'center', 'end', 'justify'] as const;
 export const TEXT_WRAPS = ['wrap', 'balance', 'pretty', 'nowrap'] as const;
 export const DECORATIONS = ['none', 'underline', 'line-through'] as const;
 
-/* Grid placement (M29): how many columns / rows a block inside a grid spans. */
+/* Grid placement: how many columns / rows a block inside a grid spans. */
 export const COL_SPANS = ['1', '2', '3', '4', 'full'] as const;
 export const ROW_SPANS = ['1', '2', '3'] as const;
 
@@ -661,7 +661,7 @@ export function cx(...parts: Array<string | string[] | false | null | undefined>
 }
 
 /* -------------------------------------------------------------------------- */
-/*                            RESPONSIVE LITERALS (M29)                        */
+/*                            RESPONSIVE LITERALS                        */
 /* -------------------------------------------------------------------------- */
 
 /*
@@ -782,7 +782,7 @@ export function responsiveLiteralClasses<K extends string>(
 }
 
 /* -------------------------------------------------------------------------- */
-/*                              FREE LAYOUT (M33-20)                          */
+/*                              FREE LAYOUT                          */
 /* -------------------------------------------------------------------------- */
 
 /*
@@ -1010,7 +1010,7 @@ export function withPlaceAt(raw: unknown, bp: Breakpoint, value: PlaceValue | nu
 /* -------------------------------------------------------------------------- */
 
 /*
- * A style's SURFACE (M29): a background image, a gradient, a colour overlay —
+ * A style's SURFACE: a background image, a gradient, a colour overlay —
  * what a hero over a photo, a band with a wash, a section with a texture
  * need and no token had. The layers are composed into ONE `background-image`
  * value carried by `--s-bgi` (`shared.tsx`'s `boxStyle`), read by fixed
@@ -1084,7 +1084,7 @@ export function surfaceClasses(raw: unknown): string[] {
 }
 
 /*
- * MOTION (M29): a reveal as the block scrolls into view, a hover response.
+ * MOTION: a reveal as the block scrolls into view, a hover response.
  * CSS only — `styles/site.css` defines the classes under
  * `@supports (animation-timeline: view())` and `motion-reduce` turns them
  * off — so a published page runs no script for it. Plain class names, not
@@ -1114,14 +1114,14 @@ export function motionClasses(raw: unknown): string[] {
 /* -------------------------------------------------------------------------- */
 
 /*
- * Rung 2½ of the fidelity ladder (M29): a style may carry Tailwind utilities
+ * Rung 2½ of the fidelity ladder: a style may carry Tailwind utilities
  * the tables above do not spell — `pt-[72px]`, `lg:grid-cols-[2fr_1fr]`,
  * `tracking-[-0.02em]`, `bg-[radial-gradient(…)]`. They are compiled where
  * they are shown (the canvas compiles them in the browser, a build scans
  * `site/tw-classes.txt`, a server route compiles the page's list), so the
  * vocabulary stays open without a rebuild.
  *
- * Stored props are untrusted (decision 48), and these reach a `class`
+ * Stored props are untrusted, and these reach a `class`
  * attribute, an inline `<style>` and a Tailwind scan — so a token is a
  * closed set of characters, with no whitespace, no `url(`, no `< > { } ; @`
  * and balanced brackets. Anything else is dropped, never rewritten.
@@ -1210,7 +1210,7 @@ export function siteUtilityClasses(tree: unknown): string[] {
 /**
  * Every class a site's stored styles map to — walked over anything (a
  * snapshot, a composition): each `style`, each entry of an `elements` map,
- * their free `classes` (M29), and each breakpoint map (`{ base, md… }`)
+ * their free `classes`, and each breakpoint map (`{ base, md… }`)
  * through the responsive mappers.
  * What the builder writes to `site/tw-classes.txt`, so a published site's
  * CSS carries the classes it uses instead of the whole canvas vocabulary.
@@ -1282,7 +1282,7 @@ export function twSourceInline(): string[] {
     line('{italic,not-italic}'),
     `@source inline("${brace(Object.values(HIDDEN_RANGE))}");`,
     `@source inline("${brace(Object.values(SURFACE_UTILITIES))}");`,
-    /* A free child's place (M33-20): cell lines, layers and turns. */
+    /* A free child's place: cell lines, layers and turns. */
     line(`free:col-start-${brace(range(1, PLACE_COLUMN_MAX))}`),
     line(`free:col-span-${brace(range(1, PLACE_COLUMN_MAX))}`),
     line(`free:row-start-${brace(range(1, PLACE_ROW_MAX))}`),

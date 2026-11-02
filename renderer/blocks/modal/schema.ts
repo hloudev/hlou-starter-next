@@ -18,7 +18,7 @@ export const MODAL_KEY_PATTERN = /^[a-z][a-z0-9-]{0,31}$/;
 /* -------------------------------------------------------------------------- */
 
 /**
- * A window over the page (M40-10), holding other blocks. There is no
+ * A window over the page, holding other blocks. There is no
  * « opens » prop anywhere: any link whose href is `#modal-<key>` opens it —
  * a button, a hero button, the header CTA, a text link — on this page, and
  * from another page through the URL's hash. Without a script the link is an

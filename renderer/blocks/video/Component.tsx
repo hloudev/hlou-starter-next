@@ -25,7 +25,7 @@ const OWN_MEDIA = /^\/(?:media|api\/v1)\/[^\s"'<>]*$/;
 /**
  * Only four things ever reach the page: a YouTube or Vimeo player on its
  * privacy-enhanced embed origin, a direct media file over https, or this
- * site's own media by a root-relative URL (`/media/…`, `/api/v1/…` — M37-06).
+ * site's own media by a root-relative URL (`/media/…`, `/api/v1/…`).
  * Anything else — a random site, a `javascript:` URL — draws the placeholder.
  */
 export function resolveVideoSource(url: string): VideoSource {
@@ -87,7 +87,7 @@ const PLAYER = 'block size-full border-0';
 export function VideoBlock(props: BlockProps<VideoProps>): ReactElement {
   /* A primitive on its own row breathes less than a composed section. */
   const { root, el } = blockParts(props, 'video', '[--site-pad-y:18px]');
-  /* A library video wins over the link (M37-06). */
+  /* A library video wins over the link. */
   const media = literalMedia(props.media);
   const source = resolveVideoSource(props.url);
   const title = literal(props.title, '') || undefined;

@@ -70,7 +70,7 @@ export type CalendarProps = {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The calendar grid (M40-12, decision 199), hand-built after the APG date
+ * The calendar grid, hand-built after the APG date
  * picker dialog: one or two months, a `grid` of day buttons with a roving
  * tabindex, the month heading live. Controlled — no scope import, so the
  * form (F3) uses it too. Drawn only while open, in the browser: the server

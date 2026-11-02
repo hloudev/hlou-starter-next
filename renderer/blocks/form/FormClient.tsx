@@ -71,7 +71,7 @@ export type FormClientProps = {
    * The page's base path (`/fr`): a site-path redirect is prefixed with it, as
    * the resolver prefixes every link. Without it, `/reservation/merci?record=…`
    * lands on the unprefixed path's static redirect stub, whose
-   * `<meta http-equiv="refresh">` drops the query (M40-20).
+   * `<meta http-equiv="refresh">` drops the query.
    */
   basePath?: string;
 };
@@ -169,7 +169,7 @@ function validateScope(store: ScopeStore): boolean {
  * on submit with its own message under it (`aria-invalid`, `aria-describedby`,
  * focus on the first), then posted as JSON.
  *
- * **A form inside a scope** (M40-16) — one form block per scope, on the
+ * **A form inside a scope** — one form block per scope, on the
  * step where the visitor types (« Vos coordonnées »). The scope's
  * own fields (dates, guests, extras) are the scope's, validated by the scope
  * per step, and reach the record through `fromState`; the form validates its
@@ -268,7 +268,7 @@ export function FormClient(props: FormClientProps): ReactElement {
       });
       if (!response.ok) return setStatus('error');
       store?.submitted();
-      /* The form's redirect (decision 201): a site path or https, else the success message. */
+      /* The form's redirect: a site path or https, else the success message. */
       const { data } = ((await response.json().catch(() => ({}))) ?? {}) as {
         data?: { redirect?: unknown };
       };

@@ -25,8 +25,7 @@ export type { StateBound, StateFormat, StateRef } from '../contracts';
 /*                                   SCHEMAS                                  */
 /* -------------------------------------------------------------------------- */
 
-/* The contract of decisions 197–198 (`docs/handoffs/interactive/README.md`
-   « The contract »), frozen: a change goes through the team lead. */
+/* The contract of the state runtime, frozen. */
 
 /** A field, step or derived key: a short camelCase word. */
 export const scopeKeySchema = z.string().regex(/^[a-z][a-zA-Z0-9]{0,31}$/);
@@ -144,7 +143,7 @@ export const actionSchema = z.discriminatedUnion('do', [
 ]);
 export type Action = z.infer<typeof actionSchema>;
 
-/** The `scope` block's own props, less its `content` slot (M40-02 adds it). */
+/** The `scope` block's own props, less its `content` slot (added by the block). */
 export const scopePropsSchema = z.object({
   fields: z.array(scopeFieldSchema).max(24),
   steps: z.array(scopeStepSchema).max(8).optional(),

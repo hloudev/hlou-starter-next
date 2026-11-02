@@ -109,7 +109,7 @@ function rowsOf(
 /* -------------------------------------------------------------------------- */
 
 /**
- * The quantity block's server shell (M40-13): it reads the bound field from
+ * The quantity block's server shell: it reads the bound field from
  * the scope it sits in (`__hl.scope`) and hands its island the rows, bounds,
  * prices and copy as JSON; the island draws them — on the server too, so the
  * published page shows the steppers before any script. Unbound, outside a

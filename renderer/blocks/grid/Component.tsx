@@ -38,7 +38,7 @@ const JUSTIFY: Record<NonNullable<GridProps['justify']>, string> = {
   end: 'justify-items-end',
 };
 
-/** Unequal templates (M29), from the tablet up; literal so Tailwind finds them. */
+/** Unequal templates, from the tablet up; literal so Tailwind finds them. */
 const TEMPLATE: Record<NonNullable<GridProps['template']>, string> = {
   equal: '',
   '2-1': 'md:grid-cols-[2fr_1fr]',

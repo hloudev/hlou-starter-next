@@ -49,7 +49,7 @@ export type ChoiceCardsClientProps = {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The choice cards island (M40-13): a fieldset of NATIVE radios, each inside
+ * The choice cards island: a fieldset of NATIVE radios, each inside
  * its `<label>` card — so the radio-group keyboard (arrows move and select,
  * in the visual direction, RTL included) and `required` come from the
  * browser, and a page without script still checks. The selected look is CSS

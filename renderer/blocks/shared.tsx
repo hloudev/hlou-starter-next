@@ -57,9 +57,9 @@ export type BlockRootAttributes = {
   lang: string;
   dir: 'ltr' | 'rtl';
   className: string;
-  /** The colour scheme the block sits on (M33-13): `SiteRoot` emits one rule per theme scheme. */
+  /** The colour scheme the block sits on: `SiteRoot` emits one rule per theme scheme. */
   'data-hl-scheme'?: string;
-  /** Its `when`, as JSON, inside a scope (decision 197): the scope runtime re-evaluates it. */
+  /** Its `when`, as JSON, inside a scope: the scope runtime re-evaluates it. */
   'data-hl-when'?: string;
   /** Present while its `when` is false: `site.css` hides it. */
   'data-hl-off'?: '';
@@ -101,11 +101,11 @@ export function blockRoot(
 ): { attributes: BlockRootAttributes; context: SiteRenderContext } {
   const context = readRenderContext(props.puck);
   const side = asRecord(asRecord(props)?.[SIDE_MAP_PROP]);
-  /* Its cell range in a free section (M33-20): a node field, in the side map. */
+  /* Its cell range in a free section: a node field, in the side map. */
   const place = placeClasses(side?.place);
   const className = ['hl-blk', `hl-blk-${key}`, ...classNames.filter(Boolean), ...place].join(' ');
   const scheme = schemeOf(props);
-  /* Its `when` (decision 197): the render pass left it in the side map only
+  /* Its `when`: the render pass left it in the side map only
      inside a scope, and marked it `off` while it is false. */
   const when = Array.isArray(side?.when) ? JSON.stringify(side.when) : undefined;
   return {
@@ -288,7 +288,7 @@ export function toListingItems(
   limit: number,
   locale: string
 ): ListingItem[] {
-  /* A money price prints in the page's locale (decision 200); a number stays as typed. */
+  /* A money price prints in the page's locale; a number stays as typed. */
   const readPrice = (value: unknown) =>
     isMoneyValue(value) ? formatMoney(value, locale) : readString(value);
   /* A phone reads grouped, a country by name — where the fields are known
@@ -352,7 +352,7 @@ export function boxStyle(
     vars['--s-font'] = resolveFontValue(stored.font as FontValue, '--site-body-font');
     classes.push('font-(family-name:--s-font)');
   }
-  /* A surface (M29): its layers as one `background-image` in a variable. */
+  /* A surface: its layers as one `background-image` in a variable. */
   if (hasSurface(stored)) {
     const surface = asRecord(stored.surface) ?? {};
     vars['--s-bgi'] = surfaceImage(surface);
@@ -366,7 +366,7 @@ export function boxStyle(
     classes.push(...surfaceClasses(stored));
   }
   classes.push(...motionClasses(stored));
-  /* Free utilities last (M29): a `pt-[72px]` replaces the token's padding
+  /* Free utilities last: a `pt-[72px]` replaces the token's padding
      through `mergeClasses`, and anything unsafe was dropped by the sanitiser. */
   classes.push(...sanitiseClasses(stored.classes));
   const font = asRecord(stored.font);
@@ -487,7 +487,7 @@ function surfaceImage(surface: Record<string, unknown>): string {
   }
   const image = asRecord(surface.image);
   if (image && isResolvedMedia(image) && SURFACE_URL.test(image.url)) {
-    /* The rungs (M37-06): `image-set()` lets a dense screen take the larger
+    /* The rungs: `image-set()` lets a dense screen take the larger
        one. Every URL is checked like the original's. */
     const urls = surfaceImageUrls(image).filter((url) => SURFACE_URL.test(url));
     const first = urls[0] ?? image.url;
@@ -529,7 +529,7 @@ export function readIcon(
 }
 
 /**
- * An icon as a block draws it (M29): the set's SVG in the current colour, a
+ * An icon as a block draws it: the set's SVG in the current colour, a
  * media asset at the same size, or a glyph. `className` sizes it (`size-6`).
  */
 export function Icon({
@@ -685,7 +685,7 @@ export function blockParts(
 /* -------------------------------------------------------------------------- */
 
 /**
- * Whether a block is above the fold (M37-06, decision 188 §10): the first
+ * Whether a block is above the fold: the first
  * node of the page and the first-child chain inside it (`SiteRender`'s
  * `leadBlocks`). Its first media is fetched eagerly with high priority.
  */
@@ -750,7 +750,7 @@ export function MediaFigure({
   placeholder?: string;
   /** How wide it is drawn (`MEDIA_SIZES_ATTR`); the content column by default. */
   sizes?: string;
-  /** Above the fold: eager, `fetchpriority="high"` (decision 188 §10). */
+  /** Above the fold: eager, `fetchpriority="high"`. */
   priority?: boolean;
   /** The editable-prop marker (`fieldAttr`), when this figure IS a prop. */
   field?: { 'data-hl-field'?: string };
@@ -793,8 +793,7 @@ export const BUTTON_VARIANT_CLASSES: Record<ButtonVariant, string> = {
   primary: 'border-site-accent bg-site-accent text-site-on-accent',
   ghost: 'border-site-hairline-strong bg-transparent text-site-ink',
   paper: 'border-site-on-accent bg-site-on-accent text-site-accent',
-  /* M29 */
-  ink: 'border-site-ink bg-site-ink text-site-on-ink',
+    ink: 'border-site-ink bg-site-ink text-site-on-ink',
   outline: 'border-site-ink bg-transparent text-site-ink',
   link: 'border-transparent bg-transparent px-0 py-0 text-site-accent underline-offset-4 hover:underline hover:brightness-100',
 };
@@ -827,7 +826,7 @@ export function SiteButton({
   href: string;
   variant?: ButtonVariant;
   size?: ButtonSize;
-  /** An `iconSchema` value drawn beside the label (M29). */
+  /** An `iconSchema` value drawn beside the label. */
   icon?: unknown;
   iconPosition?: 'start' | 'end';
   /** Utilities that replace or extend the button's defaults (`mergeClasses`). */
@@ -835,7 +834,7 @@ export function SiteButton({
   field?: { 'data-hl-field'?: string };
   style?: CSSProperties;
   /**
-   * A scope action (decision 197): the button becomes a `<button
+   * A scope action: the button becomes a `<button
    * type="button" data-hl-action>` the scope runtime answers, and `href` is
    * ignored. Validated by the caller.
    */
@@ -905,7 +904,7 @@ export function SlotArea({
 }: {
   slot: unknown;
   className?: string;
-  /** The slot's own layout utilities — a stack replaces the default grid with flex (M29). */
+  /** The slot's own layout utilities — a stack replaces the default grid with flex. */
   layout?: string;
 }): ReactElement {
   /* `hl-slot` stays a marker: `site.css` drops the density padding of the

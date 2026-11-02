@@ -10,7 +10,7 @@ const FILE_PATH = /\/[^/?#]*\.[a-z0-9]+(?:[?#]|$)/i;
 
 const NO_LEGACY_PATHS: ReadonlySet<string> = new Set();
 
-/** `/cours` and `/cours/` are one legacy folder page, listed as `/cours/` (M36-09). */
+/** `/cours` and `/cours/` are one legacy folder page, listed as `/cours/`. */
 function isLegacyPath(href: string, legacyPaths: ReadonlySet<string>): boolean {
   if (legacyPaths.size === 0) return false;
   const end = href.search(/[?#]/);
@@ -26,11 +26,11 @@ function isLegacyPath(href: string, legacyPaths: ReadonlySet<string>): boolean {
  *
  * So is a path to a FILE (`/about.html`, `/docs/plan.pdf`): a Hlou page's
  * path never has an extension, so a file is something served beside the
- * pages — a legacy site's page (decision 187), a chrome file — and a locale
+ * pages — a legacy site's page, a chrome file — and a locale
  * in front of it would point nowhere.
  *
  * And so is a path the build's legacy layer serves (`legacyPaths`, the
- * snapshot's — M36-09): a folder page `/cours/` has no extension, but it is
+ * snapshot's): a folder page `/cours/` has no extension, but it is
  * the old site's, not a Hlou page under a locale. `/` is always Hlou's home.
  *
  * A base path may carry a query (`/p/<slug>/fr?build=…`, the clean preview's

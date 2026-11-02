@@ -117,7 +117,7 @@ export function resolveAttribution(stored: unknown): SiteAttribution {
  * The tone to suggest for a site — deterministic, never applied on its own.
  * The first rule that holds wins:
  *
- * 1. a footer: the badge sits in its legal row (decision 193), so the
+ * 1. a footer: the badge sits in its legal row, so the
  *    footer is the ground — `ink` → `mono-paper`, `paper` → `mono-ink`;
  * 2. a monochrome palette (accent and paper nearly grey) → `mono-ink` on a
  *    light ground, `mono-paper` on a dark one;

@@ -23,7 +23,7 @@ export const SHAPE_KINDS = [
 ] as const;
 
 /**
- * A decoration (M29): a hand-drawn ellipse, a scribble, an arrow, a blob, a
+ * A decoration: a hand-drawn ellipse, a scribble, an arrow, a blob, a
  * rule — the marks designers scatter over a page. An inline SVG that
  * stretches to the block's size; placed in flow, or over another block as a
  * free element (a `floating` block holding it). A hero's hand-drawn circle

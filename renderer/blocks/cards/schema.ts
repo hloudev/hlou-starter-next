@@ -39,7 +39,7 @@ export const cardItemSchema = z.object({
 export type CardItem = z.infer<typeof cardItemSchema>;
 
 /**
- * A grid of cards (M29): services, team, values, steps, pricing-lite — each
+ * A grid of cards: services, team, values, steps, pricing-lite — each
  * with an optional image or icon, an eyebrow, a title, a text and a link.
  * The general-purpose section a « Why choose us » row and most brand
  * sites need; `featureGrid` stays the compact icon-only version.

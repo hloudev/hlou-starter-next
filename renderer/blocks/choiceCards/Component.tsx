@@ -52,7 +52,7 @@ const OPTION: Record<ChoiceCardsProps['look'], string> = {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The choice cards' server shell (M40-13): it reads the bound `choice` field
+ * The choice cards' server shell: it reads the bound `choice` field
  * from the scope it sits in — its options (static, or the catalog's records
  * with their price), each joined to the block's `decor` (by value) and to
  * its own `source` (by record id) — and hands its island the options as

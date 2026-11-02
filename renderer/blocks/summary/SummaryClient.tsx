@@ -68,7 +68,7 @@ const TONE: Record<SummaryLine['tone'], string> = {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The summary island (M40-14): the card, live — its rows read the scope
+ * The summary island: the card, live — its rows read the scope
  * through R1's pure helpers on every change (`readPath`, `evaluateWhen`,
  * `formatState`), a `lines` value draws one row per item, the total always
  * carries « Estimation », and a note under the card says every amount is

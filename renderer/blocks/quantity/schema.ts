@@ -38,7 +38,7 @@ export const optionMappingSchema = z.object({
 export type OptionMapping = z.infer<typeof optionMappingSchema>;
 
 /**
- * A quantity (M40-13): steppers « − 2 + » on a scope value. What it draws
+ * A quantity: steppers « − 2 + » on a scope value. What it draws
  * follows the bound field — a `number` → one stepper; a `quantities` field
  * with `key` → one stepper for that record; without `key` → the list, one
  * row per catalog record (the extras list).

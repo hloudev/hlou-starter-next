@@ -26,12 +26,12 @@ import { SITE_SCHEME_KEY } from '../contracts/guards';
 import { docNodeSchema, docPlaceValueSchema, siteComponentKindSchema } from '../doc/schema';
 
 /*
- * The site spec, format 1 (M43-01, decision 219). Every object is `.strict()`:
+ * The site spec, format 1. Every object is `.strict()`:
  * a key the format does not know is an error the writer sees, never a value
  * silently dropped. No uuid anywhere: a row is named by its key, and the
  * uuids of the base sit in the generated lock (`./lock.ts`). Optional fields
  * carry no `.default()`, so what a file says is what it parses to; the
- * compilers (S3, S4) fill the documented defaults.
+ * compilers fill the documented defaults.
  *
  * Checks across a file (unique keys) run in `superRefine` and carry their
  * spec error code in `params.code`; checks across files (references, block
@@ -43,9 +43,8 @@ import { docNodeSchema, docPlaceValueSchema, siteComponentKindSchema } from '../
 /* -------------------------------------------------------------------------- */
 
 /*
- * Copies of `@hlou/contracts`' structure enums and of
- * `@hlou/feature-collections`' vocabulary: the renderer imports no `@hlou/*`
- * package. `contracts/src/site-spec/vocabulary.test.ts` holds them equal.
+ * Copies of Hlou's structure enums and collection vocabulary: the renderer
+ * imports only `react` and `zod`, and a test holds them equal.
  */
 export const SPEC_PAGE_KINDS = ['static', 'collection_template', 'utility'] as const;
 export const SPEC_PAGE_GROUPS = ['main', 'section_templates', 'utility'] as const;
@@ -102,7 +101,7 @@ export const SITE_SPEC_KEY = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 export const SITE_SPEC_SECTION_KEY = /^[a-z0-9]+(?:[-_][a-z0-9]+)*$/;
 /**
  * A slot's key, as Structure stores it: `hero.headline`, `nav.links`, and the
- * reserved identity slots (`site.logoImage`, decision 145). Never a `/`, which
+ * reserved identity slots (`site.logoImage`). Never a `/`, which
  * separates the scope from the slot in a content key.
  */
 export const SITE_SPEC_SLOT_KEY = /^[a-z0-9]+(?:[._-][a-zA-Z0-9]+)*$/;
@@ -223,7 +222,7 @@ const specPlaceSchema = z
   .strict();
 
 /**
- * A document v2 node (`@hlou/site-renderer/doc`), node id as it is, with the
+ * A document v2 node (`../doc`), node id as it is, with the
  * spec's keys where the database holds ids: `section` names the page's
  * section by key, `instanceOf` a component by key, and inside `props`
  * `{ "$slot": "hero.title" }` names a slot of the page — `site/<key>` a site
@@ -254,7 +253,7 @@ export type SpecDocument = z.infer<typeof specDocumentSchema>;
 export const specLocaleEntrySchema = z
   .object({
     code: specLocaleSchema,
-    /** Absent = `true`. A disabled locale is kept and not published (decision 174). */
+    /** Absent = `true`. A disabled locale is kept and not published. */
     enabled: z.boolean().optional(),
   })
   .strict();
@@ -267,7 +266,7 @@ const specSocialSchema = z
   )
   .strict();
 
-/** `settings.site` (decision 145): what a machine reads once per site. */
+/** `settings.site`: what a machine reads once per site. */
 export const specSiteSettingsSchema = z
   .object({
     /** The square mark the favicon set is drawn from; absent → the logo. */
@@ -298,7 +297,7 @@ export const specAttributionSchema = z
   })
   .strict();
 
-/** The project row's definition (decision 211): no name, slug or environment. */
+/** The project row's definition: no name, slug or environment. */
 export const specProjectSchema = z
   .object({
     sourceLocale: specLocaleSchema,
@@ -432,7 +431,7 @@ export type SiteSpecSite = z.infer<typeof siteSpecSiteSchema>;
 /*                               pages/<slug>.json                            */
 /* -------------------------------------------------------------------------- */
 
-/** An agency library key (decision 177): the one id the spec carries, opaque. */
+/** An agency library key: the one id the spec carries, opaque. */
 export const SITE_SPEC_LIBRARY_PATTERN =
   /^t:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
@@ -444,7 +443,7 @@ export const specSectionPatternSchema = z
   )
   .refine((value) => !UUID.test(value), 'A library pattern is `t:<uuid>`, never a bare uuid')
   .describe(
-    'A built-in wireframe pattern key, or `t:<uuid>`: an agency library entry (decision 177), the one opaque external reference a spec may carry.'
+    'A built-in wireframe pattern key, or `t:<uuid>`: an agency library entry, the one opaque external reference a spec may carry.'
   );
 
 export const specSectionSchema = z
@@ -453,7 +452,7 @@ export const specSectionSchema = z
     label: z.string(),
     /**
      * The wireframe pattern: a built-in key (`hero-left`), or an agency library
-     * key `t:<uuid>` (decision 177). The library key is the spec's ONE opaque
+     * key `t:<uuid>`. The library key is the spec's ONE opaque
      * external reference: it names the agency's library, outside the site, not
      * a row of it, so it carries the library's own id and no lock maps it.
      */
@@ -586,7 +585,7 @@ export const SITE_SPEC_CONTENT_KEY = new RegExp(
 
 /**
  * A medium's own text in one locale (the asset's attributes): its alt text and
- * caption, wherever it is used. Additive in format 1 (M43-02, lead-approved).
+ * caption, wherever it is used. Additive in format 1 (lead-approved).
  */
 export const specMediaTextSchema = z
   .object({
@@ -688,7 +687,7 @@ export const siteSpecCollectionSchema = z
     /** In order. */
     fields: z.array(specFieldSchema),
     forms: z.array(specFormSchema).optional(),
-    /** Only for a collection that is not website-writable (decision 211). */
+    /** Only for a collection that is not website-writable. */
     records: z.array(specRecordSchema).optional(),
   })
   .strict()

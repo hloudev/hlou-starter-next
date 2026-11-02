@@ -21,7 +21,7 @@ export const DOC_ROOT_ID = 'root';
  * The Puck prop that carries a node's document-only fields (`name`, `role`,
  * `variant`, `design`, `instanceOf`, `overrides`) through Puck data and back,
  * so `fromPuckData(toPuckData(doc))` loses nothing. Written by the Classic
- * adapter (`@hlou/site-model/tree`), read here.
+ * adapter, read here.
  */
 export const DOC_SIDE_MAP_PROP = '__hl';
 
@@ -36,7 +36,7 @@ const isEditingFlag = (key: string) => key.startsWith('_') && key !== DOC_SIDE_M
 /** Node fields a side map may never set: the node's place and identity. */
 const STRUCTURAL_FIELDS = new Set(['id', 'type', 'parent', 'slot', 'order', 'props', 'hidden']);
 
-/** The ids `componentsFromSiteComposition` gives Header and Footer until the service mints uuids (M33-05). */
+/** The ids `componentsFromSiteComposition` gives Header and Footer until the service mints uuids. */
 export const CHROME_COMPONENT_IDS = {
   header: 'component:header',
   footer: 'component:footer',

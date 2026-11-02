@@ -11,7 +11,7 @@ import { isEmptyValue, pathKey, readPath, STEP_PATH } from './when';
 import { prefixHref } from '../resolve/href';
 
 /* No React, no zod: this ships to the browser inside the scope island's 4 KB
-   (decision 198). Actions are checked by hand (`parseAction`), and every
+. Actions are checked by hand (`parseAction`), and every
    value written goes through `coerceValue`, which clamps it. */
 
 /* -------------------------------------------------------------------------- */

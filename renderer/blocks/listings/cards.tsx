@@ -20,7 +20,7 @@ export type ListingsCardsView = {
   card: Styled;
   showPrice: boolean;
   /** The canvas's field marker for the card list; empty in static output. The
-   *  carousel layout marks the list as the `carousel` island's track (M40-08). */
+   *  carousel layout marks the list as the `carousel` island's track. */
   listAttrs: { 'data-hl-field'?: string; 'data-hl-c-track'?: string };
   /** What the empty state names: the collection key, or `—`. */
   emptyLabel: string;

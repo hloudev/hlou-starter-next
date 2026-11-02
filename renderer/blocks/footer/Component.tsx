@@ -56,7 +56,7 @@ export function FooterBlock(props: BlockProps<FooterProps>): ReactElement {
   const tagline = literal(props.tagline, '');
   const social = Array.isArray(props.social) ? props.social : [];
   const brand = Boolean(props.logo || logoMedia || tagline || social.length > 0);
-  /* « Propulsé par Hlou » closes the legal row (decision 193): text first,
+  /* « Propulsé par Hlou » closes the legal row: text first,
      the badge at the inline end; under 480 px the row stacks. */
   const attribution = readFooterAttribution(props.puck, props.id);
 

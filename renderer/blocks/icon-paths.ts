@@ -1,5 +1,5 @@
 /**
- * The icon set a block may name (M29): Phosphor's regular weight, as path
+ * The icon set a block may name: Phosphor's regular weight, as path
  * data on a 256×256 box — copied from `@phosphor-icons/react` (MIT) so the
  * renderer stays dependency-free and a published site ships only the icons
  * it draws. A block's `icon` prop names one of these (`globe`), or points at
@@ -60,7 +60,7 @@ export const ICON_PATHS: Readonly<Record<string, readonly string[]>> = {
   'caret-right': [
     'M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z',
   ],
-  /* M40 (R1): steppers, carousels, a booking form's extras. */
+  /* Steppers, carousels, a booking form's extras. */
   'caret-up': [
     'M213.66,165.66a8,8,0,0,1-11.32,0L128,91.31,53.66,165.66a8,8,0,0,1-11.32-11.32l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,213.66,165.66Z',
   ],
@@ -73,7 +73,7 @@ export const ICON_PATHS: Readonly<Record<string, readonly string[]>> = {
   plant: [
     'M247.63,47.89a8,8,0,0,0-7.52-7.52c-51.76-3-93.32,12.74-111.18,42.22-11.8,19.49-11.78,43.16-.16,65.74a71.34,71.34,0,0,0-14.17,27L98.33,159c7.82-16.33,7.52-33.35-1-47.49-13.2-21.79-43.67-33.47-81.5-31.25a8,8,0,0,0-7.52,7.52c-2.23,37.83,9.46,68.3,31.25,81.5A45.82,45.82,0,0,0,63.44,176,54.58,54.58,0,0,0,87,170.33l25,25V224a8,8,0,0,0,16,0V194.51a55.61,55.61,0,0,1,12.27-35,73.91,73.91,0,0,0,33.31,8.4,60.9,60.9,0,0,0,31.83-8.86C234.89,141.21,250.67,99.65,247.63,47.89ZM47.81,155.6C32.47,146.31,23.79,124.32,24,96c28.32-.24,50.31,8.47,59.6,23.81,4.85,8,5.64,17.33,2.46,26.94L61.65,122.34a8,8,0,0,0-11.31,11.31l24.41,24.41C65.14,161.24,55.82,160.45,47.81,155.6Zm149.31-10.22c-13.4,8.11-29.15,8.73-45.15,2l53.69-53.7a8,8,0,0,0-11.31-11.31L140.65,136c-6.76-16-6.15-31.76,2-45.15,13.94-23,47-35.82,89.33-34.83C232.94,98.34,220.14,131.44,197.12,145.38Z',
   ],
-  /* M40 (W1): the slideshow's pause, the gallery's enlarge chip. */
+  /* The slideshow's pause, the gallery's enlarge chip. */
   pause: [
     'M200,32H160a16,16,0,0,0-16,16V208a16,16,0,0,0,16,16h40a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm0,176H160V48h40ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Zm0,176H56V48H96Z',
   ],

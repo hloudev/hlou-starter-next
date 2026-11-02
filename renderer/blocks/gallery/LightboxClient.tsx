@@ -60,7 +60,7 @@ function Glyph({ d, className }: { d: string; className?: string }): ReactElemen
 /* -------------------------------------------------------------------------- */
 
 /**
- * The `lightbox` island (M40-09, decision 199): a native modal `<dialog>` —
+ * The `lightbox` island: a native modal `<dialog>` —
  * the browser traps the focus, makes the page inert and closes on Esc. It
  * draws its own markup, closed, so the server HTML and the first client
  * render are the same, and opens on a plain click on any `[data-hl-lightbox]`

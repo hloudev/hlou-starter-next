@@ -29,7 +29,7 @@ import { cx } from '../tw';
 /* -------------------------------------------------------------------------- */
 
 /*
- * Plain Tailwind (decision 59). Each layout is a literal set: the list's own
+ * Plain Tailwind. Each layout is a literal set: the list's own
  * display and columns, and what a card does inside it.
  */
 const LAYOUT: Record<ListingsProps['layout'], { grid: string; card: string }> = {
@@ -66,7 +66,7 @@ export function ListingsBlock(props: BlockProps<ListingsProps>): ReactElement {
     'cards',
     cx('overflow-hidden rounded-site border border-site-hairline bg-site-card', layout.card)
   );
-  /* The carousel layout gets the carousel's arrows and island (M40-08). */
+  /* The carousel layout gets the carousel's arrows and island. */
   const carousel = props.layout === 'carousel';
   const m = stateMessages(context.locale).carousel;
   const view: ListingsCardsView = {

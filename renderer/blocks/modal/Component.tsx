@@ -47,7 +47,7 @@ export function modalKeyOf(value: unknown): string {
 /* -------------------------------------------------------------------------- */
 
 /**
- * A native modal `<dialog id="modal-<key>">` (M40-10): the browser traps the
+ * A native modal `<dialog id="modal-<key>">`: the browser traps the
  * focus, closes on Esc and puts it in the top layer. It sits where the block
  * is in the DOM, so a scope widget inside it still finds its scope. A
  * child-less island (`ModalClient`) opens it from any `#modal-<key>` link and

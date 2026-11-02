@@ -6,7 +6,7 @@ import type { FieldDoc } from '../../contracts';
 import { parseMoney } from './inputs/money';
 import { toE164 } from './inputs/phone';
 
-/* The form island's own checks (M40-16), zod-free: what each input posts
+/* The form island's own checks, zod-free: what each input posts
    and the message it shows. The server validates the same data again
    (`buildRecordSchema`); these only spare the visitor a round trip. */
 
@@ -67,7 +67,7 @@ export function fieldCountry(field: FieldDoc): string {
 /**
  * What one field posts, and its error. `range` is a `daterange` field's
  * value (the calendar renders no input). The ten older types post what they
- * always did (a blank text is `''`); the four of decision 200 post `null`
+ * always did (a blank text is `''`); the four value shapes post `null`
  * when blank, else their stored shape: money `{ amount, currency }` in minor
  * units, a range `{ from, to }`, a phone E.164, a country its code.
  */

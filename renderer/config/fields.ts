@@ -27,7 +27,7 @@ export type CustomFieldKind =
   | 'style'
   | 'elements'
   /* A scope's fields, steps and derived values, a button's action, a path
-     into the nearest scope (decision 197; editors in M40-18). */
+     into the nearest scope. */
   | 'scopeFields'
   | 'scopeSteps'
   | 'scopeDerived'
@@ -52,7 +52,7 @@ export type CustomFieldRenderProps = {
   fieldTypes?: FieldType[];
   /** For `slotRef`: the prop also takes a `{ $state }` value of the nearest scope. */
   state?: boolean;
-  /** The parcours the edited node is in, or is (M40-18): set by the inspector, never by a schema. */
+  /** The parcours the edited node is in, or is: set by the inspector, never by a schema. */
   scope?: CustomFieldScope;
 };
 

@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------------ */
-/*  @hlou/site-renderer — the class vocabulary, for the Design canvas.      */
+/*  Hlou's renderer — the class vocabulary, for the Design canvas.      */
 /*                                                                          */
 /*  Every class a stored, typed prop can map to (`blocks/tw.ts`). The app   */
 /*  needs all of them ahead of time — an edit in the canvas never rebuilds  */

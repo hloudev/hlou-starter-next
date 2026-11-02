@@ -19,7 +19,7 @@ export const CAROUSEL_ELEMENTS = ['title', 'items', 'arrows', 'dots'] as const;
 
 /**
  * One slide: an image and a few lines. Typed items, not a slot per slide
- * (M40-08): a slot would make each slide a nested document and still not
+ *: a slot would make each slide a nested document and still not
  * say « one card per record ».
  */
 export const carouselSlideSchema = z.object({
@@ -34,7 +34,7 @@ export const carouselSlideSchema = z.object({
 export type CarouselSlide = z.infer<typeof carouselSlideSchema>;
 
 /**
- * A row of slides the visitor steps through (M40-08, decision 199): the
+ * A row of slides the visitor steps through: the
  * browser's own scroll-snap track, which an island arms with arrows, dots,
  * the keyboard, a mouse drag and an optional autoplay. Its slides are typed
  * items, or a collection's records through the listings mapping.
@@ -63,7 +63,7 @@ export const carouselSchema = z.object({
   loop: z
     .boolean()
     .describe('Rewind to the first slide after the last one (not an infinite loop).'),
-  /** What a click on a slide's image does (M40-09): follow its `href`, or open the lightbox. */
+  /** What a click on a slide's image does: follow its `href`, or open the lightbox. */
   onClick: z
     .enum(['none', 'link', 'lightbox'])
     .optional()

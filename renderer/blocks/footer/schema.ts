@@ -36,9 +36,9 @@ export const footerGroupSchema = z.object({
 });
 
 export const footerSchema = z.object({
-  /** A brand column before the link groups (M29): wordmark or logo, a line, social links. */
+  /** A brand column before the link groups: wordmark or logo, a line, social links. */
   logo: z.string().optional(),
-  /** An image, or bound to a media slot (`site.logoImage`, decision 170). */
+  /** An image, or bound to a media slot (`site.logoImage`). */
   logoMedia: boundMediaSchema().nullable().optional(),
   tagline: boundSchema(z.string()).optional(),
   social: z.array(socialLinkSchema).optional(),

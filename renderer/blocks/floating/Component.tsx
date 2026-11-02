@@ -33,7 +33,7 @@ export function FloatingBlock(props: BlockProps<FloatingProps>): ReactElement {
       className={cx(
         root.className,
         'absolute start-(--fs) end-(--fe) top-(--ft) bottom-(--fb) z-(--fz) translate-x-(--ftx) translate-y-(--fty)',
-        /* Converted into a free section's grid (M33-20): a cell of it, in flow. */
+        /* Converted into a free section's grid: a cell of it, in flow. */
         'free:static free:translate-none',
         framed ? '' : 'w-(--fw)',
         classes

@@ -12,7 +12,7 @@ import { currencyDigits } from '../../../state/values';
 /*                                    TYPES                                   */
 /* -------------------------------------------------------------------------- */
 
-/** Decision 200: `amount` in the currency's minor units. */
+/** `amount` in the currency's minor units. */
 export type MoneyInputValue = { amount: number; currency: string };
 
 /* -------------------------------------------------------------------------- */

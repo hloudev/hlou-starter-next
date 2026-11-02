@@ -12,7 +12,7 @@ import { styleProps } from '../style-props';
 /* -------------------------------------------------------------------------- */
 
 export const videoSchema = z.object({
-  /** A library video (M37-06): wins over `url` when set. */
+  /** A library video: wins over `url` when set. */
   media: boundMediaSchema().nullable().optional(),
   /** A YouTube / Vimeo link, or a direct file over https. */
   url: z.string(),

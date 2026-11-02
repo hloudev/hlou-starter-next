@@ -43,7 +43,7 @@ const ALIGN: Record<TabsProps['align'], string> = {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The APG tabs pattern as server markup (M40-10): a `tablist` of buttons and
+ * The APG tabs pattern as server markup: a `tablist` of buttons and
  * one `tabpanel` per tab, each a slot. The first tab is selected and the
  * others' panels are `hidden` — without a script the first tab shows. A
  * child-less island (`TabsClient`) wires selection onto this markup and

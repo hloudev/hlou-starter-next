@@ -15,7 +15,7 @@ export const STATS_ELEMENTS = ['items'] as const;
 /* -------------------------------------------------------------------------- */
 
 export const statItemSchema = z.object({
-  /* Both may show a scope value (decision 197). */
+  /* Both may show a scope value. */
   value: stateBoundSchema(z.string()),
   label: stateBoundSchema(z.string()),
   style: itemStyleSchema,

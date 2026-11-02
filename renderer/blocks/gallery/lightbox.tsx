@@ -49,7 +49,7 @@ export function lightboxItem(media: ResolvedMedia, caption: string): LightboxIte
 /* -------------------------------------------------------------------------- */
 
 /**
- * An image that opens the lightbox (M40-09): a link to the large file, so a
+ * An image that opens the lightbox: a link to the large file, so a
  * visitor without a script — or a ⌘-click — still gets the image itself.
  * The zoom chip shows on hover and focus.
  */

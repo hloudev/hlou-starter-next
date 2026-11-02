@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------------ */
-/*  @hlou/site-renderer — the Tailwind side of the rendered site.            */
+/*  Hlou's renderer — the Tailwind side of the rendered site.            */
 /*                                                                          */
 /*  Shared by every consumer: the Hlou app imports it through `app.css`     */
 /*  (utilities only, no preflight — Mantine owns the reset there), the      */
@@ -95,7 +95,7 @@
 }
 
 /*
- * A free section's child (M33-20, `blocks/tw.ts`'s `placeClasses`): its cell
+ * A free section's child (`blocks/tw.ts`'s `placeClasses`): its cell
  * range applies only as a direct child of the free grid, so a place left on
  * a block that moved elsewhere draws nothing. `md:free:col-start-3`.
  */

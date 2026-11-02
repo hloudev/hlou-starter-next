@@ -1,9 +1,8 @@
 /**
  * The OFFLINE catalogue: every Google Fonts family with its category, by
  * popularity, generated from `https://fonts.google.com/metadata/fonts` on
- * 2026-10-13 (M29). Used when `GOOGLE_FONTS_API_KEY` is unset or the live
- * Developer API call fails (see `packages/feature-design/src/service/fonts.ts`'s
- * `resolveGoogleFontsCatalog`), and by `update_theme`'s check that a
+ * 2026-10-13. Used when `GOOGLE_FONTS_API_KEY` is unset or the live
+ * Developer API call fails, and by `update_theme`'s check that a
  * `source: 'google'` family exists — a font that is neither here nor in the
  * live list is refused, with the nearest real ones suggested. Also read by
  * `theme/index.ts`'s `fontStack()` for the generic CSS fallback a family's

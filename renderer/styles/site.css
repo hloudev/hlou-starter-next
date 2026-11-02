@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------------ */
-/*  @hlou/site-renderer — the rendered site.                                */
+/*  Hlou's renderer — the rendered site.                                */
 /*                                                                          */
 /*  Everything lives under `.hl-site-scope`. Only `--site-*` variables are  */
 /*  read here: the theme tokens `themeToCss()` writes on the wrapper, plus  */
@@ -84,7 +84,7 @@
       color-mix(in srgb, var(--site-paper) 80%, var(--site-ink))
     );
     --site-media-fill: color-mix(in srgb, var(--site-accent) 22%, var(--site-paper));
-    /* Widget chrome (M40, D0): a popover's shadow, the lightbox's veil and the
+    /* Widget chrome (D0): a popover's shadow, the lightbox's veil and the
        text on it, a dialog's backdrop, a field error. The veils stay dark in
        both schemes: ink in light, paper in dark. */
     --site-shadow-pop:
@@ -118,7 +118,7 @@
     box-sizing: border-box;
   }
 
-  /* A block on a colour scheme (M33-13). `SiteRoot` writes the scheme's
+  /* A block on a colour scheme. `SiteRoot` writes the scheme's
      roles on `[data-hl-scheme="<key>"]` (`schemesCss`); the tokens the scope
      derives from them are derived again HERE, on the same element — a custom
      property is computed where it is declared, so the scope's `--site-card`
@@ -145,7 +145,7 @@
       color-mix(in srgb, var(--site-paper) 80%, var(--site-ink))
     );
     --site-media-fill: color-mix(in srgb, var(--site-accent) 22%, var(--site-paper));
-    /* Widget chrome (M40, D0): a popover's shadow, the lightbox's veil and the
+    /* Widget chrome (D0): a popover's shadow, the lightbox's veil and the
        text on it, a dialog's backdrop, a field error. The veils stay dark in
        both schemes: ink in light, paper in dark. */
     --site-shadow-pop:
@@ -302,7 +302,7 @@
     display: none;
   }
 
-  /* ------------------------------- Motion (M29) ----------------------------- */
+  /* ------------------------------- Motion ----------------------------- */
 
   /* A reveal as the block scrolls into view, driven by the scroll timeline —
      no script. Where the browser has no `animation-timeline`, the block is
@@ -394,7 +394,7 @@
     }
   }
 
-  /* ------------------------------- Marquee (M29) ---------------------------- */
+  /* ------------------------------- Marquee ---------------------------- */
 
   /* Two copies of the track scroll by half their width, so the loop is
      seamless. `--site-marquee-duration` comes from the block's speed; the
@@ -433,7 +433,7 @@
     }
   }
 
-  /* --------------------------- Accent decoration (M29) ---------------------- */
+  /* --------------------------- Accent decoration ---------------------- */
 
   /* A word a heading marks: the decoration is an inline SVG drawn behind or
      under the word, sized to it, in the decoration's colour
@@ -473,7 +473,7 @@
     padding-inline: 0.08em;
   }
 
-  /* ------------------------------ Accordion (M29) --------------------------- */
+  /* ------------------------------ Accordion --------------------------- */
 
   .hl-accordion summary {
     list-style: none;
@@ -604,7 +604,7 @@
     backdrop-filter: blur(12px) saturate(1.4);
   }
 
-  /* In the Footer block's legal row (decision 193): it closes the row and
+  /* In the Footer block's legal row: it closes the row and
      never shrinks; the row itself is the block's (`FooterBlock`). */
   a.hl-attribution--footer {
     flex: none;
@@ -658,16 +658,16 @@
     }
   }
 
-  /* ------------------------------ Scope state (M40) ------------------------- */
+  /* ------------------------------ Scope state ------------------------- */
 
-  /* A node whose `when` is false (decision 197): kept in the markup, so the
+  /* A node whose `when` is false: kept in the markup, so the
      scope runtime can show it again, and hidden whatever its own display —
      an important declaration in this layer beats any utility. */
   [data-hl-off] {
     display: none !important;
   }
 
-  /* ------------------------- Carousel, hero slider (M40) -------------------- */
+  /* ------------------------- Carousel, hero slider -------------------- */
 
   /* Slides per view and the gap, per breakpoint (`--site-carousel-per-*`,
      `--site-carousel-gap-*`, written inline by the block — a peek adds the
@@ -799,7 +799,7 @@
     }
   }
 
-  /* ------------------------------ Lightbox (M40) ---------------------------- */
+  /* ------------------------------ Lightbox ---------------------------- */
 
   /* The page under an open viewer does not scroll — no script involved. */
   html:has(dialog[data-hl-lightbox-dialog][open]) {
@@ -820,7 +820,7 @@
     }
   }
 
-  /* ---------------------------------- Tabs (M40) ---------------------------- */
+  /* ---------------------------------- Tabs ---------------------------- */
 
   /* The strip's hairline is an inset shadow, so the scrolling strip does not
      clip the selected tab's 2 px underline drawn over it. The underline grows
@@ -859,7 +859,7 @@
     }
   }
 
-  /* --------------------------------- Modal (M40) ---------------------------- */
+  /* --------------------------------- Modal ---------------------------- */
 
   /* A native modal dialog, centred from the tablet up; under it every size is
      a bottom sheet that rises 24 px (its square corners are utilities, in
@@ -941,7 +941,7 @@
       0 0 0 100vmax var(--site-backdrop);
   }
 
-  /* --------------------------------- Header menus (M40) --------------------- */
+  /* --------------------------------- Header menus --------------------- */
 
   /* Dropdowns: shown on hover and on focus within (mouse and Tab, no
      script), or open from the caret (the menu island, for touch); a
@@ -1073,7 +1073,7 @@
   }
 
   /* ------------------------------- Date picker ------------------------------ */
-  /* The date picker and its calendar (M40-12, D0 board 4.6). The field looks
+  /* The date picker and its calendar (D0 board 4.6). The field looks
      like an input; the calendar is a `popover="auto"` card placed by the island
      (`--site-dp-x` / `--site-dp-y`), a bottom sheet with one month under 640 px.
      The previous-month arrow is the next one turned, and both mirror in RTL.
@@ -1401,7 +1401,7 @@
     }
   }
 
-  /* Quantity, choices, steps, summary (M40-13, M40-14) — « Hlou Interactif »
+  /* Quantity, choices, steps, summary — « Hlou Interactif »
      boards 4.7–4.10. Their state looks are Tailwind variants on the
      elements (a utility would beat this layer); here: what has no utility. */
 

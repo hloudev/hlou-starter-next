@@ -29,7 +29,7 @@ const FOOTER_BLOCK_TYPE = 'footer';
 
 /**
  * The first Footer block a page draws, in drawing order — the one whose legal
- * row closes with the « Propulsé par Hlou » badge (decision 193). It walks
+ * row closes with the « Propulsé par Hlou » badge. It walks
  * the tree the way `renderDoc` does: a hidden node draws nothing and neither
  * does anything under it, an `instance` draws its component's blocks with its
  * own overrides, and without `chrome` the Header and Footer instances are

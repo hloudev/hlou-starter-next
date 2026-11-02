@@ -38,7 +38,7 @@ const subscribeNever = () => () => undefined;
 /* -------------------------------------------------------------------------- */
 
 /**
- * The date picker island (M40-12): the `DateField` bound to one `date` /
+ * The date picker island: the `DateField` bound to one `date` /
  * `dateRange` field of its scope through `useScopeState`. A range is written
  * end by end (`set` takes a primitive): the field cleared, then `<path>.from`,
  * then `<path>.to`. The server's texts serve until the value changes, so the

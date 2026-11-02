@@ -18,7 +18,7 @@ import {
 
 /**
  * One JSON Schema per kind of spec file, for editors and tools without Zod.
- * `@hlou/contracts`' `gen:site-spec-schema` writes them to
+ * Hlou generates them into
  * `./json-schema/<kind>.schema.json` (vendored with the renderer, so a
  * starter's editor finds them offline at `renderer/spec/json-schema/`), and a
  * test keeps them current. Structure only: references, block props and media

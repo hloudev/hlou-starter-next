@@ -17,7 +17,7 @@ import { iconPaths, widgetScope, widgetStyled, WidgetUnbound } from '../widget-s
 /* -------------------------------------------------------------------------- */
 
 /**
- * The step indicator's server shell (M40-14): the nearest scope's steps and
+ * The step indicator's server shell: the nearest scope's steps and
  * its render-time `$step`, handed to the island as JSON (which draws them on
  * the server too). A scope without steps, or no scope: « Aucune étape » /
  * « Non lié » in the editor, nothing on the site. The done / current / next

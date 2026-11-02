@@ -29,7 +29,7 @@ const SCROLLED_PX = 8;
 /* -------------------------------------------------------------------------- */
 
 /**
- * Wires the header's server markup (`root` is its `[data-hl-block]`, M40-11).
+ * Wires the header's server markup (`root` is its `[data-hl-block]`).
  * The panels open and close natively (popovers); this adds what the browser
  * does not:
  *
@@ -194,7 +194,7 @@ export function wireMenu(root: HTMLElement): () => void {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The header's menu island (M40-11): a hidden anchor. After hydration it
+ * The header's menu island: a hidden anchor. After hydration it
  * finds its block and wires the server's markup; in the canvas it attaches
  * nothing.
  */

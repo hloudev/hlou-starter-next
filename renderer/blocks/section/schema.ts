@@ -24,7 +24,7 @@ export const sectionSchema = z.object({
   width: z.enum(['narrow', 'wide', 'full']),
   ...styleProps([]),
   /**
-   * `free` (M33-20): the content is a column grid and each block sits on it
+   * `free`: the content is a column grid and each block sits on it
    * by its node's `place`, per breakpoint (`tw.ts`'s free layout). `stack`,
    * the default, is the slot as it always was.
    */
@@ -47,7 +47,7 @@ export const sectionSchema = z.object({
   /** Free elements drawn over the section (`floating` blocks). */
   floating: floatingSlotSchema,
   /**
-   * The Structure pattern a planned section was drawn with (M33-09): what
+   * The Structure pattern a planned section was drawn with: what
    * the canvas shows until the section holds something. Kept by the
    * document, not an inspector field.
    */

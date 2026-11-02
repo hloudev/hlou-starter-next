@@ -2,7 +2,7 @@
 /*                                   EXPORTS                                  */
 /* -------------------------------------------------------------------------- */
 
-/* Scope state (decisions 197–198): the typed schema and its pure half — first
+/* Scope state: the typed schema and its pure half — first
    values, derived estimates, `when`, formatting — shared by the server render
    pass, the browser runtime, the inspector and the agent. */
 export {
@@ -74,9 +74,8 @@ export {
 } from './when';
 export { formatState, intlLocale, MISSING_VALUE } from './format';
 export type { FormatOptions } from './format';
-/* The browser half (decision 198): the store and the DOM runtime. The hook is
-   `@hlou/site-renderer/state/react` — never here, because server modules (the API
-   route, through `@hlou/site-model`) import this index. */
+/* The browser half: the store and the DOM runtime. The hook is
+   `./react` — never here, because server modules import this index. */
 export { clearScopes, createScopeStore, getScope, navigateHref, parseAction } from './store';
 export type { ScopeErrorCode, ScopeEvent, ScopeStore, ScopeStoreOptions } from './store';
 export {

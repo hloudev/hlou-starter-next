@@ -26,7 +26,7 @@ import { cx } from '../tw';
 /* -------------------------------------------------------------------------- */
 
 /*
- * Plain Tailwind (decision 59). The column count and each card's colours are
+ * Plain Tailwind. The column count and each card's colours are
  * props, so they stay variables (`--site-feature-cols`, `--site-blk-*`) read
  * by fixed utilities — an unset one falls back to the theme's own token.
  */

@@ -26,7 +26,7 @@ export const choiceDecorSchema = z.object({
 export type ChoiceDecor = z.infer<typeof choiceDecorSchema>;
 
 /**
- * Choice cards (M40-13): one value of a scope's `choice` field, picked among
+ * Choice cards: one value of a scope's `choice` field, picked among
  * native radios drawn as cards, a segmented control or a list. The options
  * come from the field (static, or the catalog's records with their price).
  */

@@ -44,7 +44,7 @@ export function SiteChrome({
 }
 
 /**
- * A redirect stub's forward (M40-20): its `data-to` plus the visitor's query
+ * A redirect stub's forward: its `data-to` plus the visitor's query
  * and hash, which a meta refresh drops — a pasted `/reservation?from=…` keeps
  * its dates. One fixed text on every stub, so a future CSP allows it by one
  * `'sha256-…'`; only a same-origin path is followed.

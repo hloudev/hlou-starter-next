@@ -15,7 +15,7 @@ import { styleProps } from '../style-props';
 /* -------------------------------------------------------------------------- */
 
 /**
- * A scope (decision 197): typed state for the blocks it holds — `{ $state }`
+ * A scope: typed state for the blocks it holds — `{ $state }`
  * texts, `when` visibility, button actions, widgets. It sits inside a
  * section and never nests: its own slot refuses another scope, and a nested
  * or root-level one renders as a plain container.

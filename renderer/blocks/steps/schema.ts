@@ -14,7 +14,7 @@ export const STEPS_ELEMENTS = ['items', 'current'] as const;
 /* -------------------------------------------------------------------------- */
 
 /**
- * The step indicator (M40-14): where a visitor is in the nearest scope's
+ * The step indicator: where a visitor is in the nearest scope's
  * steps (`$step`) — « 1 Dates · 2 Extras · 3 Coordonnées ». Its labels are
  * the scope's; moving on stays a button's `step.next` (which validates).
  */

@@ -35,7 +35,7 @@ function boundField(scope: DocScopeEnv | null, path: string): DateDefField | nul
 /* -------------------------------------------------------------------------- */
 
 /**
- * The date picker's server shell (M40-12): the block root (its `when` and
+ * The date picker's server shell: the block root (its `when` and
  * scheme), and the island drawing the field — one trigger, or two for a
  * split range — from the scope's def and render-time snapshot, so the first
  * paint already shows the stored bounds and value. The island binds it to

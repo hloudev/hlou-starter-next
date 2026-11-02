@@ -12,7 +12,7 @@ import { densityOption, responsiveColumnsOption } from '../design-options';
 /* -------------------------------------------------------------------------- */
 
 /**
- * Slides to step through (M40-08). Three carousels a design asked for: cards
+ * Slides to step through. Three carousels a design asked for: cards
  * with the text over the photo, a centred row whose neighbours peek, and one
  * full-width photo at a time.
  */

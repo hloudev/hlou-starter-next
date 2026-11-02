@@ -58,7 +58,7 @@ export type SiteRenderProps = {
   /** The Canvas editor's node, slot and owner markers (`renderDoc`'s `markers`). */
   markers?: boolean;
   /**
-   * The Canvas state bar's preview, by scope id (decision 198): merged over
+   * The Canvas state bar's preview, by scope id: merged over
    * each scope's first state. Only the canvas passes it.
    */
   previewState?: Record<string, Partial<ScopeSnapshot>>;
@@ -70,7 +70,7 @@ export type SiteRenderProps = {
 /*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
 
-/** The block a section planned in Structure is (M33-09). */
+/** The block a section planned in Structure is. */
 const PLANNED_SECTION_TYPE = 'section';
 
 /**
@@ -95,7 +95,7 @@ function withoutEmptyPlannedSections(doc: PageDocument): PageDocument {
 }
 
 /**
- * The blocks above the fold (M37-06): the page's first node, then its first
+ * The blocks above the fold: the page's first node, then its first
  * child, and so on down — a hero, or a section whose first block is an
  * image. A Header instance is not the page: the page's own first node is.
  */
@@ -185,7 +185,7 @@ export function SiteRender({
      Design canvas (every Canvas path passes `mode="canvas"`). It closes the
      legal row of the first Footer the page draws; with no visible footer
      (none, hidden, or `chrome` off) `SiteRoot` draws it in a row of its own
-     (decision 193). */
+. */
   const attribution = snapshot.settings.attribution;
   const showAttribution = mode !== 'canvas' && attribution?.enabled === true;
   const footer =

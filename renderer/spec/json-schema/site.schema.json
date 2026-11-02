@@ -115,6 +115,28 @@
             "shape": {
               "type": "string",
               "enum": ["pill", "rounded"]
+            },
+            "align": {
+              "type": "string",
+              "enum": ["start", "center", "end"]
+            },
+            "mode": {
+              "type": "string",
+              "enum": ["inline", "float"]
+            },
+            "edge": {
+              "type": "string",
+              "enum": ["bottom", "top"]
+            },
+            "offsetX": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 200
+            },
+            "offsetY": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 200
             }
           },
           "additionalProperties": false

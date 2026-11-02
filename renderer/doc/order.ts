@@ -5,9 +5,9 @@
 /**
  * Order keys in the encoding of the `fractional-indexing` package (base-62
  * digits, a head letter giving the integer part's length), so the keys built
- * here and the ones `@hlou/site-model` mints with that package interleave.
+ * here and the ones Hlou's editor mints with that package interleave.
  * This is the part of it the renderer needs to BUILD documents; the editing
- * API (`keyBetween`, `keysBetween`) is `@hlou/site-model/order`'s.
+ * API (`keyBetween`, `keysBetween`) is the editor's.
  */
 const DIGITS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const ZERO = DIGITS[0] as string;
