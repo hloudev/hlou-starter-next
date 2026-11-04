@@ -2,8 +2,6 @@
 /*                                DEPENDENCIES                                */
 /* -------------------------------------------------------------------------- */
 
-import { useId } from 'react';
-
 import type { CSSProperties, ReactElement } from 'react';
 import type { SiteAttribution, SiteAttributionTone } from '../contracts';
 import { attributionMessages } from './messages';
@@ -18,18 +16,30 @@ import { siteAttributionSchema } from '../contracts';
 /** One shadow layer: its geometry (`0 2px 6px`, `inset 0 0 0 1px`) and its colour. */
 export type AttributionShadowLayer = readonly [geometry: string, colour: string];
 
-/** What the badge shows before the copy: the gradient mark, the mark in the
- *  text colour, nothing, or the gradient mark alone in a dot. */
-export type AttributionMarkKind = 'color' | 'mono' | 'none' | 'only';
+/** What the badge shows: the copy and the wordmark, the copy alone, or the H
+ *  alone on its notched tile. */
+export type AttributionMarkKind = 'logo' | 'none' | 'only';
+
+/** The logo's colours on one side of a tone. Paper, ink or a single colour,
+ *  never a gradient (brand book, decision 244). */
+export type AttributionLogoColours = {
+  /** The letters and the ball. */
+  letters: string;
+  paddles: string;
+  /** The inside of the o. */
+  counter: string;
+};
 
 /** One side (light or dark) of a tone, every value resolved. */
 export type AttributionToneSide = {
   mark: AttributionMarkKind;
+  logo: AttributionLogoColours;
+  /** The H's tile, on `only`. */
   bg: string;
   fg: string;
   /** « Propulsé par ». Its opacity mutes are written as rgba of `fg`. */
   muted: string;
-  /** « Hlou ». */
+  /** « Hlou », on text-only: every other side draws the wordmark. */
   strong: string;
   shadow: readonly AttributionShadowLayer[];
   hoverShadow: readonly AttributionShadowLayer[];
@@ -67,138 +77,185 @@ export type AttributionBadgeProps = {
 /** Where the badge links. One constant, so the real URL and UTM scheme land once. */
 export const HLOU_ATTRIBUTION_HREF = 'https://hlou.site/?ref=badge';
 
-/** The Hlou mark (512×338), as designed. */
-const MARK_PATH =
-  'M192.0 173.0C190.3 173.0 176.6 172.3 174.0 173.0C171.4 173.7 169.7 169.3 164.0 181.0C158.3 192.7 118.0 288.4 112.0 301.0C106.0 313.6 101.2 316.5 99.0 319.0C96.8 321.5 89.7 326.8 88.0 328.0C86.3 329.2 82.9 331.3 81.0 332.0C79.1 332.7 70.1 335.6 67.0 336.0C63.9 336.4 50.1 336.4 47.0 336.0C43.9 335.6 35.5 333.1 33.0 332.0C30.5 330.9 21.9 325.5 20.0 324.0C18.1 322.5 13.7 318.5 12.0 316.0C10.3 313.5 3.1 299.6 2.0 297.0C0.9 294.4 0.2 290.4 0.0 288.0C-0.2 285.6 -0.4 274.1 0.0 271.0C0.4 267.9 -5.0 275.6 4.0 254.0C13.0 232.4 88.8 56.0 98.0 35.0C107.2 14.0 102.3 27.1 104.0 25.0C105.7 22.9 114.1 14.1 117.0 12.0C119.9 9.9 133.2 3.1 136.0 2.0C138.8 0.9 145.1 0.1 148.0 0.0C150.9 -0.1 165.0 0.5 168.0 1.0C171.0 1.5 178.3 3.7 181.0 5.0C183.7 6.3 194.6 13.0 197.0 15.0C199.4 17.0 205.3 24.3 207.0 27.0C208.7 29.7 214.0 40.4 215.0 44.0C216.0 47.6 218.0 62.3 218.0 66.0C218.0 69.7 216.4 80.1 215.0 84.0C213.6 87.9 204.1 105.7 203.0 109.0C201.9 112.3 202.4 118.1 203.0 120.0C203.6 121.9 208.0 128.3 210.0 130.0C212.0 131.7 222.2 137.4 225.0 138.0C227.8 138.6 237.8 137.9 240.0 137.0C242.2 136.1 244.1 138.1 249.0 128.0C253.9 117.9 288.5 37.7 294.0 27.0C299.5 16.3 305.9 13.3 309.0 11.0C312.1 8.7 323.9 2.9 328.0 2.0C332.1 1.1 350.3 0.7 354.0 1.0C357.7 1.3 365.5 3.9 368.0 5.0C370.5 6.1 379.0 11.4 381.0 13.0C383.0 14.6 388.3 19.6 390.0 22.0C391.7 24.4 398.7 36.1 400.0 39.0C401.3 41.9 403.6 50.6 404.0 54.0C404.4 57.4 404.6 72.0 404.0 76.0C403.4 80.0 400.9 88.7 397.0 98.0C393.1 107.3 364.3 170.1 361.0 178.0C357.7 185.9 360.4 181.7 361.0 184.0C361.6 186.3 366.2 199.9 368.0 203.0C369.8 206.1 378.9 216.1 381.0 218.0C383.1 219.9 389.4 223.3 391.0 224.0C392.6 224.7 396.9 225.9 399.0 226.0C401.1 226.1 411.2 225.8 414.0 225.0C416.8 224.2 426.6 218.0 429.0 217.0C431.4 216.0 437.2 214.3 440.0 214.0C442.8 213.7 457.2 213.7 460.0 214.0C462.8 214.3 469.1 216.3 471.0 217.0C472.9 217.7 479.0 220.6 481.0 222.0C483.0 223.4 491.2 230.2 493.0 232.0C494.8 233.8 499.5 239.3 501.0 242.0C502.5 244.7 508.1 257.7 509.0 261.0C509.9 264.3 510.9 275.4 511.0 278.0C511.1 280.6 510.7 286.2 510.0 289.0C509.3 291.8 504.8 304.8 503.0 308.0C501.2 311.2 491.8 322.1 490.0 324.0C488.2 325.9 484.9 328.0 483.0 329.0C481.1 330.0 471.3 334.3 469.0 335.0C466.7 335.7 461.0 336.9 458.0 337.0C455.0 337.1 438.9 336.4 436.0 336.0C433.1 335.6 428.0 333.9 426.0 333.0C424.0 332.1 416.6 328.2 414.0 326.0C411.4 323.8 400.1 311.9 398.0 309.0C395.9 306.1 391.9 296.8 391.0 294.0C390.1 291.2 388.6 280.2 388.0 278.0C387.4 275.8 385.1 271.5 384.0 270.0C382.9 268.5 377.5 263.2 376.0 262.0C374.5 260.8 369.9 257.8 368.0 257.0C366.1 256.2 357.7 253.4 355.0 253.0C352.3 252.6 341.2 252.8 339.0 253.0C336.8 253.2 332.6 254.3 331.0 255.0C329.4 255.7 322.6 259.7 321.0 261.0C319.4 262.3 316.3 264.6 314.0 269.0C311.7 273.4 298.3 304.5 296.0 309.0C293.7 313.5 290.7 316.3 289.0 318.0C287.3 319.7 279.7 326.4 277.0 328.0C274.3 329.6 264.0 334.4 260.0 335.0C256.0 335.6 236.5 334.5 233.0 334.0C229.5 333.5 223.8 330.9 222.0 330.0C220.2 329.1 214.9 325.8 213.0 324.0C211.1 322.2 202.7 312.7 201.0 310.0C199.3 307.3 194.6 299.0 194.0 295.0C193.4 291.0 191.9 273.4 194.0 266.0C196.1 258.6 214.7 219.3 217.0 214.0C219.3 208.7 218.8 209.5 219.0 208.0C219.2 206.5 219.3 199.7 219.0 198.0C218.7 196.3 217.2 191.7 216.0 190.0C214.8 188.3 208.1 180.6 206.0 179.0C203.9 177.4 194.3 173.6 193.0 173.0C191.7 172.4 193.7 173.0 192.0 173.0Z';
-const MARK_VIEW_BOX = '0 0 512 338';
-/** Diagonal, bottom-left to top-right. */
-const MARK_STOPS: ReadonlyArray<readonly [offset: string, colour: string]> = [
-  ['0', '#3448dc'],
-  ['.38', '#4b8ecb'],
-  ['.68', '#a37ec9'],
-  ['1', '#f3705e'],
-];
+/**
+ * The logo's cells, as `@hlou/ui`'s `BrandTag` draws them: 24 × 8, the H a Pong
+ * rally. A copy, because this package is vendored into the starter and its
+ * colours are the badge's own, on a page with no app tokens.
+ */
+const LOGO_PADDLES = 'M0 1H2V8H0ZM4 0H6V7H4Z';
+const LOGO_BALL = 'M2 3H4V5H2Z';
+const LOGO_COUNTER = 'M13 3H15V7H13Z';
+const LOGO_LETTERS =
+  'M7 0H9V7H10V8H8V7H7ZM12 2H16V3H17V7H16V8H12V7H11V3H12ZM13 3V7H15V3ZM18 2H20V7H22V2H24V8H19V7H18Z';
+const WORDMARK_VIEW_BOX = '0 0 24 8';
+const WORDMARK_CELLS = { inline: 24, block: 8 } as const;
+/** The brand book's mark, "the H on its own, in an ink square", on `BrandTag`'s
+ *  notches. Its margin matters: lime reaching the edge melts into a paper page. */
+const TILE_PATH = 'M-2 -2H8V-1H9V9H8V10H-2V9H-3V-1H-2Z';
+const TILE_VIEW_BOX = '-3 -2 12 12';
+const TILE_CELLS = 12;
+
+/** The brand book's core colours, as `public/images/brand/*` holds them. */
+const INK = '#101010';
+const LIME = '#CCFC7C';
+const WHITE = '#F9F9F9';
+
+/** Decision 244: on paper all ink with a lime o, on ink lime paddles. */
+const LOGO_ON_PAPER: AttributionLogoColours = { letters: INK, paddles: INK, counter: LIME };
+const LOGO_ON_INK: AttributionLogoColours = {
+  letters: WHITE,
+  paddles: LIME,
+  counter: 'transparent',
+};
+/** The brand book's rule for a colour or a photo: go single colour. */
+const singleColour = (colour: string): AttributionLogoColours => ({
+  letters: colour,
+  paddles: colour,
+  counter: 'transparent',
+});
 
 const LIGHT_RING: readonly AttributionShadowLayer[] = [
-  ['0 0 0 1px', 'rgba(20,22,35,.08)'],
-  ['0 2px 6px', 'rgba(20,22,35,.08)'],
+  ['0 0 0 1px', 'rgba(16,16,16,.1)'],
+  ['0 2px 6px', 'rgba(16,16,16,.08)'],
 ];
 const LIGHT_RING_HOVER: readonly AttributionShadowLayer[] = [
-  ['0 0 0 1px', 'rgba(20,22,35,.14)'],
-  ['0 4px 12px', 'rgba(20,22,35,.12)'],
+  ['0 0 0 1px', 'rgba(16,16,16,.18)'],
+  ['0 4px 12px', 'rgba(16,16,16,.12)'],
 ];
 const DARK_RING: readonly AttributionShadowLayer[] = [
-  ['0 0 0 1px', 'rgba(255,255,255,.08)'],
+  ['0 0 0 1px', 'rgba(249,249,249,.14)'],
   ['0 2px 8px', 'rgba(0,0,0,.4)'],
 ];
 
 const LIGHT_SIDE = {
-  bg: '#FFFFFF',
-  fg: '#1B1C24',
-  muted: '#6B6D7A',
-  strong: '#1B1C24',
+  logo: LOGO_ON_PAPER,
+  bg: WHITE,
+  fg: INK,
+  muted: '#6B6A66',
+  strong: INK,
   shadow: LIGHT_RING,
   hoverShadow: LIGHT_RING_HOVER,
-  hoverBg: '#FFFFFF',
-  hoverFg: '#1B1C24',
+  hoverBg: WHITE,
+  hoverFg: INK,
   blur: false,
 } as const;
 
 const DARK_SIDE = {
-  bg: '#1C1D26',
-  fg: '#ECECF1',
-  muted: '#9A9CAA',
-  strong: '#ECECF1',
+  logo: LOGO_ON_INK,
+  bg: INK,
+  fg: WHITE,
+  muted: '#989898',
+  strong: WHITE,
   shadow: DARK_RING,
   hoverShadow: DARK_RING,
-  hoverBg: '#24252F',
-  hoverFg: '#ECECF1',
+  hoverBg: '#1A1A1A',
+  hoverFg: WHITE,
   blur: false,
 } as const;
 
 /**
- * Every side of every tone, exactly as the approved design gives them. Shared by the site and the settings
- * UI's previews.
+ * Every side of every tone, in the brand book's colours. Shared by the site and
+ * the settings UI's previews.
  */
 export const ATTRIBUTION_TONE_SIDES: Readonly<
   Record<AttributionToneSideKey, Readonly<AttributionToneSide>>
 > = {
-  L: { mark: 'color', ...LIGHT_SIDE },
-  D: { mark: 'color', ...DARK_SIDE },
+  L: { mark: 'logo', ...LIGHT_SIDE },
+  D: { mark: 'logo', ...DARK_SIDE },
   G: {
-    mark: 'mono',
-    bg: 'rgba(255,255,255,.16)',
-    fg: '#FFFFFF',
-    muted: 'rgba(255,255,255,.78)',
-    strong: '#FFFFFF',
-    shadow: [['inset 0 0 0 1px', 'rgba(255,255,255,.22)']],
-    hoverShadow: [['inset 0 0 0 1px', 'rgba(255,255,255,.22)']],
-    hoverBg: 'rgba(255,255,255,.24)',
-    hoverFg: '#FFFFFF',
+    mark: 'logo',
+    logo: singleColour(WHITE),
+    bg: 'rgba(249,249,249,.16)',
+    fg: WHITE,
+    muted: 'rgba(249,249,249,.78)',
+    strong: WHITE,
+    shadow: [['inset 0 0 0 1px', 'rgba(249,249,249,.22)']],
+    hoverShadow: [['inset 0 0 0 1px', 'rgba(249,249,249,.22)']],
+    hoverBg: 'rgba(249,249,249,.24)',
+    hoverFg: WHITE,
     blur: true,
   },
   B: {
-    mark: 'mono',
-    bg: 'linear-gradient(100deg,#3448DC 0%,#7F7FD0 45%,#F3705E 100%)',
-    fg: '#FFFFFF',
-    muted: 'rgba(255,255,255,.85)',
-    strong: '#FFFFFF',
-    shadow: [['0 2px 8px', 'rgba(52,72,220,.25)']],
-    hoverShadow: [['0 4px 14px', 'rgba(52,72,220,.35)']],
-    hoverBg: 'linear-gradient(100deg,#3448DC 0%,#7F7FD0 45%,#F3705E 100%)',
-    hoverFg: '#FFFFFF',
+    mark: 'logo',
+    logo: singleColour(INK),
+    bg: LIME,
+    fg: INK,
+    muted: 'rgba(16,16,16,.72)',
+    strong: INK,
+    shadow: [['inset 0 0 0 1px', 'rgba(16,16,16,.14)']],
+    hoverShadow: [['inset 0 0 0 1px', 'rgba(16,16,16,.28)']],
+    hoverBg: '#E1FFB2',
+    hoverFg: INK,
     blur: false,
   },
   MI: {
-    mark: 'mono',
+    mark: 'logo',
+    logo: singleColour(INK),
     bg: 'transparent',
-    fg: '#1B1C24',
-    muted: 'rgba(27,28,36,.6)',
-    strong: '#1B1C24',
-    shadow: [['inset 0 0 0 1px', 'rgba(27,28,36,.22)']],
-    hoverShadow: [['inset 0 0 0 1px', 'rgba(27,28,36,.5)']],
+    fg: INK,
+    muted: 'rgba(16,16,16,.62)',
+    strong: INK,
+    shadow: [['inset 0 0 0 1px', 'rgba(16,16,16,.22)']],
+    hoverShadow: [['inset 0 0 0 1px', 'rgba(16,16,16,.5)']],
     hoverBg: 'transparent',
-    hoverFg: '#1B1C24',
+    hoverFg: INK,
     blur: false,
   },
   MP: {
-    mark: 'mono',
+    mark: 'logo',
+    logo: singleColour(WHITE),
     bg: 'transparent',
-    fg: '#F1F1F4',
-    muted: 'rgba(241,241,244,.62)',
-    strong: '#F1F1F4',
-    shadow: [['inset 0 0 0 1px', 'rgba(241,241,244,.24)']],
-    hoverShadow: [['inset 0 0 0 1px', 'rgba(241,241,244,.5)']],
+    fg: WHITE,
+    muted: 'rgba(249,249,249,.62)',
+    strong: WHITE,
+    shadow: [['inset 0 0 0 1px', 'rgba(249,249,249,.24)']],
+    hoverShadow: [['inset 0 0 0 1px', 'rgba(249,249,249,.5)']],
     hoverBg: 'transparent',
-    hoverFg: '#F1F1F4',
+    hoverFg: WHITE,
     blur: false,
   },
   TO: {
     mark: 'none',
+    logo: singleColour(INK),
     bg: 'transparent',
-    fg: '#55576A',
-    muted: '#55576A',
-    strong: '#1B1C24',
+    fg: '#55544F',
+    muted: '#55544F',
+    strong: INK,
     shadow: [],
     hoverShadow: [],
     hoverBg: 'transparent',
-    hoverFg: '#1B1C24',
+    hoverFg: INK,
     blur: false,
   },
   TOD: {
     mark: 'none',
+    logo: singleColour(WHITE),
     bg: 'transparent',
-    fg: '#A0A2B0',
-    muted: '#A0A2B0',
-    strong: '#F1F1F4',
+    fg: '#989898',
+    muted: '#989898',
+    strong: WHITE,
     shadow: [],
     hoverShadow: [],
     hoverBg: 'transparent',
-    hoverFg: '#F1F1F4',
+    hoverFg: WHITE,
     blur: false,
   },
-  MO: { mark: 'only', ...LIGHT_SIDE },
-  MOD: { mark: 'only', ...DARK_SIDE },
+  /* The H keeps the brand book's ink square on paper; on ink the same tile lifts
+     to the grey the book draws it on there, so the page does not swallow it. */
+  MO: {
+    mark: 'only',
+    ...DARK_SIDE,
+    shadow: [],
+    hoverShadow: [],
+  },
+  MOD: {
+    mark: 'only',
+    ...DARK_SIDE,
+    bg: '#2A2A2A',
+    shadow: [],
+    hoverShadow: [],
+    hoverBg: '#414141',
+  },
 };
 
 /** A tone's own side, when it does not follow the page's scheme. */
@@ -228,14 +285,20 @@ const PAIR: Readonly<
   'mark-only': ['MO', 'MOD'],
 };
 
-/** The design's sizes. `ps` is the mark side (inline-start), `pe` the other. */
+/**
+ * The sizes, on the logo's grid: `cell` is screen pixels per logo pixel, always
+ * whole, and never under 2 (under 48 px wide the brand book wants the mark). The
+ * heights and `gap`, `pe` leave the two logo pixels clear it asks for all round.
+ * `ps` is the copy's side (inline-start), `pe` the logo's, and `drop` sets the copy
+ * down onto the wordmark's baseline. `tile` is the H's cell.
+ */
 const SIZES = {
-  s: { h: 22, fs: 11, mark: 9, gap: 5, ps: 7, pe: 9, dot: 28 },
-  m: { h: 28, fs: 12, mark: 11, gap: 6, ps: 9, pe: 11, dot: 32 },
-  l: { h: 34, fs: 13, mark: 13, gap: 7, ps: 11, pe: 14, dot: 38 },
+  s: { h: 24, fs: 11, cell: 2, gap: 5, ps: 10, pe: 8, drop: 3, tile: 2 },
+  m: { h: 28, fs: 12, cell: 2, gap: 6, ps: 12, pe: 10, drop: 3, tile: 3 },
+  l: { h: 36, fs: 13, cell: 3, gap: 7, ps: 14, pe: 11, drop: 6, tile: 4 },
 } as const;
 
-/** Text-only drops the mark, so it keeps a small even padding. */
+/** Text-only has no box, so it keeps a small even padding. */
 const TEXT_ONLY_PADDING = 4;
 const ROUNDED_RADIUS = '6px';
 const PILL_RADIUS = '999px';
@@ -310,14 +373,20 @@ export function attributionBadgeVars(attribution: SiteAttribution): Record<strin
   const text = light.mark === 'none';
   const padStart = only ? 0 : text ? TEXT_ONLY_PADDING : size.ps;
   const padEnd = only ? 0 : text ? TEXT_ONLY_PADDING : size.pe;
+  const tile = TILE_CELLS * size.tile;
   return {
-    '--site-badge-h': `${only ? size.dot : size.h}px`,
+    '--site-badge-h': `${only ? tile : size.h}px`,
     '--site-badge-fs': `${size.fs}px`,
-    '--site-badge-mark': `${only ? size.mark + 1 : size.mark}px`,
+    '--site-badge-logo-w': `${only ? tile : WORDMARK_CELLS.inline * size.cell}px`,
+    '--site-badge-logo-h': `${only ? tile : WORDMARK_CELLS.block * size.cell}px`,
     '--site-badge-gap': `${size.gap}px`,
     '--site-badge-ps': `${padStart}px`,
     '--site-badge-pe': `${padEnd}px`,
-    '--site-badge-r': attribution.shape === 'rounded' && !only ? ROUNDED_RADIUS : PILL_RADIUS,
+    '--site-badge-drop': `${light.mark === 'logo' ? size.drop : 0}px`,
+    '--site-badge-r': only ? '0' : attribution.shape === 'rounded' ? ROUNDED_RADIUS : PILL_RADIUS,
+    '--site-badge-letters': lightDark(light.logo.letters, dark.logo.letters),
+    '--site-badge-paddles': lightDark(light.logo.paddles, dark.logo.paddles),
+    '--site-badge-counter': lightDark(light.logo.counter, dark.logo.counter),
     '--site-badge-bg': lightDark(light.bg, dark.bg),
     '--site-badge-fg': lightDark(light.fg, dark.fg),
     '--site-badge-muted': lightDark(light.muted, dark.muted),
@@ -349,28 +418,33 @@ export function readFooterAttribution(puck: unknown, id: string): SiteAttributio
 /*                                 COMPONENTS                                 */
 /* -------------------------------------------------------------------------- */
 
-/**
- * The Hlou mark. The gradient's id comes from `useId`: unique per badge,
- * stable between the server render and a hydration, and allowed in a React
- * Server Component (`useId` is in React's server build) and in
- * `renderToStaticMarkup`. A fixed id would collide in the settings gallery
- * (a dozen badges on one page), and a `url(#id)` that resolves to a gradient
- * inside a hidden subtree paints nothing in some browsers.
- */
-function HlouMark({ gradient }: { gradient: boolean }): ReactElement {
-  const id = `hl-attribution-${useId().replace(/[^\w-]/g, '')}`;
+/** The wordmark, on the grid. Its colours are the badge's custom properties, so
+ *  an adaptive badge swaps them with the page, and `crispEdges` keeps every logo
+ *  pixel on screen pixels. */
+function HlouWordmark(): ReactElement {
   return (
-    <svg viewBox={MARK_VIEW_BOX} aria-hidden="true" focusable="false">
-      {gradient ? (
-        <defs>
-          <linearGradient id={id} x1="0" y1="1" x2="1" y2="0">
-            {MARK_STOPS.map(([offset, colour]) => (
-              <stop key={offset} offset={offset} stopColor={colour} />
-            ))}
-          </linearGradient>
-        </defs>
-      ) : null}
-      <path fill={gradient ? `url(#${id})` : 'currentColor'} fillRule="evenodd" d={MARK_PATH} />
+    <svg
+      viewBox={WORDMARK_VIEW_BOX}
+      shapeRendering="crispEdges"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path fill="var(--site-badge-paddles)" d={LOGO_PADDLES} />
+      <path fill="var(--site-badge-letters)" d={LOGO_BALL} />
+      <path fill="var(--site-badge-counter)" d={LOGO_COUNTER} />
+      <path fill="var(--site-badge-letters)" fillRule="evenodd" d={LOGO_LETTERS} />
+    </svg>
+  );
+}
+
+/** The H alone on its notched tile. The tile is the whole badge: no dot around it,
+ *  as the logo is never rounded. `styles/site.css` paints it, for the hover. */
+function HlouTile(): ReactElement {
+  return (
+    <svg viewBox={TILE_VIEW_BOX} shapeRendering="crispEdges" aria-hidden="true" focusable="false">
+      <path className={`${BADGE_CLASS}__tile`} d={TILE_PATH} />
+      <path fill="var(--site-badge-paddles)" d={LOGO_PADDLES} />
+      <path fill="var(--site-badge-letters)" d={LOGO_BALL} />
     </svg>
   );
 }
@@ -378,9 +452,8 @@ function HlouMark({ gradient }: { gradient: boolean }): ReactElement {
 /**
  * The « Propulsé par Hlou » badge: one plain link, no client script — a
  * kernel page's islands never see it. The tone travels as custom properties
- * (`attributionBadgeVars`); `styles/site.css` holds the static rules. Render
- * it as an element (`<AttributionBadge />`), never by calling it: the mark
- * uses a hook. Nothing when the setting is off.
+ * (`attributionBadgeVars`); `styles/site.css` holds the static rules. The link's
+ * label names it, so the logo is `aria-hidden`. Nothing when the setting is off.
  */
 export function AttributionBadge({
   attribution,
@@ -416,14 +489,15 @@ export function AttributionBadge({
       style={attributionBadgeVars(attribution) as CSSProperties}
     >
       {side.mark === 'only' ? (
-        <HlouMark gradient />
+        <HlouTile />
       ) : (
         <>
-          {side.mark === 'color' || side.mark === 'mono' ? (
-            <HlouMark gradient={side.mark === 'color'} />
-          ) : null}
           <span className={`${BADGE_CLASS}__muted`}>{copy.poweredBy}</span>
-          <span className={`${BADGE_CLASS}__strong`}>{copy.brand}</span>
+          {side.mark === 'logo' ? (
+            <HlouWordmark />
+          ) : (
+            <span className={`${BADGE_CLASS}__strong`}>{copy.brand}</span>
+          )}
         </>
       )}
     </a>

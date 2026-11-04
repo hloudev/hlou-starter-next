@@ -564,39 +564,49 @@
     letter-spacing: inherit;
     text-transform: none;
   }
-  /* Two classes, to outrank the span reset just above. */
+  /* Two classes, to outrank the span reset just above. `drop` sets the copy on
+     the wordmark's baseline: its letters sit low in their 8 cells. */
   .hl-attribution .hl-attribution__muted {
+    position: relative;
+    inset-block-start: var(--site-badge-drop);
     color: var(--site-badge-muted);
   }
   .hl-attribution .hl-attribution__strong {
     font-weight: 600;
     color: var(--site-badge-strong);
-    /* Close to « par » / « by ». */
-    margin-inline-start: -2px;
   }
   .hl-attribution svg {
     display: block;
     flex: none;
-    block-size: var(--site-badge-mark);
-    inline-size: auto;
+    inline-size: var(--site-badge-logo-w);
+    block-size: var(--site-badge-logo-h);
     max-inline-size: none;
-    aspect-ratio: 512 / 338;
     margin: 0;
   }
 
-  /* Text-only: no mark, no nudge; the whole line darkens on hover. */
-  .hl-attribution--text .hl-attribution__strong {
-    margin-inline-start: 0;
-  }
+  /* Text-only: the whole line darkens on hover. */
   a.hl-attribution--text:hover .hl-attribution__muted {
     color: var(--site-badge-fg-h);
   }
 
-  /* Mark-only: the mark alone, centred in a dot. */
-  a.hl-attribution--only {
+  /* Mark-only: the H on its notched tile, which is the whole badge. */
+  a.hl-attribution--only,
+  a.hl-attribution--only:hover {
     inline-size: var(--site-badge-h);
     padding-inline: 0;
-    justify-content: center;
+    background: transparent;
+  }
+  .hl-attribution__tile {
+    fill: var(--site-badge-bg);
+    transition: fill 0.15s ease;
+  }
+  a.hl-attribution:hover .hl-attribution__tile {
+    fill: var(--site-badge-bg-h);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hl-attribution__tile {
+      transition: none;
+    }
   }
 
   .hl-attribution--glass {
