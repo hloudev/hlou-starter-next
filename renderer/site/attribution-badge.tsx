@@ -21,7 +21,7 @@ export type AttributionShadowLayer = readonly [geometry: string, colour: string]
 export type AttributionMarkKind = 'logo' | 'none' | 'only';
 
 /** The logo's colours on one side of a tone. Paper, ink or a single colour,
- *  never a gradient (brand book, decision 244). */
+ *  never a gradient (brand book). */
 export type AttributionLogoColours = {
   /** The letters and the ball. */
   letters: string;
@@ -78,9 +78,8 @@ export type AttributionBadgeProps = {
 export const HLOU_ATTRIBUTION_HREF = 'https://hlou.site/?ref=badge';
 
 /**
- * The logo's cells, as `@hlou/ui`'s `BrandTag` draws them: 24 × 8, the H a Pong
- * rally. A copy, because this package is vendored into the starter and its
- * colours are the badge's own, on a page with no app tokens.
+ * The logo's cells: 24 × 8, the H a Pong rally. The badge's own copy, with its
+ * own colours, because it draws on a page that has no app tokens.
  */
 const LOGO_PADDLES = 'M0 1H2V8H0ZM4 0H6V7H4Z';
 const LOGO_BALL = 'M2 3H4V5H2Z';
@@ -89,18 +88,18 @@ const LOGO_LETTERS =
   'M7 0H9V7H10V8H8V7H7ZM12 2H16V3H17V7H16V8H12V7H11V3H12ZM13 3V7H15V3ZM18 2H20V7H22V2H24V8H19V7H18Z';
 const WORDMARK_VIEW_BOX = '0 0 24 8';
 const WORDMARK_CELLS = { inline: 24, block: 8 } as const;
-/** The brand book's mark, "the H on its own, in an ink square", on `BrandTag`'s
- *  notches. Its margin matters: lime reaching the edge melts into a paper page. */
+/** The brand book's mark, "the H on its own, in an ink square", with notched
+ *  corners. Its margin matters: lime reaching the edge melts into a paper page. */
 const TILE_PATH = 'M-2 -2H8V-1H9V9H8V10H-2V9H-3V-1H-2Z';
 const TILE_VIEW_BOX = '-3 -2 12 12';
 const TILE_CELLS = 12;
 
-/** The brand book's core colours, as `public/images/brand/*` holds them. */
+/** The brand book's core colours. */
 const INK = '#101010';
 const LIME = '#CCFC7C';
 const WHITE = '#F9F9F9';
 
-/** Decision 244: on paper all ink with a lime o, on ink lime paddles. */
+/** On paper all ink with a lime o, on ink lime paddles. */
 const LOGO_ON_PAPER: AttributionLogoColours = { letters: INK, paddles: INK, counter: LIME };
 const LOGO_ON_INK: AttributionLogoColours = {
   letters: WHITE,
