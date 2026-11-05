@@ -6,6 +6,8 @@ import type { ReactNode } from 'react';
 /*                                DEPENDENCIES                                */
 /* -------------------------------------------------------------------------- */
 
+import { richCellDoc } from './cell';
+
 /* -------------------------------------------------------------------------- */
 /*                                    TYPES                                   */
 /* -------------------------------------------------------------------------- */
@@ -30,6 +32,14 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isRichNode(value: unknown): value is RichNode {
   return isRecord(value) && typeof value.type === 'string';
+}
+
+/**
+ * A record's `richtext` cell arrives bound as its HTML string: read it through the
+ * cell scanner, which keeps only the tags this renderer draws.
+ */
+function asRichDoc(value: unknown): unknown {
+  return typeof value === 'string' && value.trim() ? richCellDoc(value) : value;
 }
 
 function readNodes(value: unknown): RichNode[] {
@@ -123,16 +133,18 @@ function renderNode(node: RichNode, key: number): ReactNode {
  * TipTap JSON → React, with no TipTap dependency. Recognises `doc`,
  * `paragraph`, `heading` (1–3), `bulletList`, `orderedList`, `listItem`,
  * `blockquote`, `hardBreak` and `text` with `bold` / `italic` / `code` / `link`
- * marks. Unknown nodes render their children; anything that is not a node
- * renders `null`.
+ * marks. A record cell's HTML string is read through `richCellDoc` first.
+ * Unknown nodes render their children; anything else renders `null`.
  */
-export function renderRichText(doc: unknown): ReactNode {
+export function renderRichText(value: unknown): ReactNode {
+  const doc = asRichDoc(value);
   if (!isRichNode(doc)) return null;
   return renderNode(doc, 0);
 }
 
-/** Plain-text projection of a TipTap doc, for `alt` text and summaries. */
-export function richTextToPlain(doc: unknown): string {
+/** Plain-text projection of a TipTap doc or a record cell, for `alt` text and summaries. */
+export function richTextToPlain(value: unknown): string {
+  const doc = asRichDoc(value);
   if (!isRichNode(doc)) return '';
   const walk = (node: RichNode): string => {
     if (node.type === 'text') return node.text ?? '';
