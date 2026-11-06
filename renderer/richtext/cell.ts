@@ -1,8 +1,8 @@
 /* -------------------------------------------------------------------------------
    A record's `richtext` cell is a string of HTML. A slot's rich text is a document,
    and a person translates its strings one by one, with its marks and links left to
-   the source (`segmentsOf` in feature-content). This is the same treatment for a cell
-   (M44 B31): its text runs out, and translations back onto the source's own tags.
+   the source. This is the same treatment for a cell: its text runs out, and
+   translations back onto the source's own tags.
 
    A scanner rather than a parser: the only question is which part is a tag, it runs on
    the server and in the browser, and it stays linear whatever a cell holds. Pure.
@@ -419,7 +419,7 @@ export function richCellDoc(html: string): DocNode {
 /*                         Written by the rich editor                         */
 /* -------------------------------------------------------------------------- */
 
-/** The editor's own schema, `@hlou/feature-content/editor-schema`: what a slot's rich text holds. */
+/** The rich editor's own schema: what a slot's rich text holds. */
 const EDITOR_HEADING_LEVELS = 2;
 
 const isTextblock = (node: DocNode) => node.type === 'paragraph' || node.type === 'heading';
