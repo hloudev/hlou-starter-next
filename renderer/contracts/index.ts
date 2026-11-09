@@ -18,6 +18,7 @@ import {
 } from './guards';
 
 import { pageDocumentSchema, siteComponentSchema } from '../doc/schema';
+import { DEFAULT_MOTION_PERSONALITY, motionPersonalitySchema } from '../motion/personality';
 
 /* The guards and constants a browser island reads, kept free of zod (`guards.ts`). */
 export {
@@ -257,10 +258,19 @@ const siteThemeTokensShapeSchema = z.object({
       message: 'Scheme keys must be unique',
     })
     .optional(),
+  /** The site's motion personality (M47, decision 322). Optional: a theme
+   *  without one — every theme before M47 — reads as the default, calm
+   *  (`themeMotion`). Not a parse default, so a theme round-trips unchanged. */
+  motion: motionPersonalitySchema.optional(),
 });
 
 export const siteThemeTokensSchema = z.preprocess(upgradeThemeTokens, siteThemeTokensShapeSchema);
 export type SiteThemeTokens = z.infer<typeof siteThemeTokensShapeSchema>;
+
+/** A theme's motion personality, the default (calm) when it sets none (M47). */
+export function themeMotion(tokens: Pick<SiteThemeTokens, 'motion'> | null | undefined) {
+  return tokens?.motion ?? DEFAULT_MOTION_PERSONALITY;
+}
 
 export const DEFAULT_THEME_TOKENS: SiteThemeTokens = siteThemeTokensShapeSchema.parse({});
 

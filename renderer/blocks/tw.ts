@@ -1084,27 +1084,61 @@ export function surfaceClasses(raw: unknown): string[] {
 }
 
 /*
- * MOTION: a reveal as the block scrolls into view, a hover response.
- * CSS only — `styles/site.css` defines the classes under
- * `@supports (animation-timeline: view())` and `motion-reduce` turns them
- * off — so a published page runs no script for it. Plain class names, not
- * utilities: nothing to generate.
+ * MOTION, the pre-M47 CSS: a reveal as the block scrolls into view, a hover
+ * response, as plain classes `styles/site.css` defines under
+ * `@supports (animation-timeline: view())`. Kept until the M47 runtime (MO2)
+ * plays `data-hl-motion` instead, so built sites never lose their reveals
+ * between merges; MO2 retires the classes, these tables and the CSS.
  */
+/** @deprecated M47: the old `reveal` values; the spec's appear presets replace them (`motion/presets.ts`). */
 export const MOTION_REVEALS = ['none', 'fade', 'fade-up', 'scale-in'] as const;
+/** @deprecated M47: the old delay steps; the spec's `transition.delay` is in seconds. */
 export const MOTION_DELAYS = ['0', '1', '2', '3'] as const;
+/** @deprecated M47: the old hovers; the spec's hover presets replace them. */
 export const MOTION_HOVERS = ['none', 'lift', 'zoom', 'dim'] as const;
 
+/* The M47 presets the old classes can draw. `motion/legacy.ts` maps the other
+   way; this file imports nothing, so the two tables are spelled twice. */
+const PRESET_REVEAL_CLASS: Record<string, string> = {
+  fade: 'fade',
+  rise: 'fade-up',
+  zoom: 'scale-in',
+};
+const PRESET_HOVER_CLASS: Record<string, string> = { lift: 'lift', enlarge: 'zoom', dim: 'dim' };
+
+/**
+ * A style's motion → the old CSS classes, read from either shape: the pre-M47
+ * `{ reveal, delay, hover }` or the M47 spec (`enter.preset` fade / rise /
+ * zoom on scroll, its delay in seconds rounded to a step, `hover.preset`
+ * lift / enlarge / dim). A spec the classes cannot draw gives none.
+ *
+ * @deprecated M47: MO2 replaces the classes with the motion runtime.
+ */
 export function motionClasses(raw: unknown): string[] {
   const motion = asRecord(asRecord(raw)?.motion);
   if (!motion) return [];
+  let reveal: string | undefined = member(MOTION_REVEALS, motion.reveal);
+  let delay: string | undefined = member(MOTION_DELAYS, motion.delay);
+  let hover: string | undefined = member(MOTION_HOVERS, motion.hover);
+  const enter = asRecord(motion.enter);
+  const onScroll = enter?.trigger === undefined || enter.trigger === 'inView';
+  if (enter && typeof motion.reveal !== 'string' && onScroll) {
+    /* No preset and no from-state: the spec's default, a fade. */
+    const preset = enter.preset ?? (enter.from === undefined ? 'fade' : undefined);
+    reveal = typeof preset === 'string' ? PRESET_REVEAL_CLASS[preset] : undefined;
+    const seconds = asRecord(enter.transition)?.delay ?? asRecord(motion.transition)?.delay;
+    const step = typeof seconds === 'number' ? Math.min(3, Math.round(seconds * 10)) : 0;
+    delay = step > 0 ? String(step) : undefined;
+  }
+  const hoverSpec = asRecord(motion.hover);
+  if (hoverSpec && typeof hoverSpec.preset === 'string') {
+    hover = PRESET_HOVER_CLASS[hoverSpec.preset];
+  }
   const out: string[] = [];
-  const reveal = member(MOTION_REVEALS, motion.reveal);
   if (reveal && reveal !== 'none') {
     out.push('hl-reveal', `hl-reveal--${reveal}`);
-    const delay = member(MOTION_DELAYS, motion.delay);
     if (delay && delay !== '0') out.push(`hl-delay-${delay}`);
   }
-  const hover = member(MOTION_HOVERS, motion.hover);
   if (hover && hover !== 'none') out.push(`hl-hover--${hover}`);
   return out;
 }

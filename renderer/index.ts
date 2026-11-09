@@ -210,6 +210,8 @@ export {
   utilityClassesSchema,
 } from './blocks/style-props';
 export type { IconValue, MotionValue, SurfaceValue } from './blocks/style-props';
+/* The motion spec, presets, personality and attribute (M47); also `./motion`. */
+export * from './motion';
 export { ACCENT_DECORATIONS, AccentText } from './blocks/accent';
 export type { AccentDecoration } from './blocks/accent';
 export { Icon, readIcon } from './blocks/shared';

@@ -5,6 +5,7 @@
 import { z } from 'zod';
 
 import type { BoundMeta, ResponsiveControl } from '../contracts';
+import type { MotionSpec } from '../motion/schema';
 import type { Responsive } from './tw';
 import {
   ASPECT_RATIOS,
@@ -21,9 +22,6 @@ import {
   MARGIN_STEPS,
   MAX_WIDTHS,
   MIN_HEIGHTS,
-  MOTION_DELAYS,
-  MOTION_HOVERS,
-  MOTION_REVEALS,
   OPACITIES,
   OVERFLOWS,
   RADII,
@@ -47,6 +45,8 @@ import {
   resolvedMediaSchema,
   themeRoleKeySchema,
 } from '../contracts';
+import { upgradeMotion } from '../motion/legacy';
+import { motionSpecSchema } from '../motion/schema';
 
 /* -------------------------------------------------------------------------- */
 /*                              ALIGN / JUSTIFY                               */
@@ -227,15 +227,13 @@ export const surfaceSchema = z
   .partial();
 export type SurfaceValue = z.infer<typeof surfaceSchema>;
 
-/** A style's motion: a reveal on scroll, a hover response. CSS only. */
-export const motionSchema = z
-  .object({
-    reveal: z.enum(MOTION_REVEALS),
-    delay: z.enum(MOTION_DELAYS),
-    hover: z.enum(MOTION_HOVERS),
-  })
-  .partial();
-export type MotionValue = z.infer<typeof motionSchema>;
+/**
+ * A style's motion (M47, decision 320): the spec of `motion/schema.ts` —
+ * enter, hover, press, loop, scroll, text, stagger. The pre-M47
+ * `{ reveal, delay, hover }` upgrades on read (`motion/legacy.ts`).
+ */
+export const motionSchema = z.preprocess(upgradeMotion, motionSpecSchema);
+export type MotionValue = MotionSpec;
 
 /* -------------------------------------------------------------------------- */
 /*                                    ICON                                    */

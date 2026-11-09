@@ -46,6 +46,7 @@ import {
   SITE_THEME_TYPOGRAPHY_KEYS,
 } from '../contracts/guards';
 import { formatMoney, isMoneyValue } from '../contracts/money-format';
+import { motionAttribute } from '../motion/compile';
 
 /* -------------------------------------------------------------------------- */
 /*                                    TYPES                                   */
@@ -63,6 +64,8 @@ export type BlockRootAttributes = {
   'data-hl-when'?: string;
   /** Present while its `when` is false: `site.css` hides it. */
   'data-hl-off'?: '';
+  /** The block's own motion (M47, `motion/compile.ts`), set by `blockParts`. */
+  'data-hl-motion'?: string;
 };
 
 export type ListingMapping = {
@@ -328,6 +331,8 @@ export function boxStyle(
   vars: Record<string, string | undefined>;
   /** The style picks a font (a level or a family): the block's default level no longer applies. */
   font?: boolean;
+  /** Its motion, as the `data-hl-motion` value (M47, `motion/compile.ts`). */
+  motion?: string;
 } {
   const stored = asRecord(raw) ?? {};
   const classes = styleClasses(stored);
@@ -365,12 +370,15 @@ export function boxStyle(
       ];
     classes.push(...surfaceClasses(stored));
   }
+  /* Motion: the attribute the M47 runtime plays, and — until MO2 retires
+     them — the old CSS classes beside it, so built sites keep their reveals. */
   classes.push(...motionClasses(stored));
+  const motion = motionAttribute(stored.motion);
   /* Free utilities last: a `pt-[72px]` replaces the token's padding
      through `mergeClasses`, and anything unsafe was dropped by the sanitiser. */
   classes.push(...sanitiseClasses(stored.classes));
   const font = asRecord(stored.font);
-  if (!font) return { classes, vars };
+  if (!font) return { classes, vars, ...(motion ? { motion } : {}) };
   /* A level's weight, size and spacing sit under the style's own: a weight
      set on this element replaces the level's (`mergeClasses`). */
   const level = isThemeRoleKey(font.role) ? levelStyle(font.role, levels) : NO_STYLE;
@@ -378,6 +386,7 @@ export function boxStyle(
     classes: mergeClasses(level.classes.join(' '), classes),
     vars: { ...level.vars, ...vars },
     font: true,
+    ...(motion ? { motion } : {}),
   };
 }
 
@@ -578,7 +587,12 @@ export function Icon({
   );
 }
 
-export type Styled = { className: string; style?: CSSProperties };
+export type Styled = {
+  className: string;
+  style?: CSSProperties;
+  /** The element's motion (M47): the last style that sets one wins. */
+  'data-hl-motion'?: string;
+};
 
 const NO_STYLE = { classes: [] as string[], vars: {} as Record<string, string | undefined> };
 
@@ -605,6 +619,7 @@ function styledWith(
 ): Styled {
   let classes = defaults;
   let merged: Record<string, string | undefined> = {};
+  let motion: string | undefined;
   const heading =
     HEADING_DEFAULT.test(defaults) && !boxes.some((box) => box.font)
       ? [levelStyle('heading', levels)]
@@ -613,11 +628,14 @@ function styledWith(
   for (const box of layers.length > 0 ? layers : [NO_STYLE]) {
     classes = mergeClasses(classes, box.classes).join(' ');
     merged = { ...merged, ...box.vars };
+    const own = (box as { motion?: string }).motion;
+    if (own) motion = own;
   }
   const vars = styleVars(merged);
   return {
     className: classes,
     ...(Object.keys(vars).length > 0 ? { style: vars } : {}),
+    ...(motion ? { 'data-hl-motion': motion } : {}),
   };
 }
 
@@ -666,6 +684,7 @@ export function blockParts(
       ...attributes,
       className: [attributes.className, own.className].filter(Boolean).join(' '),
       ...(own.style ? { style: own.style } : {}),
+      ...(own['data-hl-motion'] ? { 'data-hl-motion': own['data-hl-motion'] } : {}),
     },
     context,
     el: (name, defaults = '') => ({ ...box(name, defaults), ...fieldAttr(context, name) }),
