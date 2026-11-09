@@ -48,6 +48,7 @@ export type { ShareFacts } from '../site/facts';
 /* The value shapes, shared with the collections validator. */
 export * from './money';
 export * from './country';
+export * from './field-copy';
 
 /* -------------------------------------------------------------------------- */
 /*                                   LOCALE                                   */
@@ -306,6 +307,12 @@ export const fieldDocSchema = z.object({
   relationCollectionKey: z.string().optional(),
   cardinality: z.enum(['one', 'many']).optional(),
   options: z.unknown().optional(),
+  /** The label per site locale; `label` is the source locale's, and the fallback. */
+  labels: z.record(z.string(), z.string()).optional(),
+  /** An input's placeholder per site locale. */
+  placeholders: z.record(z.string(), z.string()).optional(),
+  /** The placeholder for one locale: on a resolved form's fields only (`localizeField`). */
+  placeholder: z.string().optional(),
 });
 export type FieldDoc = z.infer<typeof fieldDocSchema>;
 

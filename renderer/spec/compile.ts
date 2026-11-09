@@ -29,7 +29,7 @@ import { withBlockDefaults } from './block-props';
 import { isSiteSpecMediaPath, parseSiteSpecContentKey, SITE_SPEC_SITE_SCOPE } from './paths';
 import { validateSiteSpec } from './validate';
 
-import { siteSnapshotSchema, siteThemeTokensSchema } from '../contracts';
+import { fieldCopy, siteSnapshotSchema, siteThemeTokensSchema } from '../contracts';
 import { componentsFromSiteComposition, fromPuckData, withChromeInstances } from '../doc/from-puck';
 import { subtreeIds } from '../doc/tree';
 import { resolveAttribution } from '../site/attribution';
@@ -691,6 +691,9 @@ function compileField(field: SiteSpecCollection['fields'][number], localized: bo
     ...((field.type === 'phone' || field.type === 'country') && options.defaultCountry
       ? { options: { defaultCountry: options.defaultCountry } }
       : {}),
+    /* What a form shows around the input, per locale (`localizeField`); a select's
+       choice labels travel inside its choices. `toSiteData` does the same. */
+    ...fieldCopy(options),
   };
 }
 

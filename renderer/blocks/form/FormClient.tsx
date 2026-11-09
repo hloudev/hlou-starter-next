@@ -363,6 +363,7 @@ export function FormClient(props: FormClientProps): ReactElement {
                 id={id}
                 name={field.key}
                 className={TEXTAREA_CLASSES}
+                placeholder={field.placeholder}
                 required={field.required}
                 disabled={disabled}
                 aria-invalid={own.invalid || undefined}
@@ -394,6 +395,7 @@ export function FormClient(props: FormClientProps): ReactElement {
                 countries={props.countries ?? []}
                 defaultCountry={fieldCountry(field)}
                 dialLabel={props.dialLabel}
+                placeholder={field.placeholder}
               />
             ) : field.type === 'country' ? (
               <CountrySelect
@@ -407,6 +409,7 @@ export function FormClient(props: FormClientProps): ReactElement {
                 name={field.key}
                 type={inputType(field)}
                 className={INPUT_CLASSES}
+                placeholder={field.placeholder}
                 required={field.required}
                 disabled={disabled}
                 aria-invalid={own.invalid || undefined}

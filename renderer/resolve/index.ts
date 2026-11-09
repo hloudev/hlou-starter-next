@@ -29,6 +29,7 @@ import {
   isResolvedMedia,
   isSlotRef,
   isStateRef,
+  localizeField,
   withMediaRenditions,
 } from '../contracts';
 import { INSTANCE_NODE_TYPE } from '../doc/schema';
@@ -317,9 +318,10 @@ function resolveForm(key: string, ctx: Context): ResolvedForm | undefined {
   const fieldsByKey = new Map<string, FieldDoc>(
     collection?.fields.map((field) => [field.key, field])
   );
+  /* Each input as the page's locale reads it: label, placeholder, choice labels. */
   const fields = form.fieldKeys.flatMap((fieldKey) => {
     const field = fieldsByKey.get(fieldKey);
-    return field ? [field] : [];
+    return field ? [localizeField(field, ctx.locale, ctx.source)] : [];
   });
   return {
     $resolved: 'form',

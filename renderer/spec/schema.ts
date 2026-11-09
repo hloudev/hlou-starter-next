@@ -626,7 +626,10 @@ export const specFieldSchema = z
     /** Absent = `false`: one value per locale when `true`. */
     localized: z.boolean().optional(),
     default: z.unknown().optional(),
-    /** The type's options (`choices`, `currency`, `defaultCountry`), as Collections stores them. */
+    /**
+     * The type's options (`choices`, `currency`, `defaultCountry`), as Collections stores them,
+     * and a form's copy per locale: `labels`, `placeholders`, `choices[].labels`.
+     */
     options: z.record(z.string(), z.unknown()).optional(),
     /** A `relation` field's target. */
     relation: z

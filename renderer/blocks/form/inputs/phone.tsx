@@ -92,6 +92,8 @@ export function PhoneInput(props: {
   countries: ReadonlyArray<readonly [string, string]>;
   defaultCountry: string;
   dialLabel: string;
+  /** The national number's hint, in the page's language. */
+  placeholder?: string;
   disabled: boolean;
   required: boolean;
   invalid: boolean;
@@ -133,6 +135,7 @@ export function PhoneInput(props: {
         inputMode="tel"
         autoComplete="tel-national"
         className={BOX_INPUT_CLASSES}
+        placeholder={props.placeholder}
         disabled={props.disabled}
         aria-required={props.required || undefined}
         aria-invalid={props.invalid || undefined}
