@@ -125,12 +125,30 @@ Hlou hosts **`output: "export"` only**: plain files on a CDN, no server.
   variables never reach it. Put public settings as constants in
   `custom/config.ts`.
 - **No new dependencies.** `package.json` and the lockfile are Hlou's. Use
-  `fetch` and `zod` (already installed). If a package is truly needed, stop and
-  tell the user: accepting it is an explicit « adopt the build configuration »
-  decision on import, not yours.
+  `fetch`, `zod` and `motion` (already installed). If a package is truly
+  needed, stop and tell the user: accepting it is an explicit « adopt the build
+  configuration » decision on import, not yours.
 - **Leaving static export means leaving Hlou's hosting.** Removing
   `output: "export"` (to get a server) is possible only if the site is then
   hosted elsewhere; the import refuses `next.config.*` changes.
+
+## Animation
+
+- **A block's motion is data.** How it appears, its hover and press, a loop, a
+  scroll effect, a text cascade: `style.motion` (or `elements.<name>.motion`)
+  on its node in the page's document, with presets by name
+  (`{ "enter": { "preset": "rise" } }`; the values are in
+  `renderer/spec/json-schema/`). One small script plays it on every page, at
+  the site's pace (its motion personality, in the theme), and visitors who ask
+  for reduced motion get a short fade. Prefer it to code, always.
+- **Restraint**: one appear preset for the whole page, a list or a grid
+  staggered from its block (`"stagger": { "each": 0.08 }`), no loop on text.
+- **Motion code** only for what the spec cannot express (a scroll-linked
+  composition, a sequence across elements): `motion`, `motion/react` and
+  `motion/react-client` are installed, for `custom/**` and `codeVariant`
+  branches. Recipe 3 of `custom/README.md`. The first frame must be the
+  complete content, and `useReducedMotion()` gets a still version. No other
+  animation package; no Motion+ APIs.
 
 ## Forms
 

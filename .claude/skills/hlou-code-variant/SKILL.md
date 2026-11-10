@@ -36,8 +36,10 @@ keeps Hlou's look.
 ## Imports, and Hlou's live canvas
 
 Hlou's Design canvas runs an edited `Component.tsx` live, and it can only
-resolve `react`, `react/jsx-runtime`, `zod` and relative files inside
-`renderer/` (`../shared`, `../tw`, `../accent`, `../icon-paths`).
+resolve `react`, `react/jsx-runtime`, `zod`, `motion` (`motion`,
+`motion/react`, `motion/react-client`) and relative files inside `renderer/`
+(`../shared`, `../tw`, `../accent`, `../icon-paths`, or a file of yours beside
+the component).
 
 - A variant that stays within those imports shows on the canvas at once and on
   the published site from the next build.
@@ -50,6 +52,15 @@ No `fetch`, timers, `window` or inline `<script>` at render time in the block
 itself; components are server-rendered, and Hlou's canvas draws them in the
 browser, where React never runs a `<script>`. Interactive parts are
 `"use client"` components in `custom/`.
+
+**Motion.** A block's appear, hover, press, loop, scroll effect or text
+cascade is `style.motion` on the node, with presets by name, never a variant
+(`AGENTS.md` › Animation). Write Motion code only for what that spec cannot
+express. The component is a server component: draw `motion.*` elements from
+`motion/react-client` in it, and put hooks (`useScroll`, `useTransform`,
+`useReducedMotion`) in a `"use client"` file beside it. Its first frame must be
+the complete content (never `initial={{ opacity: 0 }}`): a site Hlou builds
+without Next renders client code once and never runs it.
 
 **The current page.** A nav variant marks its link to the page being drawn
 with `ariaCurrent` from `../../resolve/href`: `"page"` on the link to this

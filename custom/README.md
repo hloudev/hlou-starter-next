@@ -10,8 +10,9 @@ follow from that, and from the site being a **static export**:
 
 - **No server code**: no route handlers, server actions or middleware. Call
   APIs from the browser, with keys that are public by design.
-- **No new dependencies**: `package.json` is Hlou's. `fetch`, `react` and `zod`
-  are there.
+- **No new dependencies, except `motion`**: `package.json` is Hlou's. `fetch`,
+  `react`, `zod` and [`motion`](https://motion.dev) (animations, available to
+  every site) are there.
 - **No env variables**: Hlou's build writes its own `.env.local`. Put public
   configuration in `custom/config.ts`, and never a secret anywhere in the tree.
 
@@ -164,8 +165,8 @@ if (props.codeVariant === "custom:agences") {
 ```
 
 The published site runs it from the next build. **Hlou's Design canvas cannot
-run it live**: the canvas only resolves `react`, `zod` and files inside
-`renderer/`, so it shows that block as a code error. When the canvas matters,
+run it live**: the canvas only resolves `react`, `zod`, `motion` and files
+inside `renderer/`, so it shows that block as a code error. When the canvas matters,
 keep a variant to markup and put the data-driven part on a page of your own
 (recipe 2). `.claude/skills/hlou-code-variant` has the full rules.
 
@@ -223,3 +224,103 @@ export default async function AgencesPage({
   write the locale yourself; the unprefixed `/agences/` has no redirect stub and
   answers 404. From your own code, link to `` `/${locale}/agences/` ``.
 - The page is not in Hlou's sitemap or navigation until someone adds a link.
+
+## Recipe 3 — a scroll-linked hero with `motion/react`
+
+**First, the spec.** How a block appears, its hover and press, a loop, a
+parallax or a text cascade is **data**, not code: `style.motion` on the node in
+the page's document, with presets by name (`{ "enter": { "preset": "rise" } }`),
+or Hlou Design's Motion tab. One small script plays it on every page, at the
+site's own pace, with reduced motion handled. Write Motion code only for what
+the spec cannot say, such as a hero whose image drifts and fades as the page
+scrolls past it.
+
+`custom/components/ScrollHero.tsx` — a client component on Motion's React
+hooks. Its first frame is the complete hero (nothing starts hidden), and a
+visitor who asks for reduced motion gets it still:
+
+```tsx
+"use client";
+
+import type { ReactNode } from "react";
+import { useRef } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "motion/react";
+
+export function ScrollHero({
+  media,
+  children,
+}: {
+  media: ReactNode;
+  children: ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.3]);
+  return (
+    <div ref={ref} className="relative isolate overflow-hidden">
+      <motion.div
+        className="absolute inset-0 -z-10"
+        style={reduce ? undefined : { y, opacity }}
+      >
+        {media}
+      </motion.div>
+      {children}
+    </div>
+  );
+}
+```
+
+Wire it through a variant of the hero, in `renderer/blocks/hero/Component.tsx`,
+right after the `blockParts` line (set `codeVariant: "custom:scroll-hero"` on
+the hero in the spec, or in Hlou Design):
+
+```tsx
+import { ScrollHero } from "@/custom/components/ScrollHero";
+// …
+if (props.codeVariant === "custom:scroll-hero") {
+  const title = literal(props.title, "");
+  return (
+    <section {...root}>
+      <ScrollHero
+        media={
+          <MediaFigure
+            className="h-full rounded-none"
+            media={literalMedia(props.image)}
+            sizes="100vw"
+            priority
+          />
+        }
+      >
+        <div className="max-w-site-content mx-auto flex min-h-[70vh] items-end px-6 py-16">
+          <h1 {...el("title", "font-heading text-site-xl m-0")}>{title}</h1>
+        </div>
+      </ScrollHero>
+    </section>
+  );
+}
+```
+
+- **The canvas.** Imported from `@/custom/…`, the variant builds and
+  publishes but shows as a code error on Hlou's canvas (recipe 1). To see it
+  play there, put `ScrollHero.tsx` beside the block
+  (`renderer/blocks/hero/ScrollHero.tsx`) and import it as `./ScrollHero`:
+  the canvas hands in `motion` and runs it. That file is then an « edit with
+  care » renderer file (`AGENTS.md`).
+- **A server component draws `motion.*` elements** from `motion/react-client`
+  (`import * as m from "motion/react-client"`) without a `"use client"` file;
+  hooks (`useScroll`, `useTransform`, `useReducedMotion`) need one.
+- **Never start content hidden** (`initial={{ opacity: 0 }}`): a site Hlou
+  builds without Next renders client code once and never runs it, and a
+  visitor without JavaScript sees the first frame. Appear effects belong to the
+  spec, which keeps content visible either way.
+- `motion` only: no other animation package, and no Motion+ APIs.

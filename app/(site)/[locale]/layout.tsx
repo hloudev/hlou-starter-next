@@ -5,10 +5,12 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import {
   layoutMetadata,
+  motionGuardScript,
   SITE_BODY_CLASS,
   SITE_SCHEME_SCRIPT,
   siteHtmlAttrs,
   siteViewport,
+  themeMotion,
 } from "@/renderer";
 import MainLayout from "@/components/MainLayout";
 import { isLocale, routing } from "@/i18n/routing";
@@ -87,7 +89,8 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
   const messages = await getMessages({ locale });
 
-  const html = siteHtmlAttrs(getSnapshot(), locale);
+  const snapshot = getSnapshot();
+  const html = siteHtmlAttrs(snapshot, locale);
 
   return (
     <html
@@ -100,6 +103,13 @@ export default async function LocaleLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: SITE_SCHEME_SCRIPT }} />
+        {/* Motion's pre-paint guard (decision 321): what will appear is
+            pre-hidden only once a runtime is coming, with a failsafe. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: motionGuardScript(themeMotion(snapshot.theme).reducedMotion),
+          }}
+        />
       </head>
       <body className={SITE_BODY_CLASS} suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>

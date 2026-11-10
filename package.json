@@ -26,6 +26,7 @@
     "optimise-images": "node scripts/optimise-images.mjs"
   },
   "dependencies": {
+    "motion": "14.10.1",
     "next": "16.3.5",
     "next-intl": "^4.14.4",
     "react": "19.3.0",
