@@ -63,7 +63,7 @@ export type BlockRootAttributes = {
   'data-hl-when'?: string;
   /** Present while its `when` is false: `site.css` hides it. */
   'data-hl-off'?: '';
-  /** The block's own motion (M47, `motion/compile.ts`), set by `blockParts`. */
+  /** The block's own motion (`motion/compile.ts`), set by `blockParts`. */
   'data-hl-motion'?: string;
 };
 
@@ -330,7 +330,7 @@ export function boxStyle(
   vars: Record<string, string | undefined>;
   /** The style picks a font (a level or a family): the block's default level no longer applies. */
   font?: boolean;
-  /** Its motion, as the `data-hl-motion` value (M47, `motion/compile.ts`). */
+  /** Its motion, as the `data-hl-motion` value (`motion/compile.ts`). */
   motion?: string;
 } {
   const stored = asRecord(raw) ?? {};
@@ -369,7 +369,7 @@ export function boxStyle(
       ];
     classes.push(...surfaceClasses(stored));
   }
-  /* Motion: the attribute the M47 runtime plays (`motion/runtime.ts`). */
+  /* Motion: the attribute the motion runtime plays (`motion/runtime.ts`). */
   const motion = motionAttribute(stored.motion);
   /* Free utilities last: a `pt-[72px]` replaces the token's padding
      through `mergeClasses`, and anything unsafe was dropped by the sanitiser. */
@@ -587,7 +587,7 @@ export function Icon({
 export type Styled = {
   className: string;
   style?: CSSProperties;
-  /** The element's motion (M47): the last style that sets one wins. */
+  /** The element's motion: the last style that sets one wins. */
   'data-hl-motion'?: string;
 };
 
@@ -773,7 +773,7 @@ export function MediaFigure({
   field?: { 'data-hl-field'?: string };
   /** Inline variables of the figure's own style (`boxStyle`). */
   style?: CSSProperties;
-  /** The figure's own motion (`Styled['data-hl-motion']`), played by the M47 runtime. */
+  /** The figure's own motion (`Styled['data-hl-motion']`), played by the motion runtime. */
   motion?: string;
 }): ReactElement {
   const classes = mergeClasses(
@@ -868,7 +868,7 @@ export function SiteButton({
   inert?: boolean;
   /** `bindAttr` of a label bound to a scope value: the label sits in its own span. */
   bind?: { 'data-hl-bind'?: string };
-  /** The button's own motion (`Styled['data-hl-motion']`), played by the M47 runtime. */
+  /** The button's own motion (`Styled['data-hl-motion']`), played by the motion runtime. */
   motion?: string;
 }): ReactElement {
   const moving = motion ? { 'data-hl-motion': motion } : {};

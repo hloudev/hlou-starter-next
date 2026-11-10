@@ -1,5 +1,5 @@
 /*
- * `@hlou/site-renderer/motion` (M47): the motion spec, its presets, the site's
+ * `@hlou/site-renderer/motion`: the motion spec, its presets, the site's
  * motion personality, the upgrade of the old shape and the `data-hl-motion`
  * attribute — pure and server-safe — and the runtime that plays it (MO2:
  * `runtime.ts`, `split-text.ts`, the head guard), browser-only but safe to

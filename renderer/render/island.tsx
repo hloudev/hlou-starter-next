@@ -38,7 +38,7 @@ export const ISLANDS = {
   liveList: LiveListClient,
   menu: MenuClient,
   modal: ModalClient,
-  /* The page motion runtime (M47): renders nothing, plays every `data-hl-motion`. */
+  /* The page motion runtime: renders nothing, plays every `data-hl-motion`. */
   motion: MotionRuntimeClient,
   quantity: QuantityClient,
   scope: ScopeRuntimeClient,

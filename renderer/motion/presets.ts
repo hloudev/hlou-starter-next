@@ -5,7 +5,7 @@
 import type { MotionEase, MotionKeyframe, MotionScrollOffset, MotionScrollRange } from './schema';
 
 /*
- * THE PRESETS (M47): named motions, as data — a keyframe and a transition
+ * THE PRESETS: named motions, as data — a keyframe and a transition
  * hint each, never code. A spec names one (`enter.preset: "rise"`) and may
  * still override any part of it. Their durations are relative to the site's
  * motion personality (`personality.ts`), so one setting restyles them all.
@@ -133,7 +133,7 @@ export const APPEAR_PRESETS: Record<AppearPresetId, AppearPreset> = {
     from: { opacity: 0 },
     transition: TWEEN,
   },
-  /* `fade-up` before M47: the same 24 px rise. */
+  /* The old `fade-up`: the same 24 px rise. */
   rise: {
     id: 'rise',
     category: 'appear',
@@ -162,7 +162,7 @@ export const APPEAR_PRESETS: Record<AppearPresetId, AppearPreset> = {
     from: { opacity: 0, x: 48 },
     transition: TWEEN,
   },
-  /* `scale-in` before M47: the same 0.96. */
+  /* The old `scale-in`: the same 0.96. */
   zoom: {
     id: 'zoom',
     category: 'appear',
@@ -210,7 +210,7 @@ export const APPEAR_PRESETS: Record<AppearPresetId, AppearPreset> = {
 const GESTURE: MotionPresetTransition = { type: 'tween', durationFactor: 0.4, ease: 'easeOut' };
 
 export const GESTURE_PRESETS: Record<HoverPresetId | PressPresetId, GesturePreset> = {
-  /* The pre-M47 hovers, same values: lift 4 px, enlarge 1.02, dim 0.8. */
+  /* The old hovers, same values: lift 4 px, enlarge 1.02, dim 0.8. */
   lift: {
     id: 'lift',
     category: 'hover',

@@ -308,7 +308,7 @@
      "t") is hidden only once the head guard has said a runtime is coming
      (`on`) or the runtime runs (`live`), until the runtime releases it
      (`data-hl-motion-ready`). No script, or the guard's failsafe (`done`):
-     everything shows (M47, decision 321; `motion/guard.ts` holds the same
+     everything shows (`motion/guard.ts` holds the same
      selector). Every animation itself is the runtime's, not CSS's.
      Important, so an opacity utility (a later layer) never shows the
      element before it plays; released, the rule no longer matches. */

@@ -228,8 +228,8 @@ export const surfaceSchema = z
 export type SurfaceValue = z.infer<typeof surfaceSchema>;
 
 /**
- * A style's motion (M47, decision 320): the spec of `motion/schema.ts` —
- * enter, hover, press, loop, scroll, text, stagger. The pre-M47
+ * A style's motion: the spec of `motion/schema.ts` —
+ * enter, hover, press, loop, scroll, text, stagger. The older
  * `{ reveal, delay, hover }` upgrades on read (`motion/legacy.ts`).
  */
 export const motionSchema = z.preprocess(upgradeMotion, motionSpecSchema);

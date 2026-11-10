@@ -22,13 +22,13 @@ import {
 
 /*
  * THE ONE PURE FUNCTION that turns a spec into what Motion takes
- * (`resolveMotion`), against a site's motion personality (decision 322; its
+ * (`resolveMotion`), against a site's motion personality (its
  * schema is `personality.ts`'s). A feel (calm, snappy, playful, luxe) sets
  * the base duration, easing and spring; `durationScale` stretches every
  * inherited duration; `ease` / `spring` override the feel's. A value the
  * spec states itself is never scaled — only what it inherits.
  *
- * Reduced motion (decision 321), when the visitor asks for it:
+ * Reduced motion, when the visitor asks for it:
  * - policy `reduce` (the default): enter and text become a short opacity
  *   fade, scroll and loop are off, hover and press keep only opacity;
  * - policy `off`: no motion at all.

@@ -5,13 +5,13 @@
 import type { MotionRuntime } from './runtime';
 
 /*
- * PREVIEW'S REMOTE CONTROL (M47-07): « Replay animations » and « Simulate
+ * PREVIEW'S REMOTE CONTROL: « Replay animations » and « Simulate
  * reduced motion » reach a page's motion runtime two ways.
  *
  * - A page Hlou serves itself (the draft, a build rendered by `/p`) is
  *   same-origin with Preview, which calls `window.__hlMotion` directly.
  * - A hosted build, or a build with hand-written code, is framed by `/p` on
- *   its own origin (decision 131): nothing reaches its DOM. Preview posts a
+ *   its own origin: nothing reaches its DOM. Preview posts a
  *   message to that frame instead, and the `motion` island answers it — only
  *   from its direct parent, and only from an origin it trusts:
  *

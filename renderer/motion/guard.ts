@@ -1,5 +1,5 @@
 /*
- * CONTENT IS NEVER LOST TO MOTION (decision 321). An element that appears
+ * CONTENT IS NEVER LOST TO MOTION. An element that appears
  * (`enter`, `text`) is pre-hidden only once a script has said a runtime is
  * coming: an inline head script sets `<html data-hl-motion="on">` before the
  * first paint, and `site.css` hides the elements that will appear under it.

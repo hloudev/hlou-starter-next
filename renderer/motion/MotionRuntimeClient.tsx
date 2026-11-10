@@ -38,12 +38,12 @@ declare global {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The `motion` island (decision 319): renders nothing, and on mount runs the
+ * The `motion` island: renders nothing, and on mount runs the
  * page runtime over the whole document in `live` mode. `SiteRender` renders
  * it once, at the end of a page that carries motion, never in the canvas
  * (which runs its own, MO5). The runtime is `window.__hlMotion` while it
  * lives, so a same-origin Preview can replay it or simulate reduced motion;
- * a framed page answers the same commands by message (M47-07, `bridge.ts`).
+ * a framed page answers the same commands by message (`bridge.ts`).
  */
 export function MotionRuntimeClient({ personality, dir, origins }: MotionRuntimeClientProps): null {
   /* Props are server JSON: the keys keep one runtime per personality. */

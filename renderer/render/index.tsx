@@ -212,7 +212,7 @@ export function SiteRender({
     },
   });
 
-  /* The motion runtime (M47, decision 319): one island at the end of a page
+  /* The motion runtime: one island at the end of a page
      that carries motion — its own or its components'. A page without any
      ships no motion code. Never in the canvas, which runs its own (MO5). */
   if (mode === 'canvas' || !hasMotion(resolved.doc, drawn)) return drawnPage;
@@ -225,7 +225,7 @@ export function SiteRender({
         props={{
           personality: themeMotion(snapshot.theme),
           dir: resolved.dir,
-          /* Who may replay it from Preview by message (M47-07): the control plane. */
+          /* Who may replay it from Preview by message: the control plane. */
           ...(origins.length > 0 ? { origins } : {}),
         }}
         markers={islands}

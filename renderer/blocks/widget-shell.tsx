@@ -83,7 +83,7 @@ export function widgetStyled(styled: {
     className: styled.className,
     ...(styled.style ? { style: styled.style as Record<string, string> } : {}),
     ...(styled['data-hl-field'] ? { 'data-hl-field': styled['data-hl-field'] } : {}),
-    /* Its motion (M47): the island spreads it, the page runtime plays it. */
+    /* Its motion: the island spreads it, the page runtime plays it. */
     ...(styled['data-hl-motion'] ? { 'data-hl-motion': styled['data-hl-motion'] } : {}),
   };
 }

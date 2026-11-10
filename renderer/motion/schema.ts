@@ -14,7 +14,7 @@ import {
 } from './presets';
 
 /*
- * THE MOTION SPEC (M47, decision 320): what `style.motion` holds on a block's
+ * THE MOTION SPEC: what `style.motion` holds on a block's
  * `style`, on every `elements.<name>` and on an item's `style`. Every part is
  * optional and pure data — the vocabulary of Motion (motion.dev, the `motion`
  * package's vanilla API: `animate`, `inView`, `scroll`, `hover`, `press`,

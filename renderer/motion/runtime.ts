@@ -14,7 +14,7 @@ import { DEFAULT_MOTION_PERSONALITY, resolveMotion } from './resolve';
 import { splitText } from './split-text';
 
 /*
- * THE PAGE RUNTIME (decisions 319, 321, 323): the one thing that plays a
+ * THE PAGE RUNTIME: the one thing that plays a
  * `data-hl-motion` attribute, on the `motion` library's vanilla API. Built
  * sites (`next`, `kernel`) and Preview run it in `live` mode through the
  * `motion` island (`MotionRuntimeClient`); the Canvas runs it itself in

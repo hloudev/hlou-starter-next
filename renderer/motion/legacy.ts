@@ -1,5 +1,5 @@
 /*
- * THE OLD MOTION SHAPE, UPGRADED ON READ (decision 320). Before M47 a style's
+ * THE OLD MOTION SHAPE, UPGRADED ON READ. Before this spec a style's
  * motion was `{ reveal: fade | fade-up | scale-in, delay: '0'–'3', hover:
  * lift | zoom | dim }`, compiled to CSS classes. Those values live on in page
  * documents and in every frozen `site_versions.snapshot`, so — like
@@ -40,7 +40,7 @@ export function isLegacyMotion(value: unknown): boolean {
 }
 
 /**
- * An old `{ reveal, delay, hover }` → the M47 spec: `enter` with the matching
+ * An old `{ reveal, delay, hover }` → the current spec: `enter` with the matching
  * preset on `inView`, once, its delay in seconds; `hover` with the matching
  * preset. Anything else passes through untouched — a new spec, a non-object.
  * A value mixing both shapes (an old editor writing over a new spec) keeps

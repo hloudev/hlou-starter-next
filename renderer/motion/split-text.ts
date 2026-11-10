@@ -1,5 +1,5 @@
 /*
- * OUR OWN TEXT SPLITTER (M47, decision 319 — Motion+'s `splitText` is never
+ * OUR OWN TEXT SPLITTER (Motion+'s `splitText` is never
  * used). It cuts an element's text into pieces the runtime can animate one
  * after another: words, characters, or lines.
  *

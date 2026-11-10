@@ -8,7 +8,7 @@ import { MOTION_FEELS, MOTION_REDUCED_POLICIES } from './resolve';
 import { motionEaseSchema } from './schema';
 
 /*
- * A SITE'S MOTION PERSONALITY (decision 322): its schema, stored in
+ * A SITE'S MOTION PERSONALITY: its schema, stored in
  * `themes.tokens.motion`. A feel (calm, snappy, playful, luxe) sets the base
  * duration, easing and spring; `durationScale` stretches every inherited
  * duration; `ease` / `spring` override the feel's.

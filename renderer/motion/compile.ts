@@ -6,7 +6,7 @@ import type { MotionSpec } from './schema';
 import { upgradeMotion } from './legacy';
 
 /*
- * THE ATTRIBUTE (decision 319): blocks stay server components and carry
+ * THE ATTRIBUTE: blocks stay server components and carry
  * their motion as `data-hl-motion`, a compact JSON of the spec the page
  * runtime reads back. Compact means:
  *
