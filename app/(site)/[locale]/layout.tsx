@@ -103,7 +103,7 @@ export default async function LocaleLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: SITE_SCHEME_SCRIPT }} />
-        {/* Motion's pre-paint guard (decision 321): what will appear is
+        {/* Motion's pre-paint guard: what will appear is
             pre-hidden only once a runtime is coming, with a failsafe. */}
         <script
           dangerouslySetInnerHTML={{
