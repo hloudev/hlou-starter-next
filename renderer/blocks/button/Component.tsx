@@ -50,6 +50,7 @@ export function ButtonBlock(props: BlockProps<ButtonProps>): ReactElement {
           iconPosition={props.iconPosition}
           className={button.className || undefined}
           style={button.style}
+          motion={button['data-hl-motion']}
           field={{ 'data-hl-field': button['data-hl-field'] }}
           action={action?.success ? action.data : undefined}
           inert={context.mode === 'canvas'}

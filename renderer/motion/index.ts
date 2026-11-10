@@ -1,7 +1,9 @@
 /*
  * `@hlou/site-renderer/motion` (M47): the motion spec, its presets, the site's
  * motion personality, the upgrade of the old shape and the `data-hl-motion`
- * attribute. Pure and server-safe — the runtime that plays it is MO2's.
+ * attribute — pure and server-safe — and the runtime that plays it (MO2:
+ * `runtime.ts`, `split-text.ts`, the head guard), browser-only but safe to
+ * import anywhere (nothing runs at import).
  */
 export {
   MOTION_CLIP_SIDES,
@@ -126,3 +128,42 @@ export {
   parseMotionAttribute,
 } from './compile';
 export { readMotion, readMotionAttribute } from './read';
+/* The runtime that plays it (MO2): zod-free, shipped in the `motion` island. */
+export { checkMotion, checkMotionAttribute } from './check';
+export {
+  MOTION_FAILSAFE_MS,
+  MOTION_GUARD_CSS,
+  MOTION_GUARD_SCRIPT,
+  MOTION_PREHIDE_SELECTOR,
+  MOTION_READY_ATTRIBUTE,
+  MOTION_STATE_ATTRIBUTE,
+  motionGuardScript,
+} from './guard';
+export type { MotionPageState } from './guard';
+export { createMotionRuntime } from './runtime';
+/* Preview's remote control (MO7): the message protocol and its origin rule. */
+export {
+  listenForMotionCommands,
+  MOTION_MESSAGE_TYPE,
+  motionOriginAllowed,
+  motionOrigins,
+  originOf,
+  readMotionCommand,
+  readMotionReady,
+  replayMotion,
+} from './bridge';
+export type { MotionCommand, MotionReady } from './bridge';
+export type {
+  MotionRuntime,
+  MotionRuntimeMode,
+  MotionRuntimeOptions,
+  MotionRuntimePart,
+} from './runtime';
+export {
+  currentSplit,
+  SPLIT_CLASS,
+  SPLIT_GROUP_CLASS,
+  SPLIT_SR_CLASS,
+  splitText,
+} from './split-text';
+export type { SplitBy, SplitText } from './split-text';

@@ -56,7 +56,12 @@ export function ArticleListRows({
   return (
     <ul className={listClass} {...listAttrs}>
       {items.map((item) => (
-        <li key={item.id} className={row.className} style={row.style}>
+        <li
+          key={item.id}
+          className={row.className}
+          style={row.style}
+          data-hl-motion={row['data-hl-motion']}
+        >
           <MediaFigure
             className="aspect-[16/10]"
             media={item.image}

@@ -78,6 +78,7 @@ export function ImageBlock(props: BlockProps<ImageProps>): ReactElement {
         <MediaFigure
           className={figure.className}
           style={figure.style}
+          motion={figure['data-hl-motion']}
           media={media}
           placeholder="media / image.jpg"
           sizes={SIZES[props.width] ?? SIZES.wide}

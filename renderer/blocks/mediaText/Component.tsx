@@ -67,6 +67,7 @@ export function MediaTextBlock(props: BlockProps<MediaTextProps>): ReactElement 
         <MediaFigure
           className={cx(figure.className, mediaEnd && 'md:order-2')}
           style={figure.style}
+          motion={figure['data-hl-motion']}
           media={media}
           placeholder="media / image.jpg"
           sizes={MEDIA_SIZES_ATTR.half}
@@ -102,6 +103,7 @@ export function MediaTextBlock(props: BlockProps<MediaTextProps>): ReactElement 
                     variant={button.variant}
                     className={own.className || undefined}
                     style={own.style}
+                    motion={own['data-hl-motion']}
                     field={field ? { 'data-hl-field': field } : undefined}
                   />
                 );

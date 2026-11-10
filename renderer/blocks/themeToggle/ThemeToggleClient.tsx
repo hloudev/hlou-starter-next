@@ -23,7 +23,8 @@ export type ThemeToggleClientProps = {
   /** On the Design canvas the scheme belongs to the toolbar: the button is
    *  drawn but never flips anything. */
   inert: boolean;
-  field?: { 'data-hl-field'?: string };
+  /** The canvas marker, and the button's motion (`Styled['data-hl-motion']`). */
+  field?: { 'data-hl-field'?: string; 'data-hl-motion'?: string };
 };
 
 type Scheme = 'light' | 'dark';

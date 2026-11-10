@@ -142,6 +142,7 @@ export function CardsBlock(props: BlockProps<CardsProps>): ReactElement {
                 className={cx(box.className, 'text-inherit no-underline')}
                 style={box.style}
                 data-hl-field={box['data-hl-field']}
+                data-hl-motion={box['data-hl-motion']}
               >
                 {content}
               </a>
@@ -151,6 +152,7 @@ export function CardsBlock(props: BlockProps<CardsProps>): ReactElement {
                 className={box.className}
                 style={box.style}
                 data-hl-field={box['data-hl-field']}
+                data-hl-motion={box['data-hl-motion']}
               >
                 {content}
               </article>

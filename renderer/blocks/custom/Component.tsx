@@ -77,6 +77,7 @@ export function CustomBlock(props: BlockProps<CustomProps>): ReactElement {
                   className={box.className}
                   style={box.style}
                   data-hl-field={box['data-hl-field']}
+                  data-hl-motion={box['data-hl-motion']}
                 >
                   {media ? (
                     <MediaFigure
@@ -141,6 +142,7 @@ export function CustomBlock(props: BlockProps<CustomProps>): ReactElement {
                   variant={button.variant}
                   className={own.className || undefined}
                   style={own.style}
+                  motion={own['data-hl-motion']}
                   field={field ? { 'data-hl-field': field } : undefined}
                 />
               );

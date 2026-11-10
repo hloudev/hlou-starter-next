@@ -136,6 +136,7 @@ function DropdownItem({
   className,
   style,
   field,
+  motion,
   currentOf,
 }: {
   link: NavLink;
@@ -146,6 +147,8 @@ function DropdownItem({
   className: string;
   style?: CSSProperties;
   field?: string;
+  /** The item's motion (`Styled['data-hl-motion']`). */
+  motion?: string;
   currentOf: CurrentOf;
 }): ReactElement {
   const listId = `${id}-sub-${index + 1}`;
@@ -155,6 +158,7 @@ function DropdownItem({
       className={cx('hl-menu__item relative flex items-center gap-0.5', className)}
       style={style}
       data-hl-field={field}
+      data-hl-motion={motion}
     >
       {link.href ? (
         <>
@@ -348,6 +352,7 @@ export function HeaderBlock(props: BlockProps<HeaderProps>): ReactElement {
               className={box.className}
               style={box.style}
               field={box['data-hl-field']}
+              motion={box['data-hl-motion']}
               currentOf={currentOf}
             />
           );
@@ -361,6 +366,7 @@ export function HeaderBlock(props: BlockProps<HeaderProps>): ReactElement {
       <SiteButton
         className={cx(cta.className, className)}
         style={cta.style}
+        motion={cta['data-hl-motion']}
         label={ctaLabel}
         href={props.ctaHref}
         field={{ 'data-hl-field': cta['data-hl-field'] }}

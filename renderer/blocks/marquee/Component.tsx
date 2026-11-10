@@ -41,6 +41,7 @@ export function MarqueeBlock(props: BlockProps<MarqueeProps>): ReactElement {
           className={box.className}
           style={box.style}
           data-hl-field={hidden ? undefined : box['data-hl-field']}
+          data-hl-motion={box['data-hl-motion']}
         >
           {media ? (
             <MediaImg

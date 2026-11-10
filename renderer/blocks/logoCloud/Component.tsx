@@ -87,6 +87,7 @@ export function LogoCloudBlock(props: BlockProps<LogoCloudProps>): ReactElement 
                 className={box.className}
                 style={box.style}
                 data-hl-field={box['data-hl-field']}
+                data-hl-motion={box['data-hl-motion']}
               >
                 {entry.href ? (
                   <a href={entry.href} aria-label={alt || undefined} className="inline-flex">

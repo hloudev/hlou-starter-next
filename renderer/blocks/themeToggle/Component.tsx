@@ -65,7 +65,10 @@ export function ThemeToggleBlock(props: BlockProps<ThemeToggleProps>): ReactElem
             className: button.className,
             style: button.style,
             inert: context.mode === 'canvas',
-            field: { 'data-hl-field': button['data-hl-field'] },
+            field: {
+              'data-hl-field': button['data-hl-field'],
+              ...(button['data-hl-motion'] ? { 'data-hl-motion': button['data-hl-motion'] } : {}),
+            },
           }}
         />
       </div>

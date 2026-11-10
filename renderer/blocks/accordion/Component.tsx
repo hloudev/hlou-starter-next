@@ -54,6 +54,7 @@ export function AccordionBlock(props: BlockProps<AccordionProps>): ReactElement 
                 className={box.className}
                 style={box.style}
                 data-hl-field={box['data-hl-field']}
+                data-hl-motion={box['data-hl-motion']}
                 name={group}
                 open={editing || entry.open === true}
               >

@@ -18,6 +18,7 @@ import { StepsClient } from '../blocks/steps/StepsClient';
 import { SummaryClient } from '../blocks/summary/SummaryClient';
 import { TabsClient } from '../blocks/tabs/TabsClient';
 import { ThemeToggleClient } from '../blocks/themeToggle/ThemeToggleClient';
+import { MotionRuntimeClient } from '../motion/MotionRuntimeClient';
 
 /* -------------------------------------------------------------------------- */
 /*                                  CONSTANTS                                 */
@@ -37,6 +38,8 @@ export const ISLANDS = {
   liveList: LiveListClient,
   menu: MenuClient,
   modal: ModalClient,
+  /* The page motion runtime (M47): renders nothing, plays every `data-hl-motion`. */
+  motion: MotionRuntimeClient,
   quantity: QuantityClient,
   scope: ScopeRuntimeClient,
   steps: StepsClient,

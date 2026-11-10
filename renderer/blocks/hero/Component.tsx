@@ -73,7 +73,7 @@ function SlideStack({
   badge: boolean;
   /** Text sits over the images (overlay): a veil from the bottom keeps it legible. */
   veil?: boolean;
-  field?: { 'data-hl-field'?: string };
+  field?: { 'data-hl-field'?: string; 'data-hl-motion'?: string };
 }): ReactElement {
   return (
     <div
@@ -243,6 +243,7 @@ export function HeroBlock(props: BlockProps<HeroProps>): ReactElement {
                     variant={button.variant}
                     className={own.className || undefined}
                     style={own.style}
+                    motion={own['data-hl-motion']}
                     field={field ? { 'data-hl-field': field } : undefined}
                   />
                 );
@@ -269,7 +270,10 @@ export function HeroBlock(props: BlockProps<HeroProps>): ReactElement {
             style={figure.style}
             sizes={MEDIA_SIZES_ATTR.half}
             badge={context.mode !== 'static'}
-            field={{ 'data-hl-field': figure['data-hl-field'] }}
+            field={{
+              'data-hl-field': figure['data-hl-field'],
+              'data-hl-motion': figure['data-hl-motion'],
+            }}
           />
         ) : (
           <MediaFigure
@@ -279,6 +283,7 @@ export function HeroBlock(props: BlockProps<HeroProps>): ReactElement {
               props.mediaFit === 'contain' && '[&_img]:object-contain'
             )}
             style={figure.style}
+            motion={figure['data-hl-motion']}
             media={image}
             sizes={MEDIA_SIZES_ATTR.half}
             priority

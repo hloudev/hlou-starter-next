@@ -50,6 +50,7 @@ export function ButtonsBlock(props: BlockProps<ButtonsProps>): ReactElement {
               iconPosition={button.iconPosition}
               className={own.className || undefined}
               style={own.style}
+              motion={own['data-hl-motion']}
               field={field ? { 'data-hl-field': field } : undefined}
             />
           );

@@ -142,6 +142,7 @@ export function GalleryBlock(props: BlockProps<GalleryProps>): ReactElement {
                 className={tile.className}
                 style={{ ...justified, ...tile.style }}
                 data-hl-field={tile['data-hl-field']}
+                data-hl-motion={tile['data-hl-motion']}
               >
                 {onClick === 'lightbox' && media ? (
                   <LightboxLink

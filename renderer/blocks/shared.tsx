@@ -23,7 +23,6 @@ import {
   frameStyle,
   hasSurface,
   mergeClasses,
-  motionClasses,
   placeClasses,
   sanitiseClasses,
   styleClasses,
@@ -370,9 +369,7 @@ export function boxStyle(
       ];
     classes.push(...surfaceClasses(stored));
   }
-  /* Motion: the attribute the M47 runtime plays, and — until MO2 retires
-     them — the old CSS classes beside it, so built sites keep their reveals. */
-  classes.push(...motionClasses(stored));
+  /* Motion: the attribute the M47 runtime plays (`motion/runtime.ts`). */
   const motion = motionAttribute(stored.motion);
   /* Free utilities last: a `pt-[72px]` replaces the token's padding
      through `mergeClasses`, and anything unsafe was dropped by the sanitiser. */
@@ -762,6 +759,7 @@ export function MediaFigure({
   priority,
   field,
   style,
+  motion,
 }: {
   media: ResolvedMedia | null;
   /** Utilities that replace or extend the figure's defaults (`mergeClasses`). */
@@ -775,13 +773,20 @@ export function MediaFigure({
   field?: { 'data-hl-field'?: string };
   /** Inline variables of the figure's own style (`boxStyle`). */
   style?: CSSProperties;
+  /** The figure's own motion (`Styled['data-hl-motion']`), played by the M47 runtime. */
+  motion?: string;
 }): ReactElement {
   const classes = mergeClasses(
     'relative overflow-hidden rounded-site bg-site-media-fill',
     className ? className.split(' ') : []
   ).join(' ');
   return (
-    <div className={classes} style={style} {...field}>
+    <div
+      className={classes}
+      style={style}
+      {...field}
+      {...(motion ? { 'data-hl-motion': motion } : {})}
+    >
       {media ? (
         <MediaImg
           className="size-full object-cover"
@@ -840,6 +845,7 @@ export function SiteButton({
   action,
   inert = false,
   bind,
+  motion,
 }: {
   label: string;
   href: string;
@@ -862,7 +868,10 @@ export function SiteButton({
   inert?: boolean;
   /** `bindAttr` of a label bound to a scope value: the label sits in its own span. */
   bind?: { 'data-hl-bind'?: string };
+  /** The button's own motion (`Styled['data-hl-motion']`), played by the M47 runtime. */
+  motion?: string;
 }): ReactElement {
+  const moving = motion ? { 'data-hl-motion': motion } : {};
   const classes = mergeClasses(
     `${BUTTON_CLASSES} ${BUTTON_VARIANT_CLASSES[variant] ?? BUTTON_VARIANT_CLASSES.primary}`,
     [
@@ -885,6 +894,7 @@ export function SiteButton({
         className={classes}
         style={style}
         {...field}
+        {...moving}
         {...(inert ? { tabIndex: -1 } : { 'data-hl-action': JSON.stringify(action) })}
       >
         {content}
@@ -892,11 +902,11 @@ export function SiteButton({
     );
   }
   return href ? (
-    <a className={classes} href={href} style={style} {...field}>
+    <a className={classes} href={href} style={style} {...field} {...moving}>
       {content}
     </a>
   ) : (
-    <span className={classes} aria-disabled="true" style={style} {...field}>
+    <span className={classes} aria-disabled="true" style={style} {...field} {...moving}>
       {content}
     </span>
   );

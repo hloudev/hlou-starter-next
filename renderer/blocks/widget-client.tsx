@@ -24,6 +24,8 @@ export type WidgetStyled = {
   className: string;
   style?: CSSProperties;
   'data-hl-field'?: string;
+  /** The element's motion (M47), played by the page runtime. */
+  'data-hl-motion'?: string;
 };
 
 /** An `<img>`'s attributes, computed by the server shell (`mediaImgAttrs`). */

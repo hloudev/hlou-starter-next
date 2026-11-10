@@ -72,7 +72,12 @@ export function AccentText({
   words: readonly string[];
   decoration?: AccentDecoration;
   color?: ColorValue;
-  accent: { className?: string; style?: CSSProperties; 'data-hl-field'?: string };
+  accent: {
+    className?: string;
+    style?: CSSProperties;
+    'data-hl-field'?: string;
+    'data-hl-motion'?: string;
+  };
 }): ReactElement {
   const wanted = new Set(words.map(normalise).filter(Boolean));
   if (wanted.size === 0) return <>{text}</>;
@@ -95,6 +100,7 @@ export function AccentText({
         )}
         style={{ ...vars, ...accent.style }}
         data-hl-field={accent['data-hl-field']}
+        data-hl-motion={accent['data-hl-motion']}
       >
         {part}
         {shape ? (

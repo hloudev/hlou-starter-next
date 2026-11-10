@@ -8,6 +8,7 @@ import type { SiteRenderConfig } from '../config';
 import type { PageDocV2, RecordDoc, SiteSnapshot } from '../contracts';
 import type { PageDocument } from '../doc/schema';
 import type { ScopeSnapshot } from '../state/schema';
+import { Island } from './island';
 import { RENDER_CONTEXT_METADATA_KEY } from '../blocks/types';
 
 import {
@@ -17,10 +18,12 @@ import {
   SITE_MEDIA_METADATA_KEY,
   THEME_METADATA_KEY,
 } from '../config';
-import { recordsEndpointFromFormEndpoint } from '../contracts';
+import { recordsEndpointFromFormEndpoint, themeMotion } from '../contracts';
 import { renderDoc } from '../doc/render';
 import { ROOT_SLOT } from '../doc/schema';
 import { childrenOf, slotsOf, subtreeIds } from '../doc/tree';
+import { motionOrigins } from '../motion/bridge';
+import { hasMotion } from '../motion/compile';
 import { resolveDoc } from '../resolve';
 import { attributionFooter } from '../site/attribution-footer';
 
@@ -193,7 +196,7 @@ export function SiteRender({
       ? attributionFooter(resolved.doc, drawn, chrome)
       : null;
 
-  return renderDoc({
+  const drawnPage = renderDoc({
     doc: resolved.doc,
     components: drawn,
     config: config ?? getSiteConfig(mode),
@@ -208,4 +211,25 @@ export function SiteRender({
       ...(footer ? { [ATTRIBUTION_FOOTER_METADATA_KEY]: footer.id } : {}),
     },
   });
+
+  /* The motion runtime (M47, decision 319): one island at the end of a page
+     that carries motion — its own or its components'. A page without any
+     ships no motion code. Never in the canvas, which runs its own (MO5). */
+  if (mode === 'canvas' || !hasMotion(resolved.doc, drawn)) return drawnPage;
+  const origins = motionOrigins(formEndpoint, records);
+  return (
+    <>
+      {drawnPage}
+      <Island
+        name="motion"
+        props={{
+          personality: themeMotion(snapshot.theme),
+          dir: resolved.dir,
+          /* Who may replay it from Preview by message (M47-07): the control plane. */
+          ...(origins.length > 0 ? { origins } : {}),
+        }}
+        markers={islands}
+      />
+    </>
+  );
 }

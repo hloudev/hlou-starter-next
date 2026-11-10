@@ -89,6 +89,7 @@ export function FeatureGridBlock(props: BlockProps<FeatureGridProps>): ReactElem
                 className={cardBox.className}
                 style={{ ...cardVars, ...cardBox.style }}
                 data-hl-field={cardBox['data-hl-field']}
+                data-hl-motion={cardBox['data-hl-motion']}
               >
                 {card.icon || literalMedia(card.iconMedia) ? (
                   <span

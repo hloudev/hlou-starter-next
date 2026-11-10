@@ -76,11 +76,22 @@ export function ListingsCards({
           </>
         );
         return item.href ? (
-          <a key={item.id} className={card.className} style={card.style} href={item.href}>
+          <a
+            key={item.id}
+            className={card.className}
+            style={card.style}
+            data-hl-motion={card['data-hl-motion']}
+            href={item.href}
+          >
             {body}
           </a>
         ) : (
-          <article key={item.id} className={card.className} style={card.style}>
+          <article
+            key={item.id}
+            className={card.className}
+            style={card.style}
+            data-hl-motion={card['data-hl-motion']}
+          >
             {body}
           </article>
         );

@@ -201,6 +201,7 @@ export function CarouselDots({
   className,
   field,
   style,
+  motion,
 }: {
   count: number;
   /** « Aller à la diapositive {n} ». */
@@ -209,6 +210,8 @@ export function CarouselDots({
   className?: string;
   field?: { 'data-hl-field'?: string };
   style?: CSSProperties;
+  /** The dots' own motion (`Styled['data-hl-motion']`). */
+  motion?: string;
 }): ReactElement {
   return (
     <div
@@ -220,6 +223,7 @@ export function CarouselDots({
       style={style}
       data-hl-c-ctl=""
       {...field}
+      {...(motion ? { 'data-hl-motion': motion } : {})}
     >
       {Array.from({ length: count }, (_, index) => (
         <button
@@ -377,6 +381,7 @@ export function CarouselBlock(props: BlockProps<CarouselProps>): ReactElement {
                   className={own.className}
                   style={own.style}
                   data-hl-field={own['data-hl-field']}
+                  data-hl-motion={own['data-hl-motion']}
                 >
                   {onClick === 'link' && slide.href ? (
                     <a href={slide.href} className="block text-inherit no-underline">
@@ -408,6 +413,7 @@ export function CarouselBlock(props: BlockProps<CarouselProps>): ReactElement {
                 goTo={m.goTo}
                 className={cx(dotsEl.className, arrows === 'below' ? 'me-auto' : 'mx-auto')}
                 style={dotsEl.style}
+                motion={dotsEl['data-hl-motion']}
                 field={{ 'data-hl-field': dotsEl['data-hl-field'] }}
               />
             ) : null}
@@ -419,6 +425,7 @@ export function CarouselBlock(props: BlockProps<CarouselProps>): ReactElement {
                 className={cx(arrowsEl.className, 'ms-auto max-md:hidden')}
                 style={arrowsEl.style}
                 data-hl-field={arrowsEl['data-hl-field']}
+                data-hl-motion={arrowsEl['data-hl-motion']}
               >
                 {arrow(false)}
                 {arrow(true)}

@@ -51,6 +51,7 @@ export function CtaBandBlock(props: BlockProps<CtaBandProps>): ReactElement {
           <SiteButton
             className={button.className}
             style={button.style}
+            motion={button['data-hl-motion']}
             label={literal(props.buttonLabel, '')}
             href={props.buttonHref}
             variant="paper"

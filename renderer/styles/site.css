@@ -304,94 +304,17 @@
 
   /* ------------------------------- Motion ----------------------------- */
 
-  /* A reveal as the block scrolls into view, driven by the scroll timeline —
-     no script. Where the browser has no `animation-timeline`, the block is
-     simply visible; where the visitor asked for less motion, likewise. */
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .hl-reveal {
-        animation: hl-reveal-fade linear both;
-        animation-timeline: view();
-        animation-range: entry 0% entry 40%;
-      }
-      .hl-reveal--fade-up {
-        animation-name: hl-reveal-fade-up;
-      }
-      .hl-reveal--scale-in {
-        animation-name: hl-reveal-scale-in;
-      }
-      .hl-delay-1 {
-        animation-range: entry 10% entry 50%;
-      }
-      .hl-delay-2 {
-        animation-range: entry 20% entry 60%;
-      }
-      .hl-delay-3 {
-        animation-range: entry 30% entry 70%;
-      }
-    }
-  }
-
-  @keyframes hl-reveal-fade {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  @keyframes hl-reveal-fade-up {
-    from {
-      opacity: 0;
-      translate: 0 24px;
-    }
-    to {
-      opacity: 1;
-      translate: 0 0;
-    }
-  }
-  @keyframes hl-reveal-scale-in {
-    from {
-      opacity: 0;
-      scale: 0.96;
-    }
-    to {
-      opacity: 1;
-      scale: 1;
-    }
-  }
-
-  /* A hover response, on the block itself. */
-  .hl-hover--lift,
-  .hl-hover--zoom,
-  .hl-hover--dim {
-    transition:
-      translate 0.25s ease,
-      scale 0.25s ease,
-      opacity 0.25s ease,
-      box-shadow 0.25s ease;
-  }
-  .hl-hover--lift:hover {
-    translate: 0 -4px;
-    box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.25);
-  }
-  .hl-hover--zoom:hover {
-    scale: 1.02;
-  }
-  .hl-hover--dim:hover {
-    opacity: 0.8;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hl-hover--lift,
-    .hl-hover--zoom,
-    .hl-hover--dim {
-      transition: none;
-    }
-    .hl-hover--lift:hover,
-    .hl-hover--zoom:hover {
-      translate: none;
-      scale: none;
-    }
+  /* What will appear (a `data-hl-motion` carrying `enter` "e" or `text`
+     "t") is hidden only once the head guard has said a runtime is coming
+     (`on`) or the runtime runs (`live`), until the runtime releases it
+     (`data-hl-motion-ready`). No script, or the guard's failsafe (`done`):
+     everything shows (M47, decision 321; `motion/guard.ts` holds the same
+     selector). Every animation itself is the runtime's, not CSS's.
+     Important, so an opacity utility (a later layer) never shows the
+     element before it plays; released, the rule no longer matches. */
+  html:is([data-hl-motion='on'], [data-hl-motion='live'])
+    :is([data-hl-motion*='"e":'], [data-hl-motion*='"t":']):not([data-hl-motion-ready]) {
+    opacity: 0 !important;
   }
 
   /* ------------------------------- Marquee ---------------------------- */
