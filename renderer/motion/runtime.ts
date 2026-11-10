@@ -2,7 +2,7 @@
 /*                                DEPENDENCIES                                */
 /* -------------------------------------------------------------------------- */
 
-import { animate, hover, inView, press, scroll, stagger } from 'motion';
+import { animate, frame, hover, inView, press, scroll, stagger, styleEffect } from 'motion';
 
 import type { AnimationOptions, DOMKeyframesDefinition } from 'motion';
 import type { MotionPersonality } from './personality';
@@ -145,6 +145,37 @@ const SCROLL_PREVIEW = 1.2;
 /** Live runtimes per document: the last one disposed shows the page. */
 const liveRuntimes = new WeakMap<Document, number>();
 
+/*
+ * ELEMENTS OF ANOTHER WINDOW. The Canvas runs this runtime from the editor's
+ * window over its frames' documents (same origin, other realms). Motion's
+ * `animate` takes a subject for an element by `instanceof Element` — false for
+ * an iframe's element — and would write the values onto it as plain
+ * properties: nothing moved on the canvas. Its style effect tests elements by
+ * shape (`offsetHeight in subject`), so this effect, registered once, hands
+ * such an element to it: Motion then animates it as it animates any element
+ * (on the main-thread frame loop: it never hardware-accelerates another
+ * window's elements). Elements of the page's own window never reach it.
+ */
+type MotionEffect = Parameters<typeof animate.addEffect>[0];
+const otherWindowStyle = Object.assign(
+  (subject: Element, values: Record<string, unknown>) =>
+    (
+      styleEffect as unknown as (subjects: Element[], values: Record<string, unknown>) => () => void
+    )([subject], values),
+  {
+    test: (subject: unknown) =>
+      typeof subject === 'object' &&
+      subject !== null &&
+      (subject as Node).nodeType === 1 &&
+      (styleEffect as unknown as { test: (subject: unknown) => boolean }).test(subject),
+    read: (styleEffect as unknown as { read: unknown }).read,
+    get: (styleEffect as unknown as { get: unknown }).get,
+    flush: (styleEffect as unknown as { flush: unknown }).flush,
+    state: (styleEffect as unknown as { state: unknown }).state,
+  }
+) as unknown as MotionEffect;
+animate.addEffect?.(otherWindowStyle);
+
 /* -------------------------------------------------------------------------- */
 /*                                   HELPERS                                  */
 /* -------------------------------------------------------------------------- */
@@ -219,19 +250,32 @@ export function createMotionRuntime(config: MotionRuntimeOptions): MotionRuntime
     saved.set(element, { style });
   }
 
-  function restore(element: HTMLElement): void {
-    const found = saved.get(element);
-    if (!found) return;
-    for (const [property, value] of found.style) {
+  function putBack(element: HTMLElement, style: Map<string, string>): void {
+    for (const [property, value] of style) {
       if (value) element.style.setProperty(property, value);
       else element.style.removeProperty(property);
     }
     if (element.getAttribute('style') === '') element.removeAttribute('style');
+  }
+
+  function restore(element: HTMLElement): void {
+    const found = saved.get(element);
+    if (!found) return;
+    putBack(element, found.style);
     if (found.tabindex !== undefined) {
       if (found.tabindex === null) element.removeAttribute('tabindex');
       else element.setAttribute('tabindex', found.tabindex);
     }
     saved.delete(element);
+    /* A cancelled animation writes its start value on Motion's next render
+       step, after this: put the element back once more, after that render —
+       unless an animation has taken it over since. Without this, an element
+       rebuilt mid-animation (reduced motion switched, a breakpoint crossed, a
+       canvas edit) kept its start offset, and the next `touch` saved that
+       offset as its natural state, for good. */
+    frame.postRender(() => {
+      if (!saved.has(element)) putBack(element, found.style);
+    });
   }
 
   function track(entry: Entry, part: MotionRuntimePart, controls: Controls): Controls {
@@ -783,6 +827,8 @@ export function createMotionRuntime(config: MotionRuntimeOptions): MotionRuntime
     refresh,
 
     setReducedMotion(value) {
+      /* The same value again (Preview re-sends it) changes nothing: no rebuild. */
+      if (value === forcedReduced) return;
       forcedReduced = value;
       if (!disposed) rebuild();
     },
