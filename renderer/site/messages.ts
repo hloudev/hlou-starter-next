@@ -349,43 +349,35 @@ const STATE_MESSAGES: Record<'fr' | 'en' | 'ar', Omit<StateMessages, 'nights'>> 
 /*                                  FUNCTIONS                                 */
 /* -------------------------------------------------------------------------- */
 
-/** The chrome copy for a locale; French — Hlou's first locale — for any other. */
-export function chromeMessages(locale: string): ChromeMessages {
-  return locale in MESSAGES ? MESSAGES[locale as keyof typeof MESSAGES] : MESSAGES.fr;
-}
-
 /**
- * The badge copy for a locale, matched on its primary subtag (`fr-CA` → `fr`).
- * Unlike the chrome, an unknown locale falls back to ENGLISH, not French: the
- * badge speaks to a site's visitors, and a German page is better served by
- * « Powered by » than by « Propulsé par ».
+ * Which of Hlou's three copies a site locale reads (decision 332): its primary
+ * subtag when Hlou ships it (`fr-CA` → `fr`, `ar-MA` → `ar`), else English —
+ * a Greek, Hebrew or Armenian page is better served by English than by French.
  */
-export function attributionMessages(locale: string): AttributionMessages {
+function copyLocale(locale: string): 'fr' | 'en' | 'ar' {
   const primary = locale.toLowerCase().split(/[-_]/)[0] ?? '';
-  const poweredBy =
-    primary in ATTRIBUTION_POWERED_BY
-      ? ATTRIBUTION_POWERED_BY[primary as keyof typeof ATTRIBUTION_POWERED_BY]
-      : ATTRIBUTION_POWERED_BY.en;
-  return { poweredBy, brand: ATTRIBUTION_BRAND, label: `${poweredBy} ${ATTRIBUTION_BRAND}` };
+  return primary === 'fr' || primary === 'ar' ? primary : 'en';
 }
 
-/** A locale's primary subtag among Hlou's three; French — Hlou's first — for any other. */
-function stateLocale(locale: string): 'fr' | 'en' | 'ar' {
-  const primary = locale.toLowerCase().split(/[-_]/)[0] ?? '';
-  return primary === 'en' || primary === 'ar' ? primary : 'fr';
+/** The chrome copy for a locale (`copyLocale`). */
+export function chromeMessages(locale: string): ChromeMessages {
+  return MESSAGES[copyLocale(locale)];
+}
+
+/** The badge copy for a locale, matched as the chrome is (`copyLocale`). */
+export function attributionMessages(locale: string): AttributionMessages {
+  const poweredBy = ATTRIBUTION_POWERED_BY[copyLocale(locale)];
+  return { poweredBy, brand: ATTRIBUTION_BRAND, label: `${poweredBy} ${ATTRIBUTION_BRAND}` };
 }
 
 /** The plural forms of « n nuits » for a locale. */
 export function nightsMessages(locale: string): StateMessages['nights'] {
-  return NIGHTS[stateLocale(locale)];
+  return NIGHTS[copyLocale(locale)];
 }
 
-/**
- * The copy of scope values and widgets for a locale, matched on its primary
- * subtag; French — Hlou's first locale — for any other, as the chrome.
- */
+/** The copy of scope values and widgets for a locale (`copyLocale`), as the chrome. */
 export function stateMessages(locale: string): StateMessages {
-  const code = stateLocale(locale);
+  const code = copyLocale(locale);
   return { nights: NIGHTS[code], ...STATE_MESSAGES[code] };
 }
 

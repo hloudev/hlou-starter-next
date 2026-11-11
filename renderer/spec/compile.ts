@@ -88,7 +88,18 @@ export type SiteSpecCompileResult =
 /* -------------------------------------------------------------------------- */
 
 /** A copy of Hlou's RTL languages. */
-export const SPEC_RTL_LANGUAGES = ['ar', 'he', 'fa', 'ur', 'ps', 'sd', 'yi'] as const;
+export const SPEC_RTL_LANGUAGES = [
+  'ar',
+  'ckb',
+  'dv',
+  'fa',
+  'he',
+  'ps',
+  'sd',
+  'ug',
+  'ur',
+  'yi',
+] as const;
 
 /** A copy of Hlou's form input types: what a form asks for. */
 export const SPEC_FORM_INPUT_FIELD_TYPES = [
