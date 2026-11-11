@@ -18,6 +18,17 @@
     "icon": {
       "type": ["string", "null"]
     },
+    "tone": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": ["lime", "sand", "violet", "pink", "peach", "mauve"]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "localized": {
       "type": "boolean"
     },

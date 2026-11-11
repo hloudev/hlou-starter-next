@@ -76,6 +76,8 @@ export const SPEC_FIELD_TYPES = [
 export const SPEC_RECORD_STATUSES = ['draft', 'published', 'archived'] as const;
 export const SPEC_RECORD_ENVIRONMENTS = ['production', 'preview'] as const;
 export const SPEC_COLLECTION_DELIVERIES = ['static', 'live'] as const;
+/** A collection's colour, the brand's six accents (Collections' `collection_tone`). */
+export const SPEC_COLLECTION_TONES = ['lime', 'sand', 'violet', 'pink', 'peach', 'mauve'] as const;
 export const SPEC_RELATION_CARDINALITIES = ['one', 'many'] as const;
 export const SPEC_SOCIAL_PLATFORMS = [
   'x',
@@ -677,6 +679,8 @@ export const siteSpecCollectionSchema = z
     name: z.string().min(1),
     description: z.string().nullable().optional(),
     icon: z.string().nullable().optional(),
+    /** Its colour in the editors and the site area; absent → one derived from its id. */
+    tone: z.enum(SPEC_COLLECTION_TONES).nullable().optional(),
     /** Absent = `false`. */
     localized: z.boolean().optional(),
     /** Absent = `false`. */
