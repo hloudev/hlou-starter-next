@@ -149,6 +149,51 @@ export type SiteThemeScheme = z.infer<typeof siteThemeSchemeSchema>;
 export const siteColorSchemeSchema = z.enum(['light', 'dark']);
 export type SiteColorScheme = z.infer<typeof siteColorSchemeSchema>;
 
+/**
+ * Which palettes a site offers its visitors (decision 334): `light` or `dark`
+ * only — the site is always drawn in that one, on every surface, and its
+ * theme-toggle block hides — or `both`, when it follows the visitor's system
+ * and the toggle. A project's `settings.site.colorMode`.
+ */
+export const SITE_COLOR_MODES = ['light', 'dark', 'both'] as const;
+export const siteColorModeSchema = z.enum(SITE_COLOR_MODES);
+export type SiteColorMode = z.infer<typeof siteColorModeSchema>;
+
+/** What a site that never chose reads as: light, as every build was pinned before. */
+export const DEFAULT_SITE_COLOR_MODE: SiteColorMode = 'light';
+
+/** A site's colour mode, the default when its settings carry none. */
+export function siteColorMode(
+  settings: { colorMode?: SiteColorMode | null } | null | undefined
+): SiteColorMode {
+  return settings?.colorMode ?? DEFAULT_SITE_COLOR_MODE;
+}
+
+/** The one palette a mode allows, or `null` when the site offers both. */
+export function lockedSiteScheme(mode: SiteColorMode): SiteColorScheme | null {
+  return mode === 'both' ? null : mode;
+}
+
+/**
+ * The palette a surface shows when it would like `wanted` (a toolbar's
+ * switch): the mode's own when it allows only one, else `wanted`.
+ */
+export function shownSiteScheme(mode: SiteColorMode, wanted: SiteColorScheme): SiteColorScheme {
+  return lockedSiteScheme(mode) ?? wanted;
+}
+
+/**
+ * The palette a render pins: the site's only one, else the one the
+ * snapshot was drawn or frozen in (a canvas's switch); `undefined` follows
+ * the visitor's system.
+ */
+export function pinnedSiteScheme(snapshot: {
+  settings?: { colorMode?: SiteColorMode | null } | null;
+  colorScheme?: SiteColorScheme | null;
+}): SiteColorScheme | undefined {
+  return lockedSiteScheme(siteColorMode(snapshot.settings)) ?? snapshot.colorScheme ?? undefined;
+}
+
 export const siteThemeFontSourceSchema = z.enum(['google', 'custom']);
 export type SiteThemeFontSource = z.infer<typeof siteThemeFontSourceSchema>;
 
@@ -886,6 +931,8 @@ export const siteSettingsSchema = z.object({
   indexable: z.boolean().optional(),
   analytics: z.object({ plausibleDomain: z.string().optional() }).optional(),
   attribution: siteAttributionSchema.optional(),
+  /** Light only, dark only, or both (decision 334); absent → `DEFAULT_SITE_COLOR_MODE`. */
+  colorMode: siteColorModeSchema.optional(),
 });
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;
 
@@ -914,8 +961,10 @@ export const siteSnapshotSchema = z.object({
   records: z.record(z.string(), z.array(recordDocSchema)),
   forms: z.array(formDocSchema),
   settings: siteSettingsSchema.default({}),
-  /** The palette this build is pinned to — the Design / Preview toolbar's scheme at
-   *  the moment it was frozen. Absent = follow the visitor's system. */
+  /** The palette this build is pinned to: the site's only one when its
+   *  `settings.colorMode` allows one (decision 334), a canvas's switch on a
+   *  draft. Absent = follow the visitor's system. Read it through
+   *  `pinnedSiteScheme`, which lets the mode win over a stale pin. */
   colorScheme: siteColorSchemeSchema.optional(),
   /** The URL paths of the legacy pages this build lays beside Hlou's (decision
    *  187: `/cours/`, `/about.html`). Written by the builder, never stored in a

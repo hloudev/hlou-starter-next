@@ -42,6 +42,9 @@ export type SiteRenderContext = {
   /** Forces one of the theme's two palettes (the Design canvas's toolbar
    *  switch). Absent — every published render — follows the visitor. */
   colorScheme?: 'light' | 'dark';
+  /** The site allows one palette only (decision 334): its theme-toggle block
+   *  hides outside the canvas. */
+  schemeLocked?: boolean;
   /** Client components render as island markers (`render/island.tsx`) for a
    *  page hydrated island by island — the kernel build method. */
   islands?: boolean;
@@ -154,6 +157,7 @@ export function readRenderContext(puck: unknown): SiteRenderContext {
     ...(raw.colorScheme === 'light' || raw.colorScheme === 'dark'
       ? { colorScheme: raw.colorScheme }
       : {}),
+    ...(raw.schemeLocked === true ? { schemeLocked: true } : {}),
     ...(raw.islands === true ? { islands: true } : {}),
     ...(typeof raw.recordsEndpoint === 'string' && raw.recordsEndpoint
       ? { recordsEndpoint: raw.recordsEndpoint }

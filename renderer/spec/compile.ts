@@ -303,6 +303,7 @@ export function compileSiteSpec(
       titleTemplate: site.project.site?.titleTemplate ?? SPEC_DEFAULT_TITLE_TEMPLATE,
       ...(site.project.site?.themeColor ? { themeColor: site.project.site.themeColor } : {}),
       social: { ...site.project.site?.social },
+      ...(site.project.site?.colorMode ? { colorMode: site.project.site.colorMode } : {}),
       indexable: site.project.indexable ?? true,
       attribution: resolveAttribution(site.project.attribution),
     },

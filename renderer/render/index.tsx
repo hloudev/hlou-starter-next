@@ -18,7 +18,13 @@ import {
   SITE_MEDIA_METADATA_KEY,
   THEME_METADATA_KEY,
 } from '../config';
-import { recordsEndpointFromFormEndpoint, themeMotion } from '../contracts';
+import {
+  lockedSiteScheme,
+  pinnedSiteScheme,
+  recordsEndpointFromFormEndpoint,
+  siteColorMode,
+  themeMotion,
+} from '../contracts';
 import { renderDoc } from '../doc/render';
 import { ROOT_SLOT } from '../doc/schema';
 import { childrenOf, slotsOf, subtreeIds } from '../doc/tree';
@@ -167,6 +173,7 @@ export function SiteRender({
   );
 
   const records = recordsEndpoint ?? recordsEndpointFromFormEndpoint(formEndpoint);
+  const scheme = pinnedSiteScheme(snapshot);
   const context: SiteRenderContext = {
     locale: resolved.locale,
     dir: resolved.dir,
@@ -179,9 +186,11 @@ export function SiteRender({
     ...(islands ? { islands } : {}),
     ...(previewOverlays && mode === 'canvas' ? { previewOverlays } : {}),
     leadBlocks: leadBlockIds(resolved.doc),
-    /* The palette the version was frozen in pins the scope — every surface
-       that renders a build shows it as built, whatever the viewer's system. */
-    ...(snapshot.colorScheme ? { colorScheme: snapshot.colorScheme } : {}),
+    /* A light- or dark-only site pins its one palette everywhere (decision
+       334); otherwise the palette a version was frozen in, or a canvas's
+       switch, pins the scope — whatever the viewer's system. */
+    ...(scheme ? { colorScheme: scheme } : {}),
+    ...(lockedSiteScheme(siteColorMode(snapshot.settings)) ? { schemeLocked: true } : {}),
   };
 
   /* The badge shows in the preview and on the published site, never in the

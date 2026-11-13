@@ -37,10 +37,15 @@ const ICON_BUTTON =
 /**
  * Server-safe shell, like the form block: resolves the label, the classes and
  * the render mode, then hands `ThemeToggleClient` (through its `Island`) plain data.
+ *
+ * On a site that allows one palette (decision 334) there is nothing to switch:
+ * the block renders nothing, except on the canvas, where it stays — faded —
+ * so it can still be selected and removed.
  */
 export function ThemeToggleBlock(props: BlockProps<ThemeToggleProps>): ReactElement {
   /* A primitive on its own row breathes less than a composed section. */
   const { root, context, el } = blockParts(props, 'themeToggle', '[--site-pad-y:18px]');
+  if (context.schemeLocked && context.mode !== 'canvas') return <></>;
   const label = literal(props.label, themeToggleDefaults.label as string);
   const variant = BUTTON_VARIANT_CLASSES[props.variant] ?? BUTTON_VARIANT_CLASSES.ghost;
   /* The icon padding replaces the button's own, rather than racing it. */
@@ -54,7 +59,8 @@ export function ThemeToggleBlock(props: BlockProps<ThemeToggleProps>): ReactElem
       <div
         className={cx(
           'mx-auto flex w-full max-w-site-content in-[.hl-slot]:max-w-none',
-          ALIGN[props.align]
+          ALIGN[props.align],
+          context.schemeLocked ? 'opacity-40' : ''
         )}
       >
         <Island

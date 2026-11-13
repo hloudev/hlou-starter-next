@@ -183,6 +183,9 @@ export const SITE_SCHEME_STORAGE_KEY = 'hl-site-scheme';
  * An inline `<head>` script for a published page: re-applies a visitor's
  * remembered choice before first paint, so a reload in the non-system scheme
  * doesn't flash. Guarded — storage can throw in a private window, and a bad
- * value is ignored rather than trusted into the attribute.
+ * value is ignored rather than trusted into the attribute. A page whose
+ * `<html>` already carries the attribute is pinned (a light- or dark-only
+ * site, decision 334) and keeps it: a choice remembered while the site
+ * offered both never overrides it.
  */
-export const SITE_SCHEME_SCRIPT = `try{var s=localStorage.getItem('${SITE_SCHEME_STORAGE_KEY}');if(s==='light'||s==='dark')document.documentElement.setAttribute('${SITE_SCHEME_ATTRIBUTE}',s)}catch(e){}`;
+export const SITE_SCHEME_SCRIPT = `try{var d=document.documentElement,s=localStorage.getItem('${SITE_SCHEME_STORAGE_KEY}');if((s==='light'||s==='dark')&&!d.hasAttribute('${SITE_SCHEME_ATTRIBUTE}'))d.setAttribute('${SITE_SCHEME_ATTRIBUTE}',s)}catch(e){}`;

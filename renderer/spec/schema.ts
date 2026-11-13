@@ -17,6 +17,7 @@ import {
   SITE_ATTRIBUTION_SHAPES,
   SITE_ATTRIBUTION_SIZES,
   SITE_ATTRIBUTION_TONES,
+  SITE_COLOR_MODES,
   siteThemeDensitySchema,
   siteThemeRadiusSchema,
   siteThemeTypographySchema,
@@ -280,6 +281,8 @@ export const specSiteSettingsSchema = z
       .nullable()
       .optional(),
     social: specSocialSchema.optional(),
+    /** Light only, dark only, or both (decision 334); absent → light. */
+    colorMode: z.enum(SITE_COLOR_MODES).nullable().optional(),
   })
   .strict();
 

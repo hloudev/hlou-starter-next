@@ -82,6 +82,17 @@
                 }
               },
               "additionalProperties": false
+            },
+            "colorMode": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": ["light", "dark", "both"]
+                },
+                {
+                  "type": "null"
+                }
+              ]
             }
           },
           "additionalProperties": false

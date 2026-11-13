@@ -6,6 +6,7 @@ import type { PageDocV2, SiteColorScheme, SiteSnapshot } from '../contracts';
 import type { SiteEnv } from './env';
 import type { HeadTag } from './head';
 import type { ResolvedRoute } from './routes';
+import { pinnedSiteScheme } from '../contracts';
 import { resolveSiteUrl } from './env';
 import { organizationJsonLd, serializeJsonLd, webPageJsonLd, webSiteJsonLd } from './jsonld';
 import {
@@ -279,9 +280,13 @@ export function rootStubMetadata(snapshot: SiteSnapshot, env: SiteEnv): SiteMeta
  * own accent; a colour the agency chose is the colour, in both schemes.
  */
 export function siteViewport(snapshot: SiteSnapshot): SiteViewport {
+  /* A site pinned to one palette shows that palette's colour, whatever the system. */
+  const pinned = pinnedSiteScheme(snapshot);
   const themeColor = snapshot.settings.themeColor
     ? [{ color: snapshot.settings.themeColor }]
-    : [
+    : pinned
+      ? [{ color: themeColorValue(snapshot, pinned) }]
+      : [
         { media: '(prefers-color-scheme: light)', color: themeColorValue(snapshot, 'light') },
         { media: '(prefers-color-scheme: dark)', color: themeColorValue(snapshot, 'dark') },
       ];
@@ -290,12 +295,13 @@ export function siteViewport(snapshot: SiteSnapshot): SiteViewport {
 
 /** `<html lang dir class style>` for a locale: the theme lands on `:root`. */
 export function siteHtmlAttrs(snapshot: SiteSnapshot, locale: string): SiteHtmlAttrs {
+  const scheme = pinnedSiteScheme(snapshot);
   return {
     lang: locale,
     dir: snapshot.locales.find((info) => info.code === locale)?.dir === 'rtl' ? 'rtl' : 'ltr',
     className: SITE_ROOT_CLASS,
     style: themeToCss(snapshot.theme, locale),
-    ...(snapshot.colorScheme ? { scheme: snapshot.colorScheme } : {}),
+    ...(scheme ? { scheme } : {}),
   };
 }
 
