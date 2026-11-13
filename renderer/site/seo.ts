@@ -6,7 +6,6 @@ import type { PageDocV2, SiteColorScheme, SiteSnapshot } from '../contracts';
 import type { SiteEnv } from './env';
 import type { HeadTag } from './head';
 import type { ResolvedRoute } from './routes';
-import { pinnedSiteScheme } from '../contracts';
 import { resolveSiteUrl } from './env';
 import { organizationJsonLd, serializeJsonLd, webPageJsonLd, webSiteJsonLd } from './jsonld';
 import {
@@ -24,6 +23,7 @@ import {
 } from './routes';
 import { xHandle } from './social';
 
+import { pinnedSiteScheme } from '../contracts';
 import { SITE_ROOT_CLASS, themeToCss } from '../theme';
 import { SITE_SCHEME_SCRIPT } from '../theme/scheme';
 
@@ -287,9 +287,9 @@ export function siteViewport(snapshot: SiteSnapshot): SiteViewport {
     : pinned
       ? [{ color: themeColorValue(snapshot, pinned) }]
       : [
-        { media: '(prefers-color-scheme: light)', color: themeColorValue(snapshot, 'light') },
-        { media: '(prefers-color-scheme: dark)', color: themeColorValue(snapshot, 'dark') },
-      ];
+          { media: '(prefers-color-scheme: light)', color: themeColorValue(snapshot, 'light') },
+          { media: '(prefers-color-scheme: dark)', color: themeColorValue(snapshot, 'dark') },
+        ];
   return { themeColor, width: 'device-width', initialScale: 1 };
 }
 
