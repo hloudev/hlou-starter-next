@@ -7,7 +7,7 @@
  * manifest, redirects, the 404, the social card — framework-free, so every
  * build method adapts the same functions instead of re-implementing them.
  */
-export { absoluteUrl, createSiteEnv, resolveSiteUrl } from './env';
+export { absoluteUrl, createSiteEnv, resolveSiteUrl, siteIsIndexable } from './env';
 export type { SiteEnv, SiteEnvInput, SiteEnvironment } from './env';
 export { escapeHtml, headTagsToHtml, htmlAttrsToHtml } from './head';
 export type { HeadTag } from './head';
@@ -53,7 +53,7 @@ export type { PageSeo, SiteHtmlAttrs, SiteMetadata, SiteViewport } from './seo';
 export { organizationJsonLd, serializeJsonLd, webPageJsonLd, webSiteJsonLd } from './jsonld';
 export type { JsonLd } from './jsonld';
 export { formEndpointBase, HONEYPOT_FIELD } from './forms';
-export { robotsData, robotsTxt, sitemapEntries, sitemapXml, webManifest } from './files';
+export { llmsTxt, robotsData, robotsTxt, sitemapEntries, sitemapXml, webManifest } from './files';
 export type { RobotsData, SitemapEntry, WebManifest } from './files';
 export { redirectStubs } from './redirects';
 export type { RedirectStub } from './redirects';

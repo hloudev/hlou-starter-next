@@ -306,7 +306,7 @@ export const specAttributionSchema = z
 export const specProjectSchema = z
   .object({
     sourceLocale: specLocaleSchema,
-    /** Absent = `true`. */
+    /** Absent = automatic: indexed once the site has its own domain (decision 335). */
     indexable: z.boolean().optional(),
     site: specSiteSettingsSchema.optional(),
     attribution: specAttributionSchema.optional(),

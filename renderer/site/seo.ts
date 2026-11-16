@@ -152,7 +152,7 @@ export function siteRobots(
   env: SiteEnv,
   page?: Pick<PageDocV2, 'indexable'>
 ): { index: boolean; follow: boolean } {
-  if (env.environment === 'preview') return { index: false, follow: false };
+  if (env.environment === 'preview' || !env.indexable) return { index: false, follow: false };
   if (snapshot.settings.indexable === false || page?.indexable === false) {
     return { index: false, follow: true };
   }

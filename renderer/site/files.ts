@@ -4,7 +4,7 @@
 
 import type { SiteSnapshot } from '../contracts';
 import type { SiteEnv } from './env';
-import { absoluteUrl } from './env';
+import { absoluteUrl, siteIsIndexable } from './env';
 import { escapeHtml } from './head';
 import {
   getSiteDescription,
@@ -16,6 +16,7 @@ import {
   themeColor,
   themeColorValue,
 } from './routes';
+import { pageSeo } from './seo';
 
 /* -------------------------------------------------------------------------- */
 /*                                    TYPES                                   */
@@ -107,11 +108,11 @@ export function sitemapXml(entries: readonly SitemapEntry[]): string {
 /* -------------------------------------------------------------------------- */
 
 /**
- * The site's crawl rule: nothing on a preview build, nothing
- * when the site is set not to be indexed, everything otherwise.
+ * The site's crawl rule: nothing on a preview build, on a build the platform
+ * closed, or when the site is set not to be indexed; everything otherwise.
  */
 export function robotsData(env: SiteEnv, snapshot: SiteSnapshot): RobotsData {
-  const closed = env.environment === 'preview' || snapshot.settings.indexable === false;
+  const closed = !siteIsIndexable(env, snapshot.settings);
   return {
     rules: closed ? { userAgent: '*', disallow: '/' } : { userAgent: '*', allow: '/' },
     sitemap: `${env.siteUrl}/sitemap.xml`,
@@ -123,6 +124,49 @@ export function robotsTxt(data: RobotsData): string {
   const rule =
     'allow' in data.rules ? `Allow: ${data.rules.allow}` : `Disallow: ${data.rules.disallow}`;
   return `User-Agent: ${data.rules.userAgent}\n${rule}\n\nSitemap: ${data.sitemap}\n`;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                  LLMS.TXT                                  */
+/* -------------------------------------------------------------------------- */
+
+/** One line of Markdown: no line breaks, no brackets that would end a link early. */
+function inline(text: string): string {
+  return text.replace(/\s+/g, ' ').replace(/[[\]]/g, '').trim();
+}
+
+/**
+ * `llms.txt` (llmstxt.org): the site's name and description, then every page
+ * the sitemap lists — title, absolute URL, description — one section per
+ * locale, the source locale first. `null` when the site is closed to search
+ * engines (decision 335): what crawlers may not read, the file does not
+ * advertise.
+ */
+export function llmsTxt(snapshot: SiteSnapshot, env: SiteEnv): string | null {
+  if (!siteIsIndexable(env, snapshot.settings)) return null;
+  const source = getSourceLocale(snapshot).code;
+  const byLocale = new Map<string, string[]>();
+  for (const route of siteRoutes(snapshot)) {
+    if (route.page.indexable === false) continue;
+    const { title, description } = pageSeo(snapshot, route.locale, route);
+    const url = absoluteUrl(env, localePath(route.locale, route.path));
+    const line = `- [${inline(title) || url}](${url})${description ? `: ${inline(description)}` : ''}`;
+    const lines = byLocale.get(route.locale) ?? [];
+    lines.push(line);
+    byLocale.set(route.locale, lines);
+  }
+
+  const description = getSiteDescription(snapshot, source);
+  const parts = [`# ${inline(getSiteName(snapshot, source))}`];
+  if (description) parts.push(`> ${inline(description)}`);
+  const locales = [...byLocale.keys()].sort((a, b) =>
+    a === source ? -1 : b === source ? 1 : a.localeCompare(b)
+  );
+  for (const locale of locales) {
+    const heading = locales.length > 1 ? `## Pages (${locale})` : '## Pages';
+    parts.push(`${heading}\n\n${(byLocale.get(locale) ?? []).join('\n')}`);
+  }
+  return `${parts.join('\n\n')}\n`;
 }
 
 /* -------------------------------------------------------------------------- */

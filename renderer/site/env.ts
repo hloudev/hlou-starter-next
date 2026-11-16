@@ -23,11 +23,28 @@ export type SiteEnv = {
   buildId?: string;
   /** A preview build is never indexed, whatever the settings say. */
   environment: SiteEnvironment;
+  /**
+   * The platform's verdict for this build (decision 335): `false` closes the
+   * site to search engines whatever its settings say — a dev or local
+   * builder, or a site whose automatic default is off. Unset (a starter run
+   * alone) leaves it to the site's own `indexable`.
+   */
+  indexable: boolean;
 };
 
 export type SiteEnvironment = 'production' | 'preview';
 
 export type SiteEnvInput = { [K in keyof SiteEnv]?: string | undefined };
+
+/**
+ * Whether search engines may index this site: never a preview, never when
+ * the platform closed the build (`env.indexable`), never when the site or
+ * page says no. `robots.txt`, `<meta name=robots>` and `llms.txt` all ask
+ * this one question.
+ */
+export function siteIsIndexable(env: SiteEnv, settings: { indexable?: boolean }): boolean {
+  return env.environment !== 'preview' && env.indexable && settings.indexable !== false;
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                  FUNCTIONS                                 */
@@ -47,6 +64,7 @@ export function createSiteEnv(input: SiteEnvInput): SiteEnv {
     plausibleDomain: input.plausibleDomain ?? '',
     cfBeaconToken: input.cfBeaconToken ?? '',
     environment: input.environment === 'preview' ? 'preview' : 'production',
+    indexable: input.indexable !== 'false',
     ...(input.buildId ? { buildId: input.buildId } : {}),
   };
 }

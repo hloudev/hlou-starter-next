@@ -304,7 +304,8 @@ export function compileSiteSpec(
       ...(site.project.site?.themeColor ? { themeColor: site.project.site.themeColor } : {}),
       social: { ...site.project.site?.social },
       ...(site.project.site?.colorMode ? { colorMode: site.project.site.colorMode } : {}),
-      indexable: site.project.indexable ?? true,
+      /* Absent is automatic (decision 335): the builder decides from the domain. */
+      ...(site.project.indexable !== undefined ? { indexable: site.project.indexable } : {}),
       attribution: resolveAttribution(site.project.attribution),
     },
     generatedAt: options.generatedAt ?? EPOCH,
