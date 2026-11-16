@@ -24,7 +24,7 @@ export type SiteEnv = {
   /** A preview build is never indexed, whatever the settings say. */
   environment: SiteEnvironment;
   /**
-   * The platform's verdict for this build (decision 335): `false` closes the
+   * The platform's verdict for this build: `false` closes the
    * site to search engines whatever its settings say — a dev or local
    * builder, or a site whose automatic default is off. Unset (a starter run
    * alone) leaves it to the site's own `indexable`.

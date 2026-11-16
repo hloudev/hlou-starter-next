@@ -139,7 +139,7 @@ function inline(text: string): string {
  * `llms.txt` (llmstxt.org): the site's name and description, then every page
  * the sitemap lists — title, absolute URL, description — one section per
  * locale, the source locale first. `null` when the site is closed to search
- * engines (decision 335): what crawlers may not read, the file does not
+ * engines: what crawlers may not read, the file does not
  * advertise.
  */
 export function llmsTxt(snapshot: SiteSnapshot, env: SiteEnv): string | null {
