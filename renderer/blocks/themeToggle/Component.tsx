@@ -38,7 +38,7 @@ const ICON_BUTTON =
  * Server-safe shell, like the form block: resolves the label, the classes and
  * the render mode, then hands `ThemeToggleClient` (through its `Island`) plain data.
  *
- * On a site that allows one palette (decision 334) there is nothing to switch:
+ * On a site that allows one palette there is nothing to switch:
  * the block renders nothing, except on the canvas, where it stays — faded —
  * so it can still be selected and removed.
  */

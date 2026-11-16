@@ -350,7 +350,7 @@ const STATE_MESSAGES: Record<'fr' | 'en' | 'ar', Omit<StateMessages, 'nights'>> 
 /* -------------------------------------------------------------------------- */
 
 /**
- * Which of Hlou's three copies a site locale reads (decision 332): its primary
+ * Which of Hlou's three copies a site locale reads: its primary
  * subtag when Hlou ships it (`fr-CA` → `fr`, `ar-MA` → `ar`), else English —
  * a Greek, Hebrew or Armenian page is better served by English than by French.
  */

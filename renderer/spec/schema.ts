@@ -281,7 +281,7 @@ export const specSiteSettingsSchema = z
       .nullable()
       .optional(),
     social: specSocialSchema.optional(),
-    /** Light only, dark only, or both (decision 334); absent → light. */
+    /** Light only, dark only, or both; absent → light. */
     colorMode: z.enum(SITE_COLOR_MODES).nullable().optional(),
   })
   .strict();

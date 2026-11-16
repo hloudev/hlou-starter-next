@@ -150,7 +150,7 @@ export const siteColorSchemeSchema = z.enum(['light', 'dark']);
 export type SiteColorScheme = z.infer<typeof siteColorSchemeSchema>;
 
 /**
- * Which palettes a site offers its visitors (decision 334): `light` or `dark`
+ * Which palettes a site offers its visitors: `light` or `dark`
  * only — the site is always drawn in that one, on every surface, and its
  * theme-toggle block hides — or `both`, when it follows the visitor's system
  * and the toggle. A project's `settings.site.colorMode`.
@@ -931,7 +931,7 @@ export const siteSettingsSchema = z.object({
   indexable: z.boolean().optional(),
   analytics: z.object({ plausibleDomain: z.string().optional() }).optional(),
   attribution: siteAttributionSchema.optional(),
-  /** Light only, dark only, or both (decision 334); absent → `DEFAULT_SITE_COLOR_MODE`. */
+  /** Light only, dark only, or both; absent → `DEFAULT_SITE_COLOR_MODE`. */
   colorMode: siteColorModeSchema.optional(),
 });
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;
@@ -962,7 +962,7 @@ export const siteSnapshotSchema = z.object({
   forms: z.array(formDocSchema),
   settings: siteSettingsSchema.default({}),
   /** The palette this build is pinned to: the site's only one when its
-   *  `settings.colorMode` allows one (decision 334), a canvas's switch on a
+   *  `settings.colorMode` allows one, a canvas's switch on a
    *  draft. Absent = follow the visitor's system. Read it through
    *  `pinnedSiteScheme`, which lets the mode win over a stale pin. */
   colorScheme: siteColorSchemeSchema.optional(),

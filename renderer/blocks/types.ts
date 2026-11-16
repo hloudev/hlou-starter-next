@@ -42,7 +42,7 @@ export type SiteRenderContext = {
   /** Forces one of the theme's two palettes (the Design canvas's toolbar
    *  switch). Absent — every published render — follows the visitor. */
   colorScheme?: 'light' | 'dark';
-  /** The site allows one palette only (decision 334): its theme-toggle block
+  /** The site allows one palette only: its theme-toggle block
    *  hides outside the canvas. */
   schemeLocked?: boolean;
   /** Client components render as island markers (`render/island.tsx`) for a
