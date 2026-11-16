@@ -18,6 +18,9 @@ export const siteEnv = createSiteEnv({
   buildId: process.env.NEXT_PUBLIC_HLOU_BUILD_ID,
   /* `preview` builds are never indexed; unset (a starter run alone) is production. */
   environment: process.env.NEXT_PUBLIC_HLOU_ENVIRONMENT,
+  /* The platform's verdict: `false` closes the site to search engines whatever
+     its settings say. Unset (a starter run alone) leaves it to the settings. */
+  indexable: process.env.NEXT_PUBLIC_HLOU_INDEXABLE,
 });
 
 /** Canonical site origin (no trailing slash). */
