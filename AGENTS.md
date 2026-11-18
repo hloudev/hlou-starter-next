@@ -204,7 +204,8 @@ shows a report before anything is applied:
 - **The spec** (`hlou/site/**`) is merged with what changed in Hlou since the
   export, field by field. Changed on one side only: that side wins. Changed on
   both: **Hlou's value wins unless you choose yours in the report**, item by
-  item.
+  item. An optional field the spec leaves out keeps Hlou's value; write `null`
+  (where the format allows it) or the value you want to change it.
 - **Applied**: changed and new files in the editable code zones, kept as overlays.
 - **Refused**, file by file: changes to `site/**`, `hlou/site.lock.json`,
   `hlou/export.json`, `package.json`, the lockfile, `next.config.*`; deleting a

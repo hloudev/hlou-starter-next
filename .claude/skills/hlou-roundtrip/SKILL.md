@@ -23,6 +23,12 @@ happened in Hlou since the export, against the version the export came from
   you choose yours in the report**, item by item (« Garder la version locale »).
 - A key the lock (`hlou/site.lock.json`) does not know is a **new** row. Never
   edit the lock: a renamed key comes back as a new row.
+- An optional field you **leave out** is not set by the folder: Hlou keeps its
+  value (a theme's name or tokens, a page's status, a collection's
+  description…), it never becomes a blank. To clear one, write `null` where the
+  format allows it, or the value you want. A row is removed by removing it
+  (a page file, a section, a slot, a record): that is a deletion, listed in the
+  report.
 - Changed content lands as a draft in Hlou, like any edit.
 - A block, prop, locale or media path the project cannot honour is **refused**
   in the report, never dropped silently. `pnpm hlou:compile` catches most of

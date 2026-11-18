@@ -41,7 +41,14 @@ public/media/<dir>/<file>      the bytes of every medium, named /media/<dir>/<fi
 
 Every object is strict: a key the format does not know is an error
 (`unknown_key`), never silently dropped. Optional fields have documented
-defaults (a page's `status` is `draft`, a slot is `localizable`).
+defaults (a page's `status` is `draft`, a slot is `localizable`): `pnpm
+hlou:compile` uses them, and Hlou does for a row it creates. For a row Hlou
+already has, an optional field you **leave out** keeps Hlou's value (a page's
+`status`, a theme token, a collection's `description`…), never a blank. To
+change it, write it: `null` clears where the format allows it (a section's
+`pattern`, a collection's `description`, `icon` and `tone`, a field's
+`default`, a record's `slug` and `publishedAt`), anything else takes the value
+you want (`false`, `"draft"`…). A theme's `fonts` are always the spec's own.
 
 ## Keys
 
@@ -211,6 +218,7 @@ submissions). Only `published` records reach the site.
 | add a locale     | `{ "code": "de" }` in `site.json` `locales`, then `content/de.json` with a value for every localisable slot                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | add a medium     | the file at `public/media/<dir>/<file>` (a new name: never overwrite an existing file, Media keeps versions in Hlou), then `/media/<dir>/<file>` wherever it is used                                                                                                                                                                                                                                                                                                                                                                                       |
 | add a collection | `collections/<key>.json` (fields, records), then `{ "$collection": "<key>" }` in a list block or a `dynamic` slot                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| clear a value    | write it out: `null` where the format allows it, else the value you want. Deleting the key does nothing in Hlou: an absent optional field keeps Hlou's value                                                                                                                                                                                                                                                                                                                                                                                               |
 | rename a key     | avoid it. Hlou recognises two renames only: a page whose slug changed while its `path` stayed, and a section a `document` node still draws. Any other renamed key — a slot, a component, a collection, a field, a form, a record — is a deletion plus an addition: Hlou deletes the old row with its content (approval state, versions) and creates the new one, its values as drafts; the import report lists both. When you must, rename it everywhere it is used (`$slot`, the `<pageSlug>/<slotKey>` content keys in every locale), in the same change |
 
 ## Errors `pnpm hlou:compile` prints, and their fix
