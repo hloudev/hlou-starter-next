@@ -62,6 +62,7 @@ theme are written in the **site spec** (`hlou/site/`, skill `hlou-site-spec`).
 | the markup of one block, where no token can do it | a **`codeVariant`** branch in that block's `Component.tsx` (`.claude/skills/hlou-code-variant`).                    |
 | a section no Hlou block draws                     | a **`custom` block** node in the page's document, drawn by a `codeVariant` of `renderer/blocks/custom/`.            |
 | new logic: an API call, a widget, an extra page   | **the user zone**: `custom/**`, and pages in `app/(custom)/[locale]/…`.                                             |
+| CSS no utility can say: a `@font-face`, a class   | **`custom/styles.css`**, or a `custom/*.css` file it `@import`s. Never `app/globals.css`.                           |
 | people, domains, publishing, form delivery        | **Hlou** only. Say so plainly.                                                                                      |
 
 When a request mixes several of these, do each part where it belongs and **tell
@@ -186,6 +187,8 @@ back. Without `hlou/site/site.json` there is no spec: `pnpm dev` then serves
   `bg-site-paper`, `text-site-ink`, `bg-site-accent`, `text-site-xl`,
   `font-heading`, `rounded-site`, `max-w-site-content`. Breakpoints `md` 768,
   `lg` 1180, `xl` 1440 (`.claude/skills/hlou-blocks`).
+- CSS of the site's own goes in `custom/styles.css` (imported by
+  `app/globals.css`, which is Hlou's) or in `custom/*.css` files it imports.
 - Read records through `site/content.ts` (`records`, `pick`, `getBySlug`);
   never copy their text into code (`.claude/skills/hlou-content-contract`).
   The records themselves are written in `hlou/site/collections/<key>.json`.

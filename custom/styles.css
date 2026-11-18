@@ -1,0 +1,10 @@
+/*
+ * This site's own CSS. `app/globals.css` imports this file after Tailwind and
+ * the renderer's styles, so its rules win over the block defaults. Write rules
+ * here, or import other files of `custom/` from here:
+ *
+ *   @import "./brand.css";
+ *
+ * Hlou keeps this file on every build, Design shows it on the canvas, and an
+ * import brings it back. Leave `app/globals.css` alone: it is Hlou's.
+ */

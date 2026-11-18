@@ -76,6 +76,17 @@ Hlou's canvas, in Preview and in a build alike, with no script:
 Style it with `aria-[current=page]:…`, or `aria-[current]:…` for the section
 too.
 
+## CSS of your own
+
+When utilities and tokens cannot say it (a hand-drawn logo sized by CSS, a
+`@font-face`, a set of `kr-*` classes ported from a prototype), the rules go in
+**`custom/styles.css`**, or in other files of `custom/` that it `@import`s
+(`@import "./brand.css";`). `app/globals.css` imports `custom/styles.css` after
+Tailwind and the block defaults; Hlou builds keep it, Design shows it on the
+canvas, and an import brings it back. Never put CSS in `app/globals.css` (a
+Hlou build uses its own) nor beside a block in `renderer/blocks/` (no build
+loads it).
+
 ## A section no block draws
 
 Do not bend a library block beyond recognition. In the page's document, add a

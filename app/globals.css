@@ -27,6 +27,12 @@
 @source "../site/tw-classes.txt";
 
 /*
+ * The site's own CSS (`custom/styles.css`, yours): after Tailwind and the
+ * block defaults, so its rules win over them.
+ */
+@import "../custom/styles.css";
+
+/*
  * The site tokens the renderer writes on `.hl-site-scope`, mirrored onto
  * `:root` for the chrome outside the scope (Tailwind names them in
  * `renderer/styles/tailwind.css`). The values duplicate

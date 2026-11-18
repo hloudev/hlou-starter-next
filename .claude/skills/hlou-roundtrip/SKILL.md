@@ -67,6 +67,12 @@ conflicts to expect when you know Hlou changed the same thing.
    `.cursor/**`, `.github/copilot-instructions.md`, `.claude/**`. Every export
    regenerates them, so edits there are lost. Put notes for the next developer
    in `custom/README.md`.
+8. **CSS lives in `custom/styles.css`.** A folder started from the starter
+   (no `hlou/export.json`) brings back only the user zone and block code, so
+   `app/globals.css` is Hlou's: an `@import` of a `custom/` file you added
+   there is moved into `custom/styles.css` by the import, and any other edit
+   to it is listed as « not carried ». A `.css` file under `renderer/blocks/`
+   is never loaded by a build: move it to `custom/`.
 
 ## What the report says
 

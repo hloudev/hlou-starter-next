@@ -25,6 +25,7 @@ the starter's own wiring.
 | `app/(redirects)/…`            | the starter                           | Stubs forwarding `/` and unprefixed page paths to the source locale                                                                                               |
 | `components/`, `lib/`, `i18n/` | the starter                           | `MainLayout`, `SiteFrame`, the snapshot reader, the env, forms, locale routing                                                                                    |
 | `custom/**`, `app/(custom)/**` | **you**                               | The user zone for code. Never generated, always kept                                                                                                              |
+| `custom/styles.css`            | the starter, then **you**             | The site's own CSS, imported last by `app/globals.css`; it `@import`s other `custom/*.css`                                                                        |
 
 ## What `pnpm dev` does
 

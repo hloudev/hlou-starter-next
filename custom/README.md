@@ -18,6 +18,31 @@ follow from that, and from the site being a **static export**:
 
 Import from here with the `@/` alias: `@/custom/api/client`.
 
+## The site's CSS — `custom/styles.css`
+
+Style with Tailwind and the site tokens first. For what no utility can say (a
+`@font-face`, an SVG sized by CSS, a set of classes ported from a prototype),
+write the rules in **`custom/styles.css`**. `app/globals.css` imports it after
+Tailwind and the renderer's block defaults, so its rules win over them. Split a
+large stylesheet into other files of `custom/` and import them from there:
+
+```css
+/* custom/styles.css */
+@import "./brand.css";
+
+.brand-logo svg {
+  inline-size: 8rem;
+  block-size: auto;
+}
+```
+
+A Hlou build keeps `custom/styles.css` and every file it imports, Hlou Design
+shows them on the canvas, and an import brings them back. `app/globals.css`
+itself is Hlou's: a build uses its own. On import, an `app/globals.css` that only
+adds `@import`s of `custom/` files has them moved into `custom/styles.css`;
+any other edit to it is listed as not carried. A `.css` file beside a block in
+`renderer/blocks/` is never loaded by a build either: keep CSS in `custom/`.
+
 ## Recipe 1 — a typed API client, used from a `codeVariant`
 
 `custom/config.ts`:

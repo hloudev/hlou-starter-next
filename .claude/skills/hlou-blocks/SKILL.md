@@ -70,3 +70,8 @@ Arabic pages render `dir="rtl"`. Use logical utilities only: `ms-`/`me-`,
 `renderer/styles/site.css` holds the block defaults in the `hl-site` layer,
 below Tailwind's `utilities`: a utility you add always wins. Tailwind scans the
 whole project, `custom/` included.
+
+CSS that no utility can say goes in `custom/styles.css` (or a `custom/*.css`
+file it `@import`s). `app/globals.css` imports it last, unlayered, so its rules
+win over the block defaults and over utilities. Never edit `app/globals.css`:
+a Hlou build uses its own.
