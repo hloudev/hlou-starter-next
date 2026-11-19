@@ -25,6 +25,7 @@ import {
 } from '../contracts';
 import { SITE_SCHEME_KEY } from '../contracts/guards';
 import { docNodeSchema, docPlaceValueSchema, siteComponentKindSchema } from '../doc/schema';
+import { motionPersonalitySchema } from '../motion/personality';
 
 /*
  * The site spec, format 1. Every object is `.strict()`:
@@ -374,6 +375,8 @@ export const specThemeSchema = z
       .strict()
       .optional(),
     schemes: z.array(specSchemeSchema).max(12).optional(),
+    /** The site's motion personality (`themes.tokens.motion`). Absent = calm, the default. */
+    motion: motionPersonalitySchema.strict().optional(),
   })
   .strict();
 

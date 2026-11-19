@@ -393,6 +393,103 @@
             "required": ["key", "name", "roles"],
             "additionalProperties": false
           }
+        },
+        "motion": {
+          "type": "object",
+          "properties": {
+            "feel": {
+              "default": "calm",
+              "description": "The site’s feel: calm, snappy, playful or luxe.",
+              "type": "string",
+              "enum": ["calm", "snappy", "playful", "luxe"]
+            },
+            "durationScale": {
+              "default": 1,
+              "description": "Stretches every inherited duration: 0.5 twice as fast, 2 twice as slow.",
+              "type": "number",
+              "minimum": 0.25,
+              "maximum": 3
+            },
+            "ease": {
+              "description": "Replaces the feel’s easing.",
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "linear",
+                    "easeIn",
+                    "easeOut",
+                    "easeInOut",
+                    "circIn",
+                    "circOut",
+                    "circInOut",
+                    "backIn",
+                    "backOut",
+                    "backInOut",
+                    "anticipate"
+                  ]
+                },
+                {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1,
+                      "description": "x1, 0–1."
+                    },
+                    {
+                      "type": "number",
+                      "minimum": -2,
+                      "maximum": 3,
+                      "description": "y1."
+                    },
+                    {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1,
+                      "description": "x2, 0–1."
+                    },
+                    {
+                      "type": "number",
+                      "minimum": -2,
+                      "maximum": 3,
+                      "description": "y2."
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "description": "A cubic-bezier curve [x1, y1, x2, y2]."
+                }
+              ]
+            },
+            "spring": {
+              "description": "Replaces the feel’s spring.",
+              "type": "object",
+              "properties": {
+                "duration": {
+                  "type": "number",
+                  "minimum": 0.1,
+                  "maximum": 5,
+                  "description": "Seconds."
+                },
+                "bounce": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "description": "0–1."
+                }
+              }
+            },
+            "reducedMotion": {
+              "default": "reduce",
+              "description": "For visitors who ask for reduced motion: reduce (a short fade) or off (no motion).",
+              "type": "string",
+              "enum": ["reduce", "off"]
+            }
+          },
+          "additionalProperties": false
         }
       },
       "required": ["colors", "fonts"],
