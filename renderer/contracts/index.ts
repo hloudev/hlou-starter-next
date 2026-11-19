@@ -1108,9 +1108,11 @@ export function snapshotForEnvironment<T extends Pick<SiteSnapshot, 'records'>>(
 /**
  * `/api/v1/media/{projectId}/file/{assetId}` — the session-gated read the app
  * bakes into a snapshot. A trailing `?version=` is a cache key, not identity,
- * so it plays no part in the match.
+ * so it plays no part in the match. Nor does a leading base path (`/app/api/…`):
+ * the editor draws its frames with one where the app runs under it, and an
+ * older document may hold a literal stored that way.
  */
-const MEDIA_FILE_URL = /^\/api\/v1\/media\/[^/?#]+\/file\/([^/?#]+)/;
+const MEDIA_FILE_URL = /^(?:\/[^/?#]+)?\/api\/v1\/media\/[^/?#]+\/file\/([^/?#]+)/;
 
 /** The asset a session-gated media URL names, or `null` for any other URL. */
 export function mediaFileUrlAssetId(url: string): string | null {
