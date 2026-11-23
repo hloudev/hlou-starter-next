@@ -328,6 +328,8 @@ export function compileSiteSpec(
  */
 class MediaTable {
   private readonly byPath = new Map<string, MediaDoc>();
+  /** The paths the spec itself names (the lock's own come after). */
+  private readonly named = new Set<string>();
 
   constructor(
     private readonly ids: Ids,
@@ -361,6 +363,7 @@ class MediaTable {
         if (value.alt !== undefined && doc.alt[locale] === undefined) doc.alt[locale] = value.alt;
       }
     }
+    for (const path of this.byPath.keys()) this.named.add(path);
     for (const path of Object.keys(spec.lock?.media ?? {}).sort()) {
       if (isSiteSpecMediaPath(path)) this.id(path);
     }
@@ -387,10 +390,18 @@ class MediaTable {
     return this.doc(path).id;
   }
 
+  /**
+   * One doc per medium. The lock may name a medium by two paths — Hlou's own
+   * and the one a folder gave it (`spec_path`) — and only the one the spec
+   * names has its file in the folder: that one is the URL (2026-11-23).
+   */
   docs(): Record<string, MediaDoc> {
     const out: Record<string, MediaDoc> = {};
     for (const path of [...this.byPath.keys()].sort()) {
       const doc = this.byPath.get(path) as MediaDoc;
+      const held = out[doc.id];
+      /* The spec's own path wins over one only the lock gives; otherwise the last, as ever. */
+      if (held && this.named.has(held.url) && !this.named.has(path)) continue;
       out[doc.id] = doc;
     }
     return out;
