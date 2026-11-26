@@ -57,6 +57,7 @@ export function MoneyInput(props: {
   return (
     <div className={BOX_CLASSES} dir="ltr">
       <input
+        suppressHydrationWarning
         id={props.id}
         name={props.name}
         type="text"

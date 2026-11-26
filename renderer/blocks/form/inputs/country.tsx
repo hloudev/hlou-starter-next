@@ -39,6 +39,7 @@ export function CountrySelect(props: {
 }): ReactElement {
   return (
     <select
+      suppressHydrationWarning
       id={props.id}
       name={props.name}
       className={INPUT_CLASSES}

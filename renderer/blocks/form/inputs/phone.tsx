@@ -108,6 +108,7 @@ export function PhoneInput(props: {
       >
         <span aria-hidden="true">{code ? `${flagOf(country)} +${code}` : '+…'}</span>
         <select
+          suppressHydrationWarning
           name={`${props.name}:cc`}
           value={country}
           onChange={(event) => setCountry(event.currentTarget.value)}
@@ -129,6 +130,7 @@ export function PhoneInput(props: {
         </select>
       </span>
       <input
+        suppressHydrationWarning
         id={props.id}
         name={props.name}
         type="tel"

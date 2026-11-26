@@ -281,8 +281,14 @@ export function FormClient(props: FormClientProps): ReactElement {
     }
   }
 
+  /*
+   * `suppressHydrationWarning` on the form and every field: Chromium's autofill
+   * annotates them (`form_signature`, `alternative_form_signature`, …) before
+   * React hydrates, which no extension or app switch turns off.
+   */
   return (
     <form
+      suppressHydrationWarning
       ref={formRef}
       {...props.formAttrs}
       onSubmit={handleSubmit}
@@ -313,7 +319,13 @@ export function FormClient(props: FormClientProps): ReactElement {
         if (field.type === 'boolean') {
           return (
             <label key={field.key} className="flex items-center gap-2 text-site-sm" htmlFor={id}>
-              <input id={id} name={field.key} type="checkbox" disabled={disabled} />
+              <input
+                suppressHydrationWarning
+                id={id}
+                name={field.key}
+                type="checkbox"
+                disabled={disabled}
+              />
               <span>{field.label}</span>
             </label>
           );
@@ -360,6 +372,7 @@ export function FormClient(props: FormClientProps): ReactElement {
             </label>
             {field.type === 'richtext' ? (
               <textarea
+                suppressHydrationWarning
                 id={id}
                 name={field.key}
                 className={TEXTAREA_CLASSES}
@@ -371,6 +384,7 @@ export function FormClient(props: FormClientProps): ReactElement {
               />
             ) : field.type === 'select' ? (
               <select
+                suppressHydrationWarning
                 id={id}
                 name={field.key}
                 className={INPUT_CLASSES}
@@ -405,6 +419,7 @@ export function FormClient(props: FormClientProps): ReactElement {
               />
             ) : (
               <input
+                suppressHydrationWarning
                 id={id}
                 name={field.key}
                 type={inputType(field)}
@@ -422,6 +437,7 @@ export function FormClient(props: FormClientProps): ReactElement {
       })}
       <div className="absolute -start-[9999px] size-px overflow-hidden" aria-hidden="true">
         <input
+          suppressHydrationWarning
           ref={honeypotRef}
           name={HONEYPOT_FIELD}
           type="text"
